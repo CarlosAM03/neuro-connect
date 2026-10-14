@@ -1,17 +1,19 @@
-# neuroconnect
+# Cliente NeuroConnect — MVP-0
 
-A new Flutter project.
+Flutter 3.47.5 / Dart 3.13.4, Material 3, Riverpod, go_router y Dio. Pantallas en español: registro, login, perfil, lista/creación/edición/detalle de objetivos, lifecycle, check-ins e historial.
 
-## Getting Started
+```sh
+flutter pub get --enforce-lockfile
+flutter analyze
+flutter test
+flutter build web --dart-define=API_BASE_URL=http://localhost:3000/api/v1
+flutter run -d chrome --web-port=5173 --dart-define=API_BASE_URL=http://localhost:3000/api/v1
+```
 
-This project is a starting point for a Flutter application.
+El backend debe permitir `http://localhost:5173` en CORS_ORIGINS. Para otro puerto cambia ambas configuraciones. En un emulador Android, usa `http://10.0.2.2:3000/api/v1` para desarrollo; en dispositivos utiliza un origen HTTPS accesible. La app no contiene credenciales de base de datos ni JWT_SECRET.
 
-A few resources to get you started if this is your first Flutter project:
+La URL se inyecta al compilar. Web guarda únicamente el access token en sessionStorage; Android/iOS usan almacenamiento seguro del sistema. El arranque valida el token mediante `/auth/me`; un 401 privado elimina el token y cambia la sesión a no autenticada. Logout limpia el token y los providers de datos privados reaccionan al cambio de identidad. Los errores de red permiten reintentar sin descartar una sesión potencialmente válida. No hay refresh tokens ni modo offline.
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Los widgets consumen repositorios y providers; no construyen requests HTTP. Crear/editar Goal no permite cambiar progreso: este se registra mediante CheckIn. Las acciones de eliminación requieren confirmación en la UI y explican su efecto sobre el historial/progreso.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Los proyectos Web, Android e iOS están generados. Este bloque valida Web; APK e iOS no fueron compilados. Dashboard, gráficas, Analytics, IA y red de apoyo corresponden a otros incrementos. fl_chart forma parte de Foundation según el roadmap y aún no se utiliza.

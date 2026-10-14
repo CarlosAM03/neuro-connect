@@ -41,6 +41,8 @@ dependencies:
   fl_chart: ^1.2.0
   flutter_secure_storage: ^11.2.0
   web: ^1.1.1
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:
