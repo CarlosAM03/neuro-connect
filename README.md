@@ -1,0 +1,2040 @@
+
+# NeuroConnect
+
+> Plataforma Inteligente para el Seguimiento de Objetivos y Gestión de Redes de Apoyo en Personas Neurodivergentes.
+
+[![Status](https://img.shields.io/badge/status-en%20desarrollo-orange)](#estado-del-proyecto)
+[![Target](https://img.shields.io/badge/target-v1.0.0-blue)](#roadmap-v100)
+[![Architecture](https://img.shields.io/badge/backend-NestJS-red)](#stack-tecnológico)
+[![Frontend](https://img.shields.io/badge/frontend-Flutter-blue)](#stack-tecnológico)
+[![Database](https://img.shields.io/badge/database-PostgreSQL-336791)](#stack-tecnológico)
+
+---
+
+## Estado del proyecto
+
+**NeuroConnect se encuentra actualmente en desarrollo.**
+
+La versión objetivo del semestre es:
+
+```text
+v1.0.0
+```
+
+La v1.0.0 corresponde al MVP académico completo definido para la asignatura:
+
+```text
+Inteligencia Artificial (G)
+Instituto Tecnológico de Tijuana
+Periodo Agosto–Diciembre 2026
+```
+
+El desarrollo está organizado incrementalmente mediante:
+
+```text
+MVP-0 — Núcleo
+MVP-1 — Analítica
+MVP-2 — Inteligencia Artificial
+MVP-3 — Red de apoyo
+MVP-4 — Cierre y hardening
+```
+
+La fecha objetivo de finalización es:
+
+```text
+Primera semana de diciembre de 2026
+```
+
+> El estado de una funcionalidad no debe inferirse únicamente por aparecer documentada en este README.  
+> La implementación real y su nivel de avance deberán consultarse en el código, pruebas y documentación de planificación.
+
+---
+
+# Descripción
+
+NeuroConnect es un sistema multiplataforma orientado al seguimiento de objetivos personales y a la gestión controlada de redes de apoyo para personas neurodivergentes.
+
+El sistema busca permitir que una persona pueda:
+
+- crear objetivos;
+- registrar check-ins periódicos;
+- conservar un historial de progreso;
+- consultar indicadores y tendencias;
+- visualizar su seguimiento mediante un dashboard;
+- generar resúmenes mediante inteligencia artificial;
+- incorporar integrantes a una red de apoyo;
+- decidir qué información comparte;
+- establecer permisos;
+- establecer una fecha de expiración del acceso;
+- revocar posteriormente dicho acceso.
+
+El flujo funcional objetivo de v1.0.0 es:
+
+```text
+Registro
+   ↓
+Inicio de sesión
+   ↓
+Objetivos
+   ↓
+Check-ins
+   ↓
+Historial
+   ↓
+Analítica
+   ↓
+Dashboard
+   ↓
+Resumen mediante IA
+   ↓
+Red de apoyo
+   ↓
+Permisos
+   ↓
+Consulta autorizada
+   ↓
+Revocación
+```
+
+---
+
+# Propósito académico
+
+NeuroConnect se desarrolla como:
+
+```text
+MVP académico
+```
+
+y no como producto clínico o comercial terminado.
+
+El proyecto busca demostrar de forma integrada:
+
+- desarrollo de software;
+- diseño de dominio;
+- persistencia relacional;
+- desarrollo multiplataforma;
+- analítica descriptiva;
+- minería de datos básica;
+- inteligencia artificial generativa;
+- autorización;
+- privacidad;
+- DevOps;
+- despliegue público;
+- validación mediante pruebas.
+
+---
+
+# Alcance de v1.0.0
+
+La versión v1.0.0 deberá incluir:
+
+## Núcleo
+
+- registro;
+- autenticación;
+- perfil;
+- objetivos;
+- check-ins;
+- historial;
+- ownership de información.
+
+## Analítica
+
+- indicadores descriptivos;
+- progreso promedio;
+- frecuencia de seguimiento;
+- tasa de cumplimiento;
+- variación de progreso;
+- dificultad promedio;
+- inactividad;
+- clasificación de tendencias;
+- dashboard;
+- visualización temporal.
+
+## Inteligencia Artificial
+
+- construcción de contexto estructurado;
+- integración mediante `AiProvider`;
+- selección evaluada de un modelo generativo;
+- generación de resúmenes;
+- recomendaciones generales;
+- persistencia de `AISummary`;
+- historial de resúmenes;
+- trazabilidad del contexto utilizado.
+
+## Red de apoyo
+
+- relaciones entre usuarios;
+- permisos de lectura;
+- expiración;
+- revocación;
+- reactivación;
+- consultas delegadas;
+- aislamiento de información.
+
+## Cierre técnico
+
+- pruebas;
+- seguridad básica;
+- UX;
+- accesibilidad básica;
+- Docker;
+- CI;
+- deployment público;
+- HTTPS;
+- monitoreo;
+- backup y restore;
+- documentación.
+
+---
+
+# Fuera de alcance de v1.0.0
+
+NeuroConnect v1.0.0 no pretende implementar:
+
+- diagnóstico psicológico;
+- diagnóstico psiquiátrico;
+- diagnóstico médico;
+- recomendaciones clínicas;
+- tratamiento;
+- expedientes clínicos;
+- detección automática de trastornos;
+- reconocimiento de emociones;
+- análisis facial;
+- análisis de voz;
+- wearables;
+- chat;
+- red social;
+- videollamadas;
+- sistema de emergencias;
+- notificaciones push;
+- RAG;
+- agentes autónomos;
+- fine-tuning;
+- entrenamiento de modelos propios;
+- vector databases;
+- microservicios;
+- Kubernetes;
+- funcionamiento offline-first;
+- publicación obligatoria en App Store o Play Store.
+
+Las capacidades anteriores podrán evaluarse exclusivamente como trabajo futuro.
+
+---
+
+# Principio fundamental de IA
+
+La inteligencia artificial no constituye la fuente autoritativa de análisis.
+
+El pipeline de NeuroConnect es:
+
+```text
+Datos del usuario
+       ↓
+Analytics determinístico
+       ↓
+Indicadores estructurados
+       ↓
+SummaryContext
+       ↓
+Modelo generativo
+       ↓
+Explicación
+```
+
+Nunca:
+
+```text
+Datos
+  ↓
+LLM
+  ↓
+Métricas oficiales
+```
+
+Los indicadores y tendencias son calculados por el sistema.
+
+La IA únicamente transforma resultados estructurados en lenguaje comprensible.
+
+---
+
+# Delimitación de IA
+
+El modelo generativo podrá:
+
+- resumir resultados;
+- describir tendencias;
+- identificar seguimiento reciente o ausencia de este;
+- generar recomendaciones generales de organización y seguimiento.
+
+No podrá:
+
+- diagnosticar;
+- inferir condiciones clínicas;
+- inferir emociones no registradas;
+- recomendar medicamentos;
+- recomendar tratamientos;
+- modificar información;
+- ejecutar acciones sobre la cuenta;
+- consultar directamente la base de datos.
+
+La elección definitiva del proveedor y modelo para v1.0.0 permanece sujeta al proceso de evaluación definido en:
+
+```text
+docs/ADRS/ADR-005-INTEGRACION-IA-V1.md
+```
+
+---
+
+# Privacidad
+
+NeuroConnect sigue el principio:
+
+```text
+private by default
+```
+
+La información de una persona no estará disponible para otro usuario salvo que exista una relación de apoyo válida y permisos explícitos.
+
+Los permisos iniciales son:
+
+```text
+VIEW_GOALS
+VIEW_PROGRESS
+VIEW_SUMMARIES
+```
+
+El propietario podrá controlar:
+
+```text
+qué información
++
+con quién
++
+durante cuánto tiempo
+```
+
+se comparte.
+
+El acceso podrá:
+
+```text
+expirar
+```
+
+o ser:
+
+```text
+revocado
+```
+
+por el propietario.
+
+---
+
+# Datos enviados a IA
+
+La integración con el proveedor de IA utilizará minimización de datos.
+
+Podrán enviarse indicadores como:
+
+```text
+progress
+trend
+averageDifficulty
+daysSinceLastCheckIn
+completionRate
+checkInFrequencyPerWeek
+```
+
+cuando sean necesarios.
+
+No deberán enviarse:
+
+```text
+password
+passwordHash
+JWT
+email
+CheckIn.notes
+SupportRelationship
+permissions
+API keys
+DATABASE_URL
+información innecesaria de identidad
+```
+
+---
+
+# Arquitectura
+
+NeuroConnect utiliza una arquitectura cliente-servidor basada en un monolito modular.
+
+```text
+┌───────────────────────────────────────┐
+│             Flutter App               │
+│                                       │
+│ Web        Android        iOS         │
+│                                       │
+│ Material 3                            │
+│ Riverpod                              │
+│ go_router                             │
+│ Dio                                   │
+└──────────────────┬────────────────────┘
+                   │
+                   │ HTTPS
+                   │ REST / JSON
+                   ▼
+┌───────────────────────────────────────┐
+│             NestJS API                │
+│              /api/v1                  │
+│                                       │
+│ AuthModule                            │
+│ UsersModule                           │
+│ GoalsModule                           │
+│ CheckInsModule                        │
+│ AnalyticsModule                       │
+│ AiModule                              │
+│ SupportNetworkModule                  │
+└───────────────┬─────────────┬─────────┘
+                │             │
+                │ Prisma      │ HTTPS
+                ▼             ▼
+       ┌──────────────┐   ┌───────────────┐
+       │ PostgreSQL   │   │ LLM Provider  │
+       │     16       │   │   Model TBD   │
+       └──────────────┘   └───────────────┘
+```
+
+---
+
+# Principios arquitectónicos
+
+La v1.0.0 mantiene las siguientes reglas:
+
+```text
+Flutter = experiencia cliente
+
+NestJS = autoridad de negocio
+
+PostgreSQL = fuente persistente de verdad
+
+Analytics = resultados determinísticos
+
+LLM = explicación generativa
+
+SupportRelationship = autorización delegada
+```
+
+No existen conexiones directas:
+
+```text
+Flutter → PostgreSQL
+
+Flutter → LLM Provider
+
+LLM Provider → PostgreSQL
+```
+
+Todo acceso pasa por:
+
+```text
+Flutter
+   ↓
+NestJS
+```
+
+---
+
+# Stack tecnológico
+
+## Frontend
+
+```text
+Flutter
+Dart
+Material 3
+Riverpod
+go_router
+Dio
+fl_chart
+```
+
+Objetivos:
+
+```text
+Web
+Android
+iOS compatible
+```
+
+La aceptación académica mínima de v1.0.0 requiere:
+
+```text
+Web funcional
++
+Android demostrable
+```
+
+---
+
+## Backend
+
+```text
+NestJS
+TypeScript
+Prisma
+JWT
+Argon2id
+class-validator
+Swagger / OpenAPI
+Jest
+```
+
+Arquitectura:
+
+```text
+Modular Monolith
+```
+
+API:
+
+```text
+/api/v1
+```
+
+---
+
+## Persistencia
+
+```text
+PostgreSQL 16
++
+Prisma ORM
+```
+
+Entidades principales:
+
+```text
+User
+
+Goal
+
+CheckIn
+
+AISummary
+
+SupportRelationship
+```
+
+---
+
+## DevOps
+
+```text
+Docker
+Docker Compose
+Git
+GitHub
+GitHub Actions
+```
+
+Deployment objetivo mediante infraestructura gratuita.
+
+Opciones aprobadas incluyen:
+
+```text
+Flutter Web
+→ static hosting gratuito
+
+NestJS
+→ Docker sobre host Linux gratuito
+o PaaS gratuito compatible
+
+PostgreSQL
+→ managed PostgreSQL free tier
+```
+
+---
+
+# Estructura del monorepo
+
+La estructura objetivo es:
+
+```text
+neuro-connect/
+│
+├── app/
+│   ├── lib/
+│   ├── test/
+│   ├── integration_test/
+│   ├── web/
+│   ├── android/
+│   ├── ios/
+│   ├── pubspec.yaml
+│   └── README.md
+│
+├── backend/
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   ├── migrations/
+│   │   └── seed.ts
+│   │
+│   ├── src/
+│   │   ├── auth/
+│   │   ├── users/
+│   │   ├── goals/
+│   │   ├── check-ins/
+│   │   ├── analytics/
+│   │   ├── ai/
+│   │   ├── support-network/
+│   │   ├── common/
+│   │   ├── config/
+│   │   └── prisma/
+│   │
+│   ├── test/
+│   ├── Dockerfile
+│   ├── .dockerignore
+│   ├── .env.example
+│   ├── package.json
+│   └── README.md
+│
+├── docs/
+│   ├── ADRS/
+│   ├── Planeacion/
+│   ├── ai/
+│   ├── evidence/
+│   └── operations/
+│
+├── infra/
+│   ├── compose/
+│   └── proxy/
+│
+├── .github/
+│   └── workflows/
+│
+├── compose.yaml
+├── .gitignore
+└── README.md
+```
+
+Algunas carpetas serán creadas progresivamente conforme avance la implementación.
+
+---
+
+# Documentación
+
+La documentación constituye parte de la baseline del proyecto.
+
+Actualmente se encuentra organizada en:
+
+```text
+docs/
+│
+├── ADRS/
+│   ├── ADR-001 — Esquema relacional y modelo de datos de NeuroConnect.md
+│   ├── ADR-002-DOMINIO-Y-DISENO-V1.md
+│   ├── ADR-003-BACKEND-V1.md
+│   ├── ADR-004-FRONTEND-V1.md
+│   ├── ADR-005-INTEGRACION-IA-V1.md
+│   ├── ADR-006-ARQUITECTURA-SISTEMA-V1.md
+│   ├── ADR-007-DEVOPS-INFRAESTRUCTURA-V1.md
+│   └── Anteproyecto_NeuroConnect_IA_G_Carlos_Armenta.pdf
+│
+└── Planeacion/
+    ├── PLAN_IMPLEMENTACION_AVANCE_1.md
+    └── ROADMAP_V1.md
+```
+
+---
+
+# ADRs
+
+## ADR-001 — Persistencia y modelo de datos
+
+Define:
+
+- PostgreSQL;
+- Prisma;
+- entidades;
+- relaciones;
+- constraints;
+- ownership;
+- snapshots;
+- persistencia de IA.
+
+---
+
+## ADR-002 — Dominio y diseño
+
+Define:
+
+- actores;
+- comportamiento;
+- reglas de negocio;
+- objetivos;
+- check-ins;
+- analítica;
+- red de apoyo;
+- privacidad;
+- delimitaciones.
+
+---
+
+## ADR-003 — Backend
+
+Define:
+
+- NestJS;
+- módulos;
+- API REST;
+- autenticación;
+- autorización;
+- DTO;
+- errores;
+- transacciones;
+- testing backend.
+
+---
+
+## ADR-004 — Frontend
+
+Define:
+
+- Flutter;
+- arquitectura feature-first;
+- Riverpod;
+- go_router;
+- Dio;
+- Material 3;
+- navegación;
+- UX;
+- responsive design;
+- accesibilidad.
+
+---
+
+## ADR-005 — Integración IA
+
+Define:
+
+- `SummaryContextBuilder`;
+- `PromptBuilder`;
+- `AiProvider`;
+- restricciones;
+- privacidad;
+- benchmark;
+- proceso de selección del modelo.
+
+El proveedor/modelo final todavía deberá seleccionarse mediante evaluación durante MVP-2.
+
+---
+
+## ADR-006 — Arquitectura del sistema
+
+Integra:
+
+```text
+Flutter
++
+NestJS
++
+PostgreSQL
++
+Analytics
++
+IA
++
+SupportNetwork
+```
+
+en la arquitectura integral de v1.0.0.
+
+---
+
+## ADR-007 — DevOps e infraestructura
+
+Define:
+
+- Docker;
+- Docker Compose;
+- CI;
+- deployment;
+- HTTPS;
+- monitoreo;
+- logs;
+- backups;
+- recovery;
+- operación;
+- costo de infraestructura igual a cero.
+
+---
+
+# Planeación
+
+## Roadmap general
+
+Consultar:
+
+```text
+docs/Planeacion/ROADMAP_V1.md
+```
+
+Define el camino completo:
+
+```text
+Foundation
+   ↓
+MVP-0
+   ↓
+MVP-1
+   ↓
+MVP-2
+   ↓
+MVP-3
+   ↓
+MVP-4
+   ↓
+Release Candidate
+   ↓
+v1.0.0
+```
+
+---
+
+## Avance 1
+
+Consultar:
+
+```text
+docs/Planeacion/PLAN_IMPLEMENTACION_AVANCE_1.md
+```
+
+Meta técnica:
+
+```text
+MVP-0
+100 %
+
+MVP-1
+100 %
+
+MVP-2
+20–30 %
+```
+
+La implementación real deberá validarse antes de declarar estos porcentajes alcanzados.
+
+---
+
+# Roadmap v1.0.0
+
+## MVP-0 — Núcleo
+
+```text
+Auth
+Users
+Goals
+CheckIns
+Persistence
+History
+```
+
+Criterio principal:
+
+```text
+register
+→ login
+→ create goal
+→ create check-in
+→ history
+```
+
+---
+
+## MVP-1 — Analítica
+
+```text
+Analytics
+Dashboard
+Trends
+Charts
+```
+
+Criterio principal:
+
+```text
+CheckIns
+→ deterministic analytics
+→ dashboard
+```
+
+---
+
+## MVP-2 — Inteligencia Artificial
+
+```text
+SummaryContextBuilder
+PromptBuilder
+AiProvider
+Model Evaluation
+Real LLM
+AISummary
+```
+
+Criterio principal:
+
+```text
+Analytics
+→ structured context
+→ real model
+→ persisted summary
+```
+
+---
+
+## MVP-3 — Red de apoyo
+
+```text
+SupportRelationship
+Permissions
+Expiration
+Revocation
+Delegated Views
+```
+
+Criterio principal:
+
+```text
+Owner grants access
+→ Supporter reads allowed data
+→ Owner revokes
+→ Access disappears
+```
+
+---
+
+## MVP-4 — Cierre
+
+```text
+Testing
+UX
+Accessibility
+Security
+DevOps
+Deployment
+Monitoring
+Backup
+Restore
+Documentation
+```
+
+Criterio principal:
+
+```text
+release demostrable
+de extremo a extremo
+```
+
+---
+
+# Cronograma académico
+
+| Periodo | Actividad |
+|---|---|
+| 25 sep – 4 oct | Anteproyecto, investigación, arquitectura y modelo conceptual |
+| 5 – 18 oct | Backend base, autenticación, usuarios, objetivos, check-ins y base de datos |
+| 19 oct – 1 nov | Cliente Flutter, autenticación, objetivos, check-ins e historial |
+| 2 – 8 nov | Analítica, indicadores, tendencias y dashboard |
+| 9 – 15 nov | IA generativa, prompts, resúmenes y validación |
+| 16 – 22 nov | Red de apoyo, permisos, expiración y revocación |
+| 23 – 29 nov | Pruebas, UX, seguridad y deployment |
+| 30 nov – 6 dic | Release final, evidencias, documento y presentación |
+
+El roadmap técnico puede adelantar trabajo respecto a estas ventanas, pero no altera los compromisos académicos del anteproyecto.
+
+---
+
+# Requisitos de desarrollo
+
+## Backend
+
+Se requiere:
+
+```text
+Node.js LTS
+npm
+Docker
+Docker Compose
+```
+
+---
+
+## Frontend
+
+Se requiere:
+
+```text
+Flutter SDK
+Dart
+Android SDK
+```
+
+Para Web:
+
+```text
+Chrome
+```
+
+o navegador compatible con Flutter Web.
+
+---
+
+## Base de datos
+
+Desarrollo utiliza:
+
+```text
+PostgreSQL 16
+```
+
+preferentemente mediante Docker Compose.
+
+---
+
+# Desarrollo local
+
+> Esta sección representa el flujo objetivo del monorepo. Los comandos estarán plenamente operativos una vez inicializados los componentes correspondientes.
+
+## 1. Clonar
+
+```bash
+git clone <repository-url>
+cd neuro-connect
+```
+
+---
+
+## 2. Configurar backend
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Configurar las variables necesarias.
+
+---
+
+## 3. Levantar PostgreSQL
+
+Desde la raíz:
+
+```bash
+docker compose up -d postgres
+```
+
+---
+
+## 4. Instalar backend
+
+```bash
+cd backend
+npm ci
+```
+
+---
+
+## 5. Generar Prisma Client
+
+```bash
+npx prisma generate
+```
+
+---
+
+## 6. Aplicar migraciones
+
+Desarrollo:
+
+```bash
+npx prisma migrate dev
+```
+
+Producción:
+
+```bash
+npx prisma migrate deploy
+```
+
+`migrate dev` no deberá utilizarse en producción.
+
+---
+
+## 7. Seed
+
+Cuando exista un seed disponible:
+
+```bash
+npx prisma db seed
+```
+
+Los datos de seed corresponden a:
+
+```text
+desarrollo
++
+demostración
+```
+
+y no constituyen datos científicos.
+
+---
+
+## 8. Ejecutar backend
+
+```bash
+npm run start:dev
+```
+
+---
+
+## 9. Configurar Flutter
+
+```bash
+cd ../app
+flutter pub get
+```
+
+---
+
+## 10. Ejecutar Flutter Web
+
+```bash
+flutter run -d chrome \
+  --dart-define=API_BASE_URL=http://localhost:<port>/api/v1
+```
+
+---
+
+## 11. Ejecutar Android
+
+```bash
+flutter run \
+  --dart-define=API_BASE_URL=<development-api-url>/api/v1
+```
+
+La URL exacta dependerá de si el backend se ejecuta:
+
+- en el host;
+- en Docker;
+- mediante emulador;
+- en un dispositivo físico.
+
+---
+
+# Variables de entorno
+
+El backend utilizará variables equivalentes a:
+
+```env
+NODE_ENV=
+PORT=
+
+DATABASE_URL=
+
+JWT_SECRET=
+JWT_EXPIRES_IN=
+
+CORS_ORIGINS=
+
+AI_PROVIDER=
+AI_MODEL=
+AI_API_KEY=
+AI_TIMEOUT_MS=
+
+SWAGGER_ENABLED=
+AI_PREVIEW_ENABLED=
+```
+
+Los valores reales:
+
+```text
+NO
+```
+
+deberán versionarse.
+
+---
+
+# Configuración Flutter
+
+La URL de API se proporcionará mediante build configuration.
+
+Ejemplo:
+
+```bash
+flutter build web \
+  --dart-define=API_BASE_URL=https://<api-host>/api/v1
+```
+
+`API_BASE_URL` no constituye un secreto.
+
+---
+
+# Seguridad de secretos
+
+Nunca deberán committearse:
+
+```text
+.env
+
+DATABASE_URL
+
+JWT_SECRET
+
+AI_API_KEY
+
+passwords
+
+private keys
+
+access tokens
+
+production credentials
+```
+
+Si un secreto llega al historial Git:
+
+```text
+revocar
+→
+rotar
+→
+actualizar configuración
+```
+
+Eliminar simplemente el archivo no es suficiente.
+
+---
+
+# API
+
+La API pública está versionada mediante:
+
+```text
+/api/v1
+```
+
+Swagger/OpenAPI utilizará:
+
+```text
+/api/docs
+```
+
+cuando esté habilitado.
+
+Health:
+
+```text
+GET /api/v1/health
+```
+
+Readiness podrá utilizar:
+
+```text
+GET /api/v1/health/ready
+```
+
+---
+
+# Backend modules
+
+La v1.0.0 define:
+
+```text
+AuthModule
+
+UsersModule
+
+GoalsModule
+
+CheckInsModule
+
+AnalyticsModule
+
+AiModule
+
+SupportNetworkModule
+```
+
+No forman parte del alcance:
+
+```text
+AdminModule
+
+ChatModule
+
+NotificationModule
+
+BillingModule
+```
+
+---
+
+# Flujo de datos
+
+```text
+Flutter
+   ↓
+NestJS Controller
+   ↓
+Service
+   ↓
+Prisma
+   ↓
+PostgreSQL
+```
+
+Para IA:
+
+```text
+PostgreSQL
+   ↓
+AnalyticsModule
+   ↓
+SummaryContextBuilder
+   ↓
+PromptBuilder
+   ↓
+AiProvider
+   ↓
+LLM
+   ↓
+AISummary
+```
+
+---
+
+# Analytics
+
+Analytics será:
+
+```text
+determinístico
++
+read-only
++
+no persistido
+```
+
+Las métricas se derivan de:
+
+```text
+Goal
++
+CheckIn
+```
+
+Entre ellas:
+
+```text
+completionRate
+
+averageProgress
+
+checkInFrequencyPerWeek
+
+progressDelta
+
+averageDifficulty
+
+daysSinceLastCheckIn
+
+trend
+```
+
+---
+
+# Tendencias
+
+La versión v1.0.0 utiliza:
+
+```text
+PROGRESSING
+STABLE
+DECLINING
+INACTIVE
+```
+
+Estas categorías describen únicamente el comportamiento temporal de los datos registrados.
+
+No representan:
+
+```text
+estado psicológico
+estado emocional
+diagnóstico
+```
+
+---
+
+# Testing
+
+## Backend
+
+La calidad del backend se validará mediante:
+
+```text
+unit tests
++
+integration tests
++
+E2E tests
+```
+
+Comandos objetivo:
+
+```bash
+npm run lint
+npm test
+npm run test:e2e
+npm run build
+```
+
+Los E2E deberán utilizar PostgreSQL real.
+
+No SQLite.
+
+---
+
+## Flutter
+
+Validaciones objetivo:
+
+```bash
+flutter analyze
+flutter test
+flutter build web
+```
+
+Antes de v1.0.0 deberá generarse además un build Android funcional.
+
+---
+
+# Prueba E2E final
+
+El principal criterio de aceptación de v1.0.0 será:
+
+```text
+User A
+  ↓
+Register
+  ↓
+Login
+  ↓
+Create Goal
+  ↓
+Create CheckIns
+  ↓
+History
+  ↓
+Analytics
+  ↓
+Dashboard
+  ↓
+Generate AI Summary
+  ↓
+Create SupportRelationship
+  ↓
+Grant Permissions
+
+User B
+  ↓
+Login
+  ↓
+Read Authorized Data
+  ↓
+Cannot Write
+
+User A
+  ↓
+Revoke Access
+
+User B
+  ↓
+No Access
+```
+
+---
+
+# DevOps
+
+El backend será empaquetado mediante:
+
+```text
+Docker
+```
+
+y deberá conservar portabilidad entre proveedores.
+
+El mismo artefacto deberá poder utilizarse en:
+
+```text
+local
+
+CI
+
+PaaS gratuito
+
+Linux host
+```
+
+---
+
+# CI
+
+La baseline utiliza:
+
+```text
+GitHub Actions
+```
+
+Workflows previstos:
+
+```text
+.github/
+└── workflows/
+    ├── backend-ci.yml
+    ├── frontend-ci.yml
+    └── release-check.yml
+```
+
+---
+
+# CI backend
+
+Pipeline:
+
+```text
+checkout
+   ↓
+npm ci
+   ↓
+prisma generate
+   ↓
+lint
+   ↓
+unit tests
+   ↓
+E2E
+   ↓
+build
+```
+
+---
+
+# CI frontend
+
+Pipeline:
+
+```text
+checkout
+   ↓
+flutter pub get
+   ↓
+flutter analyze
+   ↓
+flutter test
+   ↓
+flutter build web
+```
+
+---
+
+# Infraestructura académica
+
+El proyecto tiene una restricción explícita:
+
+```text
+Costo recurrente obligatorio
+=
+$0
+```
+
+La infraestructura deberá poder funcionar utilizando:
+
+- free tiers;
+- infraestructura Always-Free;
+- certificados gratuitos;
+- hosting estático gratuito;
+- PostgreSQL gratuito;
+- CI gratuito;
+- monitoreo gratuito.
+
+No se requiere adquirir un dominio.
+
+---
+
+# Deployment
+
+La topología objetivo es conceptualmente:
+
+```text
+Flutter Web
+    ↓
+Static Hosting
+    ↓
+HTTPS
+    ↓
+NestJS Docker
+    ↓
+PostgreSQL
+
+NestJS
+    ↓
+HTTPS
+    ↓
+LLM Provider
+```
+
+---
+
+# Portabilidad de infraestructura
+
+El código no deberá depender de APIs propietarias de un proveedor específico de hosting.
+
+Cambiar:
+
+```text
+PaaS A
+→
+Linux VM
+```
+
+o:
+
+```text
+PostgreSQL Provider A
+→
+PostgreSQL Provider B
+```
+
+no debe requerir modificar reglas de negocio.
+
+---
+
+# Monitoreo
+
+La operación pública deberá observar al menos:
+
+```text
+Flutter Web availability
+
+Backend health
+```
+
+El backend proporcionará además:
+
+```text
+logs
+status codes
+request IDs
+health endpoints
+```
+
+---
+
+# Backups
+
+La base de datos productiva deberá contar con una estrategia basada en:
+
+```text
+pg_dump
+```
+
+y restauración mediante:
+
+```text
+pg_restore
+```
+
+o:
+
+```text
+psql
+```
+
+Antes de v1.0.0 deberá realizarse al menos una prueba controlada de:
+
+```text
+backup
+   ↓
+new database
+   ↓
+restore
+   ↓
+application validation
+```
+
+---
+
+# Desarrollo multiplataforma
+
+NeuroConnect mantiene una única base Flutter para:
+
+```text
+Web
+
+Android
+
+iOS
+```
+
+La v1.0.0 académica requiere:
+
+```text
+Web funcional
+
+Android demostrable
+
+iOS compatible a nivel de proyecto
+```
+
+No requiere publicación en tiendas.
+
+---
+
+# Diseño y UX
+
+La interfaz utiliza:
+
+```text
+Material 3
+```
+
+y prioriza:
+
+```text
+claridad
+
+predictibilidad
+
+consistencia
+
+baja sobrecarga
+
+lenguaje neutral
+
+control del usuario
+```
+
+---
+
+# Lenguaje del producto
+
+La interfaz v1.0.0 estará principalmente en español.
+
+El código utiliza nombres en inglés.
+
+Ejemplos:
+
+```text
+Goal
+CheckIn
+SupportRelationship
+AISummary
+```
+
+Interfaz:
+
+```text
+Objetivo
+Check-in
+Red de apoyo
+Resumen IA
+```
+
+---
+
+# Terminología
+
+El producto evita utilizar como lenguaje habitual:
+
+```text
+Paciente
+
+Diagnóstico
+
+Tratamiento
+
+Patología
+
+Síntoma
+
+Caso clínico
+```
+
+NeuroConnect no se presenta como herramienta clínica.
+
+---
+
+# Estado de IA
+
+La integración definitiva del modelo permanece:
+
+```text
+PENDING MODEL SELECTION
+```
+
+hasta ejecutar la metodología documentada en ADR-005.
+
+La evaluación deberá considerar al menos seis alternativas y utilizar:
+
+```text
+Weighted Decision Matrix
+
+Blind NeuroConnect Benchmark
+
+Integration / Operational Spike
+```
+
+El modelo ganador será seleccionado específicamente para el caso de NeuroConnect.
+
+---
+
+# Principios de ingeniería
+
+El proyecto prioriza:
+
+```text
+simplicidad
+
+modularidad
+
+testabilidad
+
+seguridad
+
+trazabilidad
+
+reproducibilidad
+
+privacidad
+
+entrega completa
+```
+
+sobre:
+
+```text
+sobrearquitectura
+
+escalabilidad prematura
+
+infraestructura distribuida
+
+abstracciones innecesarias
+```
+
+---
+
+# Decisiones deliberadamente evitadas
+
+v1.0.0 no utiliza:
+
+```text
+Microservices
+
+GraphQL
+
+Redis
+
+Kafka
+
+RabbitMQ
+
+Kubernetes
+
+Service Mesh
+
+Vector Database
+
+LangChain
+
+RAG
+
+Agents
+
+Multiple Databases
+```
+
+salvo que un ADR posterior justifique formalmente un cambio.
+
+---
+
+# Fuente de verdad documental
+
+Antes de modificar una decisión estructural debe revisarse la documentación correspondiente.
+
+```text
+Persistencia
+→ ADR-001
+
+Dominio
+→ ADR-002
+
+Backend
+→ ADR-003
+
+Frontend
+→ ADR-004
+
+IA
+→ ADR-005
+
+Arquitectura integral
+→ ADR-006
+
+DevOps
+→ ADR-007
+
+Roadmap
+→ ROADMAP_V1.md
+```
+
+---
+
+# Política de cambios
+
+Una modificación significativa sobre:
+
+- arquitectura;
+- framework;
+- base de datos;
+- autenticación;
+- modelo de autorización;
+- integración IA;
+- deployment topology;
+
+deberá documentarse mediante:
+
+```text
+actualización formal
+```
+
+o:
+
+```text
+nuevo ADR
+```
+
+antes de convertirse en nueva baseline.
+
+---
+
+# Estado de releases
+
+Mientras v1.0.0 no se encuentre liberada:
+
+```text
+0.x.x
+```
+
+representará versiones de desarrollo.
+
+La release académica final será:
+
+```text
+v1.0.0
+```
+
+---
+
+# Criterio para v1.0.0
+
+La versión no será considerada terminada únicamente porque:
+
+```text
+compile
+```
+
+Debe:
+
+```text
+funcionar
++
+integrarse
++
+estar probada
++
+estar desplegada
++
+estar documentada
+```
+
+---
+
+# Autor
+
+**Carlos Benjamín Armenta Márquez**
+
+```text
+Ingeniería en Sistemas Computacionales
+Instituto Tecnológico de Tijuana
+
+Inteligencia Artificial (G)
+Periodo Agosto–Diciembre 2026
+```
+
+Proyecto académico individual.
+
+---
+
+# Advertencia
+
+NeuroConnect v1.0.0 es un prototipo académico.
+
+Los indicadores y resúmenes proporcionados por el sistema tienen finalidad informativa y de seguimiento.
+
+No constituyen:
+
+- diagnóstico;
+- evaluación psicológica;
+- evaluación médica;
+- tratamiento;
+- recomendación clínica;
+- sustitución de atención profesional.
+
+---
+
+# Estado final esperado
+
+```text
+NeuroConnect v1.0.0
+
+Frontend         DONE
+Backend          DONE
+Database         DONE
+Analytics        DONE
+AI               DONE
+Support Network  DONE
+Security         DONE
+Testing          DONE
+Deployment       DONE
+Documentation    DONE
+
+Web              PUBLIC
+Android          FUNCTIONAL
+iOS              COMPATIBLE
+
+Infrastructure
+Cost             $0
+```
+
+---
+
+## NeuroConnect
+
+> Registrar primero. Analizar después. Explicar con IA únicamente sobre resultados verificables. Compartir solo bajo control del usuario.
