@@ -1005,58 +1005,73 @@ preferentemente mediante Docker Compose.
 
 # Desarrollo local
 
-MVP-0 implementa autenticación, perfil, objetivos, check-ins e historial. Los módulos posteriores continúan sujetos al roadmap. Versiones verificadas: Node 22.16.0, Flutter 3.47.5 / Dart 3.13.4, PostgreSQL 16 mediante Docker.
+MVP-0 ofrece autenticación, perfil, objetivos, lifecycle, check-ins e historial. MVP-1 añade Analytics determinístico, seguimiento, tendencias y gráficas. Versiones verificadas: Node 22.16.0, Flutter 3.47.5 / Dart 3.13.4, PostgreSQL 16.
 
-## 1. Preparar entorno local
+## Local con Docker
 
-Desde la raíz del repositorio (primera ejecución):
+Clona el repositorio y copia `.env.example` a `.env`. Configura `POSTGRES_PASSWORD`, `JWT_SECRET` (al menos 32 caracteres aleatorios) y, si usarás el seed, `SEED_PASSWORD` (al menos 12 caracteres). Conserva estos archivos fuera de Git. Si ya existe un entorno, conserva sus credenciales y agrega únicamente las claves nuevas del ejemplo.
 
-```bash
-git clone --branch mvp0 https://github.com/CarlosAM03/neuro-connect.git
-cd neuro-connect
-node infra/setup-local.cjs
+Con Docker Engine y Compose disponibles, desde la raíz:
+
+```sh
+docker compose up -d --build --wait
+```
+
+Este comando construye frontend y backend, inicia PostgreSQL, aplica migrations y espera los healthchecks en orden. No requiere Node ni Flutter instalados en el host. La primera compilación descarga el SDK Flutter y dependencias; posteriores builds reutilizan la caché.
+
+- Frontend: http://localhost:5173
+- API: http://localhost:3000/api/v1
+- Swagger: http://localhost:3000/api/docs
+- Readiness: http://localhost:3000/api/v1/health/ready
+- PostgreSQL: loopback, puerto 5434 y volumen persistente.
+
+Seed opcional, desde raíz:
+
+```sh
+docker compose exec backend node seed-dist/seed.js
+```
+
+El seed crea `demo@neuroconnect.local`, tres objetivos y quince check-ins: progreso creciente, estable y sin seguimiento reciente. Usa la contraseña `SEED_PASSWORD` de `.env`; no se ejecuta al iniciar. Reejecutarlo reemplaza solamente los historiales demo identificados por el seed.
+
+`API_BASE_URL` se incorpora al **build** del frontend. Su valor local predeterminado es `http://localhost:3000/api/v1`, accesible desde el navegador. Cambiarlo requiere reconstruir la imagen. No uses el hostname interno `backend`. Si cambias frontend host/puerto, actualiza también `CORS_ORIGINS` y `FRONTEND_PORT`. CORS permite por defecto localhost y 127.0.0.1:5173.
+
+```sh
+docker compose ps
+docker compose logs backend
+docker compose stop
+```
+
+Detener conserva el volumen. No elimines el volumen para validar un entorno existente.
+
+## Desarrollo directo (opcional)
+
+Para un entorno nuevo, `node infra/setup-local.cjs` genera `.env` y `backend/.env` con credenciales locales aleatorias y no sobrescribe archivos existentes. También puedes configurar manualmente ambos ejemplos. El backend directo usa `DATABASE_URL` apuntando al puerto PostgreSQL del host; Compose lo configura mediante el DNS interno.
+
+```sh
 docker compose up -d --wait postgres
 cd backend
 npm ci
 npm run prisma:generate
 npm run migrate:deploy
 npm run seed
-```
-
-El setup genera credenciales aleatorias en `.env` y `backend/.env`, ignorados por Git, y conserva cualquier configuración existente. Para configuración manual utiliza los `.env.example`. El seed utiliza `SEED_PASSWORD` de `backend/.env`; crea `demo@neuroconnect.local`, tres objetivos y quince check-ins sintéticos. Reejecutarlo reemplaza únicamente los historiales demo identificados por el seed. No se ejecuta automáticamente al arrancar.
-
-## 2. Iniciar backend
-
-Opción local, desde `backend/`:
-
-```bash
 npm run start:dev
 ```
 
-Opción Docker, desde raíz (utiliza migraciones versionadas antes de arrancar):
+En otra terminal:
 
-```bash
-docker compose --profile full up -d --build --wait
-```
-
-Utiliza una opción a la vez para evitar competir por el puerto 3000. API: `http://localhost:3000/api/v1`; Swagger: `http://localhost:3000/api/docs`; readiness: `http://localhost:3000/api/v1/health/ready`. PostgreSQL se expone únicamente en loopback, puerto 5434, con volumen persistente.
-
-## 3. Iniciar Flutter Web
-
-En otra terminal, desde `app/`:
-
-```bash
+```sh
+cd app
 flutter pub get --enforce-lockfile
 flutter run -d chrome --web-port=5173 --dart-define=API_BASE_URL=http://localhost:3000/api/v1
 ```
 
-También puede usarse `-d web-server --web-hostname=127.0.0.1`. `CORS_ORIGINS` debe incluir `http://localhost:5173`. La UI permite registro, login, restauración de sesión, logout, perfil, Goal CRUD/lifecycle, check-ins e historial. Dashboard, Analytics, IA y red de apoyo pertenecen a siguientes incrementos.
+Utiliza backend/Flutter directos o sus contenedores a la vez para evitar conflictos de puertos. También puede usarse `-d web-server --web-hostname=127.0.0.1`.
 
-## 4. Validar
+## Validación
 
-Desde raíz:
+Con Node y Flutter para desarrollo, desde raíz:
 
-```bash
+```sh
 node infra/setup-test.cjs
 cd backend
 npm run lint
@@ -1068,22 +1083,23 @@ cd ../app
 flutter analyze
 flutter test
 flutter build web --dart-define=API_BASE_URL=http://localhost:3000/api/v1
+cd ..
+docker build -t neuroconnect-backend:local ./backend
+docker build -t neuroconnect-frontend:local ./app
 ```
 
-`test:e2e` requiere `TEST_DATABASE_URL` y rechaza bases cuyo nombre no termine en `_test`. `setup-test.cjs` configura una base separada en el PostgreSQL del proyecto. `smoke` requiere el backend escuchando en 3000; ejecuta el flujo HTTP con dos cuentas sintéticas y limpia sus propios datos. No imprime tokens ni contraseñas.
+E2E utiliza PostgreSQL real y una base separada cuyo nombre termina en `_test`. `setup-test.cjs` prepara esa base. El smoke requiere backend escuchando en 3000 y `backend/.env` configurado; verifica MVP-0 y Analytics con dos cuentas sintéticas y elimina únicamente sus datos. No imprime tokens ni contraseñas. Para verificar también las tres tendencias del seed: desde `backend`, `npm run smoke:seed` después de ejecutar el seed.
 
-Desde raíz:
+## Artefactos productivos
 
-```bash
-docker build -t neuroconnect-backend:mvp0 ./backend
-docker compose --profile full stop
-```
+`backend/Dockerfile` produce NestJS/Prisma sin devDependencies y ejecuta como usuario node. `app/Dockerfile` compila Flutter Web y sirve assets mediante Nginx sin root, con fallback SPA y healthcheck. Los artefactos son independientes.
 
-Detener Compose conserva el volumen PostgreSQL. No es necesario eliminarlo para validar.
+En producción, PostgreSQL es externo y se localiza exclusivamente mediante `DATABASE_URL`. El ejemplo `infra/compose/compose.prod.example.yml` contiene frontend/backend y ninguna base de datos; utiliza secretos del entorno y `API_BASE_URL` HTTPS pública al compilar. Es una plantilla operativa, no un deployment ejecutado. TLS, hosting público y hardening corresponden a bloques posteriores.
 
-Android e iOS conservan proyecto generado; sus builds no son gate de MVP-0. Para dispositivos usa una API HTTPS accesible y configura `API_BASE_URL`. Detalle operativo, resultados y checklist: [MVP0_REPORT.md](harness/codex/MVP0_REPORT.md).
+Android e iOS conservan los proyectos existentes; este bloque valida Web. Para dispositivos usa una API HTTPS accesible. Evidencias y checklist: [MVP1_REPORT.md](harness/codex/MVP1_REPORT.md).
 
 ---
+
 # Variables de entorno
 
 El backend utilizará variables equivalentes a:
