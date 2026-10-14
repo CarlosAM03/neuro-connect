@@ -31,6 +31,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: [sh, -c, 'npm run migrate:deploy && node dist/main.js']
+    command: [sh, -c, 'npm run migrate:deploy && exec node dist/main.js']
 volumes:
   postgres_data:
