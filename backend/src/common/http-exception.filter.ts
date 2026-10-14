@@ -40,14 +40,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
       429: 'RATE_LIMITED',
       503: 'UNAVAILABLE',
     };
-    response
-      .status(statusCode)
-      .json({
-        statusCode,
-        code: codes[statusCode] ?? 'INTERNAL_ERROR',
-        message,
-        path: request.path,
-        timestamp: new Date().toISOString(),
-      });
+    response.status(statusCode).json({
+      statusCode,
+      code: codes[statusCode] ?? 'INTERNAL_ERROR',
+      message,
+      path: request.path,
+      timestamp: new Date().toISOString(),
+    });
   }
 }

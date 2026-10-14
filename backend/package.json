@@ -16,7 +16,8 @@
     "test:e2e": "node test/run-e2e.cjs",
     "prisma:generate": "prisma generate",
     "migrate:deploy": "prisma migrate deploy",
-    "seed": "tsx prisma/seed.ts"
+    "seed": "tsx prisma/seed.ts",
+    "smoke": "node test/smoke.cjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

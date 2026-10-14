@@ -8,37 +8,60 @@ import {
   ParseUUIDPipe,
   Post,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOkResponse,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { CheckInResponse, ErrorResponse } from '../common/response.dto';
 import { CurrentUser, SafeUser } from '../auth/auth.guard';
 import { CreateCheckInDto } from './check-in.dto';
 import { CheckInsService } from './check-ins.service';
 
 @ApiTags('CheckIns')
 @ApiBearerAuth()
+@ApiResponse({ status: 400, type: ErrorResponse })
+@ApiResponse({ status: 401, type: ErrorResponse })
+@ApiResponse({ status: 404, type: ErrorResponse })
+@ApiResponse({ status: 409, type: ErrorResponse })
 @Controller('goals/:goalId/check-ins')
 export class CheckInsController {
   constructor(private readonly checkIns: CheckInsService) {}
-  @Post() create(
+  @ApiCreatedResponse({ type: CheckInResponse })
+  @Post()
+  create(
     @CurrentUser() user: SafeUser,
     @Param('goalId', ParseUUIDPipe) goalId: string,
     @Body() dto: CreateCheckInDto,
   ) {
     return this.checkIns.create(user.id, goalId, dto);
   }
-  @Get() history(
+  @ApiOkResponse({ type: [CheckInResponse] })
+  @Get()
+  history(
     @CurrentUser() user: SafeUser,
     @Param('goalId', ParseUUIDPipe) goalId: string,
   ) {
     return this.checkIns.history(user.id, goalId);
   }
-  @Get(':checkInId') detail(
+  @ApiOkResponse({ type: CheckInResponse })
+  @Get(':checkInId')
+  detail(
     @CurrentUser() user: SafeUser,
     @Param('goalId', ParseUUIDPipe) goalId: string,
     @Param('checkInId', ParseUUIDPipe) id: string,
   ) {
     return this.checkIns.detail(user.id, goalId, id);
   }
-  @Delete(':checkInId') @HttpCode(204) delete(
+  @ApiNoContentResponse({
+    description: 'CheckIn deleted and progress snapshot recalculated',
+  })
+  @Delete(':checkInId')
+  @HttpCode(204)
+  delete(
     @CurrentUser() user: SafeUser,
     @Param('goalId', ParseUUIDPipe) goalId: string,
     @Param('checkInId', ParseUUIDPipe) id: string,

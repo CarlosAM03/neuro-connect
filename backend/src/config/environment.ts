@@ -10,6 +10,13 @@ export function validateEnvironment(env: Record<string, unknown>) {
   }
   if ((env.JWT_SECRET as string).length < 32)
     throw new Error('JWT_SECRET must have at least 32 characters');
+  const database = new URL(env.DATABASE_URL as string);
+  if (!['postgresql:', 'postgres:'].includes(database.protocol))
+    throw new Error('DATABASE_URL must use PostgreSQL');
+  if (!/^[1-9]\d*(ms|s|m|h|d|w)$/.test(env.JWT_EXPIRES_IN as string))
+    throw new Error(
+      'Invalid JWT_EXPIRES_IN; use a positive duration such as 8h',
+    );
   const port = Number(env.PORT ?? 3000);
   if (!Number.isInteger(port) || port < 1 || port > 65535)
     throw new Error('Invalid PORT');
