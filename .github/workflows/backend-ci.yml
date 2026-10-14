@@ -2,7 +2,7 @@ name: Backend CI
 on:
   pull_request:
   push:
-    branches: [main, mvp0]
+    branches: [main, mvp0, mvp1]
 permissions:
   contents: read
 jobs:

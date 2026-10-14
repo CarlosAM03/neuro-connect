@@ -1,6 +1,6 @@
-# Cliente NeuroConnect — MVP-0
+# Cliente NeuroConnect
 
-Flutter 3.47.5 / Dart 3.13.4, Material 3, Riverpod, go_router y Dio. Pantallas en español: registro, login, perfil, lista/creación/edición/detalle de objetivos, lifecycle, check-ins e historial.
+Flutter 3.47.5 / Dart 3.13.4, Material 3, Riverpod, go_router, Dio y fl_chart. Pantallas en español: registro, login, perfil, objetivos/lifecycle, check-ins, historial, dashboard de seguimiento y análisis por objetivo. Analytics proviene del backend; la app no clasifica tendencias.
 
 ```sh
 flutter pub get --enforce-lockfile
@@ -16,4 +16,8 @@ La URL se inyecta al compilar. Web guarda únicamente el access token en session
 
 Los widgets consumen repositorios y providers; no construyen requests HTTP. Crear/editar Goal no permite cambiar progreso: este se registra mediante CheckIn. Las acciones de eliminación requieren confirmación en la UI y explican su efecto sobre el historial/progreso.
 
-Los proyectos Web, Android e iOS están generados. Este bloque valida Web; APK e iOS no fueron compilados. Dashboard, gráficas, Analytics, IA y red de apoyo corresponden a otros incrementos. fl_chart forma parte de Foundation según el roadmap y aún no se utiliza.
+El dashboard es la entrada autenticada. La gráfica muestra fechas y progreso 0–100; el análisis incluye una timeline textual accesible. Sin registros no se fabrican puntos, y con menos de dos se muestra historial insuficiente. Los estados PAUSED/COMPLETED muestran tendencia histórica. Loading, errores, retry y vacío están probados.
+
+Desde la raíz, `docker compose up -d --build --wait` construye y sirve toda la aplicación. El Dockerfile del frontend compila con SDK fijado y sirve mediante Nginx en 8080 sin root. `API_BASE_URL` es un build arg que se convierte en dart-define; cambiarlo requiere rebuild. Nginx ofrece `/healthz`, fallback SPA y assets locales sin depender del CDN Flutter.
+
+Los proyectos Web, Android e iOS existentes se conservan. Este bloque valida Web; APK e iOS no fueron compilados. IA y red de apoyo corresponden a incrementos posteriores. Ver `../harness/codex/MVP1_REPORT.md`.

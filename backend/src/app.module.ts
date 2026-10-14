@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { GoalsModule } from './goals/goals.module';
 import { CheckInsModule } from './check-ins/check-ins.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CheckInsModule } from './check-ins/check-ins.module';
     UsersModule,
     GoalsModule,
     CheckInsModule,
+    AnalyticsModule,
   ],
   controllers: [HealthController],
 })

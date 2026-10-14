@@ -2,7 +2,7 @@ name: Frontend CI
 on:
   pull_request:
   push:
-    branches: [main, mvp0]
+    branches: [main, mvp0, mvp1]
 permissions:
   contents: read
 jobs:
@@ -22,3 +22,4 @@ jobs:
       - run: flutter analyze
       - run: flutter test
       - run: flutter build web --dart-define=API_BASE_URL=http://localhost:3000/api/v1
+      - run: docker build -t neuroconnect-frontend:ci .

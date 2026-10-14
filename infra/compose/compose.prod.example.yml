@@ -1,0 +1,22 @@
+# Independent artifacts; PostgreSQL is provisioned externally, never a sidecar.
+# From root: docker compose --env-file .env.production -f infra/compose/compose.prod.example.yml up -d --build --wait
+services:
+  backend:
+    build: ../../backend
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: ${DATABASE_URL:?External PostgreSQL connection required}
+      JWT_SECRET: ${JWT_SECRET:?Required}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-8h}
+      CORS_ORIGINS: ${CORS_ORIGINS:?Public frontend origin required}
+      PORT: 3000
+      SWAGGER_ENABLED: 'false'
+    ports: ['127.0.0.1:3000:3000']
+    command: [sh, -c, 'npm run migrate:deploy && exec node dist/main.js']
+  frontend:
+    build:
+      context: ../../app
+      args:
+        API_BASE_URL: ${API_BASE_URL:?Public HTTPS API URL required}
+    ports: ['127.0.0.1:5173:8080']
+# TLS/public ingress is provided by the chosen hosting platform. No DB service.
