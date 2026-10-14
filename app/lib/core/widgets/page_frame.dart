@@ -16,36 +16,73 @@ class PageFrame extends StatelessWidget {
   final List<Widget>? actions;
   final bool private;
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(title), actions: actions),
-    body: Align(
+  Widget build(BuildContext context) {
+    final path = GoRouterState.of(context).uri.path;
+    final selected = path.startsWith('/profile')
+        ? 2
+        : path.startsWith('/goals')
+        ? 1
+        : 0;
+    const routes = ['/dashboard', '/goals', '/profile'];
+    final wide = private && MediaQuery.sizeOf(context).width >= 1024;
+    final content = Align(
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 960),
         child: child,
       ),
-    ),
-    bottomNavigationBar: private
-        ? NavigationBar(
-            selectedIndex:
-                GoRouterState.of(context).uri.path.startsWith('/profile')
-                ? 1
-                : 0,
-            onDestinationSelected: (index) =>
-                context.go(index == 0 ? '/goals' : '/profile'),
-            destinations: const [
-              NavigationDestination(
-                icon: Icon(Icons.flag_outlined),
-                label: 'Objetivos',
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.person_outline),
-                label: 'Perfil',
-              ),
-            ],
-          )
-        : null,
-  );
+    );
+    return Scaffold(
+      appBar: AppBar(title: Text(title), actions: actions),
+      body: wide
+          ? Row(
+              children: [
+                NavigationRail(
+                  selectedIndex: selected,
+                  labelType: NavigationRailLabelType.all,
+                  onDestinationSelected: (index) => context.go(routes[index]),
+                  destinations: const [
+                    NavigationRailDestination(
+                      icon: Icon(Icons.insights_outlined),
+                      label: Text('Seguimiento'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.flag_outlined),
+                      label: Text('Objetivos'),
+                    ),
+                    NavigationRailDestination(
+                      icon: Icon(Icons.person_outline),
+                      label: Text('Perfil'),
+                    ),
+                  ],
+                ),
+                const VerticalDivider(width: 1),
+                Expanded(child: content),
+              ],
+            )
+          : content,
+      bottomNavigationBar: private && !wide
+          ? NavigationBar(
+              selectedIndex: selected,
+              onDestinationSelected: (index) => context.go(routes[index]),
+              destinations: const [
+                NavigationDestination(
+                  icon: Icon(Icons.insights_outlined),
+                  label: 'Seguimiento',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.flag_outlined),
+                  label: 'Objetivos',
+                ),
+                NavigationDestination(
+                  icon: Icon(Icons.person_outline),
+                  label: 'Perfil',
+                ),
+              ],
+            )
+          : null,
+    );
+  }
 }
 
 class ErrorView extends StatelessWidget {

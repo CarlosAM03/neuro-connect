@@ -31,8 +31,12 @@ class FixtureAdapter implements HttpClientAdapter {
   int calls = 0;
   int identityStatus = 200;
   String goalStatus = 'ACTIVE';
+  int analyticsStatus = 200;
+  bool empty = false;
+  bool insufficient = false;
   final requests = <RequestOptions>[];
   Completer<void>? gate;
+  Completer<void>? analyticsGate;
   @override
   Future<ResponseBody> fetch(
     RequestOptions options,
@@ -42,6 +46,9 @@ class FixtureAdapter implements HttpClientAdapter {
     calls++;
     requests.add(options);
     if (gate != null) await gate!.future;
+    if (options.path.startsWith('/analytics') && analyticsGate != null) {
+      await analyticsGate!.future;
+    }
     final data = switch (options.path) {
       '/auth/login' => {'accessToken': 'synthetic-test-token'},
       '/auth/me' || '/users/me' => {
@@ -49,14 +56,44 @@ class FixtureAdapter implements HttpClientAdapter {
         'email': 'a@example.com',
         'displayName': 'Persona A',
       },
-      '/goals' => [
-        {
-          'id': 'goal-a',
-          'title': 'Objetivo privado A',
-          'status': 'ACTIVE',
-          'progress': 20,
-        },
-      ],
+      '/analytics/overview' => {
+        'totalGoals': empty ? 0 : 1,
+        'activeGoals': empty ? 0 : 1,
+        'pausedGoals': 0,
+        'completedGoals': 0,
+        'completionRate': 0,
+        'averageProgress': empty ? 0 : 20,
+        'checkInsLast28Days': empty ? 0 : 2,
+        'checkInFrequencyPerWeek': empty ? 0 : 0.5,
+        'inactiveGoals': 0,
+      },
+      '/analytics/goals/goal-a' => {
+        'goalId': 'goal-a',
+        'currentProgress': 20,
+        'previousProgress': insufficient ? null : 10,
+        'progressDelta': insufficient ? null : 10,
+        'averageDifficulty': 3,
+        'totalCheckIns': insufficient ? 1 : 2,
+        'checkInsLast28Days': insufficient ? 1 : 2,
+        'daysSinceLastCheckIn': 1,
+        'trend': insufficient ? 'STABLE' : 'PROGRESSING',
+        'insufficientHistory': insufficient,
+        'timeline': [
+          if (!insufficient) {'date': '2026-10-13T12:00:00Z', 'progress': 10},
+          {'date': '2026-10-14T12:00:00Z', 'progress': 20},
+        ],
+      },
+      '/goals' =>
+        empty
+            ? []
+            : [
+                {
+                  'id': 'goal-a',
+                  'title': 'Objetivo privado A',
+                  'status': 'ACTIVE',
+                  'progress': 20,
+                },
+              ],
       '/goals/goal-a' => {
         'id': 'goal-a',
         'title': 'Objetivo privado A',
@@ -77,7 +114,11 @@ class FixtureAdapter implements HttpClientAdapter {
     };
     return ResponseBody.fromString(
       jsonEncode(data),
-      options.path == '/auth/me' ? identityStatus : 200,
+      options.path == '/auth/me'
+          ? identityStatus
+          : options.path.startsWith('/analytics')
+          ? analyticsStatus
+          : 200,
       headers: {
         Headers.contentTypeHeader: ['application/json'],
       },
@@ -120,6 +161,8 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+    container.read(routerProvider).go('/goals');
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Objetivo privado A'));
     await tester.pumpAndSettle();
     final button = tester.widget<FilledButton>(
@@ -130,6 +173,7 @@ void main() {
       find.text('Reactiva el objetivo para registrar nuevos check-ins.'),
       findsOneWidget,
     );
+    await tester.scrollUntilVisible(find.text('Comentario privado'), 200);
     expect(find.text('Comentario privado'), findsOneWidget);
   });
   testWidgets('active goal opens a bounded CheckIn form', (tester) async {
@@ -141,6 +185,8 @@ void main() {
         child: const NeuroConnectApp(),
       ),
     );
+    await tester.pumpAndSettle();
+    container.read(routerProvider).go('/goals');
     await tester.pumpAndSettle();
     await tester.tap(find.text('Objetivo privado A'));
     await tester.pumpAndSettle();
@@ -241,6 +287,9 @@ void main() {
     adapter.gate!.complete();
     adapter.gate = null;
     await tester.pumpAndSettle();
+    expect(find.text('Mi seguimiento'), findsOneWidget);
+    container.read(routerProvider).go('/goals');
+    await tester.pumpAndSettle();
     expect(find.text('Mis objetivos'), findsOneWidget);
     expect(find.text('Objetivo privado A'), findsOneWidget);
   });
@@ -276,6 +325,8 @@ void main() {
           child: const NeuroConnectApp(),
         ),
       );
+      await tester.pumpAndSettle();
+      container.read(routerProvider).go('/goals');
       await tester.pumpAndSettle();
       await tester.tap(find.text('Nuevo objetivo'));
       await tester.pumpAndSettle();

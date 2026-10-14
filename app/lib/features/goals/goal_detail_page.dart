@@ -125,6 +125,10 @@ class _GoalDetailPageState extends ConsumerState<GoalDetailPage> {
                     ),
                   ],
                 ),
+                TextButton(
+                  onPressed: () => context.go('/goals/${goal.id}/analytics'),
+                  child: const Text('Ver análisis y gráfica'),
+                ),
                 if (goal.status != 'ACTIVE')
                   const Padding(
                     padding: EdgeInsets.only(top: 16),

@@ -11,12 +11,14 @@ import '../features/goals/goals_page.dart';
 import '../features/goals/goal_editor.dart';
 import '../features/goals/goal_detail_page.dart';
 import '../features/check_ins/check_in_page.dart';
+import '../features/analytics/dashboard_page.dart';
+import '../features/analytics/goal_analytics_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier(0);
   ref.listen(sessionProvider, (_, _) => refresh.value++);
   final router = GoRouter(
-    initialLocation: '/goals',
+    initialLocation: '/dashboard',
     refreshListenable: refresh,
     redirect: (context, route) {
       final session = ref.read(sessionProvider);
@@ -27,11 +29,17 @@ final routerProvider = Provider<GoRouter>((ref) {
       final loggedIn = session.asData?.value != null;
       if (!loggedIn && path != '/login' && path != '/register') return '/login';
       if (loggedIn && ['/login', '/register', '/bootstrap'].contains(path)) {
-        return '/goals';
+        return '/dashboard';
       }
       return null;
     },
     routes: [
+      GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
+      GoRoute(
+        path: '/goals/:id/analytics',
+        builder: (_, state) =>
+            GoalAnalyticsPage(id: state.pathParameters['id']!),
+      ),
       GoRoute(path: '/bootstrap', builder: (_, _) => const _BootstrapPage()),
       GoRoute(path: '/login', builder: (_, _) => const AuthPage()),
       GoRoute(
