@@ -9,7 +9,7 @@ COPY prisma ./prisma
 RUN npx prisma generate
 COPY tsconfig*.json ./
 COPY src ./src
-RUN npm run build && npm prune --omit=dev
+RUN npm run build && npx tsc -p tsconfig.seed.json && npm prune --omit=dev
 
 FROM node:22.16.0-bookworm-slim AS runtime
 ENV NODE_ENV=production
@@ -17,6 +17,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/dist ./dist
+COPY --from=build --chown=node:node /app/seed-dist ./seed-dist
 COPY --from=build --chown=node:node /app/prisma ./prisma
 COPY --chown=node:node package*.json ./
 USER node

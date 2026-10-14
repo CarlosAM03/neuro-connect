@@ -1,0 +1,9 @@
+.dart_tool
+build
+.git
+.env*
+android
+ios
+test
+integration_test
+*.log
