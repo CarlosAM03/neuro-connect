@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "format": "prettier --write src test prisma",
     "test": "jest --runInBand",
-    "test:e2e": "jest --config test/jest-e2e.json --runInBand",
+    "test:e2e": "node test/run-e2e.cjs",
     "prisma:generate": "prisma generate",
     "migrate:deploy": "prisma migrate deploy",
     "seed": "tsx prisma/seed.ts"
