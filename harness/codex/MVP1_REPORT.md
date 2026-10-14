@@ -6,7 +6,8 @@
 - Branch: `mvp1`, creada directamente desde `origin/main` después de fetch y de verificar remote, árbol limpio, historia y merge humano PR #1 MVP-0.
 - Base commit: `fd371d0c1ac552d383ddd95465e5bc1093048cae`.
 - Final commit: commit documental final que contiene este reporte, resoluble con `git log -1 --format=%H -- harness/codex/MVP1_REPORT.md`. Implementation commit validado: `7c11ec95b8d3ba18358e6fed8eb3e5d3f995107a`. Un hash de commit no puede incorporarse dentro de su propio contenido.
-- Status técnico: `READY_FOR_HUMAN_VALIDATION`. Entrega GitHub: pendiente de push/PR al completar handoff. No merge ni auto-merge.
+- Status técnico: `READY_FOR_HUMAN_VALIDATION`. `origin/mvp1` publicada. Entrega PR: `BLOCKED` exclusivamente por 403 del conector GitHub («Resource not accessible by integration»). No se intentó extraer/reutilizar credenciales. No merge ni auto-merge.
+- Compare URL: https://github.com/CarlosAM03/neuro-connect/compare/main...mvp1?expand=1. Título/cuerpo preparados en `harness/codex/MVP1_PR.md`; no número PR porque la creación fue rechazada.
 - Validación: 2026-10-14; Windows, Docker Desktop Linux containers, PostgreSQL16, Node22.16.0, Flutter3.47.5/Dart3.13.4.
 
 ## Scope / Implemented / Not implemented
@@ -114,7 +115,7 @@ Casos cubiertos:0/1/múltiples registros,±5/estabilidad/inactividad y precedenc
 
 Fallos corregidos: expectativa E2E contaba7 en vez de8 (registro inactivo10d también entra en frecuencia28d); corregida expectativa preservando reglas. Tests Flutter adaptaron scroll del historial y sincronización de carga inicial; lints de llaves corregidos. Gates afectados reejecutados hasta verde, sin eliminar tests/requisitos.
 
-CI mantiene gates anteriores, agrega trigger mvp1 y Docker frontend. Resultado remoto aún no reclamado antes de publicar; consultar Actions del commit publicado. Sin deployment CI.
+CI mantiene gates anteriores, agrega trigger mvp1 y Docker frontend. Ambos workflows remotos terminaron SUCCESS en commit `da6360af7c1d269eaf8a663c5dc55365a75fe8b8`: [Backend CI](https://github.com/CarlosAM03/neuro-connect/actions/runs/38560596367) y [Frontend CI](https://github.com/CarlosAM03/neuro-connect/actions/runs/38560596373), incluidos Docker builds. El commit de cierre posterior cambia únicamente este reporte, sin cambios de implementación. Sin deployment CI.
 
 ## Docker validation / Smoke test results / Browser validation results
 
@@ -126,7 +127,7 @@ Navegador IAB real en127.0.0.1:5173 contra APIcontainerlocalhost3000 y PGcontain
 
 Fixtures adicionales del mismo usuario: copias de historias seed (original intacto) y Goal70→40. UI mostró DECLINING/current40/previous70/delta−30 y timeline; dashboard mostró STABLE/INACTIVE en historias copiadas. Desktop1280×900 NavigationRail; compacto NavigationBar; override restablecido. Cuenta temporal y cinco Goals/19 CheckIns limpiados por filtro exacto email/displayName; demo permanece. Smokes limpian solo sus propias cuentas. Base vacía temporal eliminada, volumen conservado.
 
-Evidencias sin credenciales/datos reales: docs/evidence/mvp1/dashboard-browser.png (35→65) y declining-browser.png (70→40).
+Evidencias sin credenciales/datos reales: docs/evidence/mvp1/dashboard-browser.png (35→65) y declining-browser.png (70→40). Shutdown final: `docker compose stop`, tres servicios detenidos sin eliminar volumen; cleanup del harness completado.
 
 ## Files changed
 
@@ -140,7 +141,7 @@ Evidencias sin credenciales/datos reales: docs/evidence/mvp1/dashboard-browser.p
 
 Sin blocker técnico ni desviación funcional conocida del alcance autorizado. Analytics lee historial completo; dashboard consulta por Goal y refresca mediante navegación/manualmente, sin nuevos polling/paginación. Optimización de volumen futuro. Primera build necesita Internet. Tags/versiones fijados, sin pinning de digests: hardening posterior. Advertencia Prisma package.json config y advisories npm heredadas de MVP-0 siguen como deuda; no audit fix --force.
 
-CI remoto pendiente de observación tras push; Android/iOS y deployment/TLS productivo no ejecutados. DB externa validada conceptualmente/sintácticamente, sin servicio contratado. JWT sin refresh/offline conserva baseline. No cambiar passwords locales con volumen inicializado sin mantener coherencia PostgreSQL. No aceptación humana declarada.
+Entrega PR bloqueada únicamente por permiso del conector403; rama publicada y compare/cuerpo preparados. Android/iOS y deployment/TLS productivo no ejecutados. DB externa validada conceptualmente/sintácticamente, sin servicio contratado. JWT sin refresh/offline conserva baseline. No cambiar passwords locales con volumen inicializado sin mantener coherencia PostgreSQL. No aceptación humana declarada.
 
 ## Human Validation Checklist
 
