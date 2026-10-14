@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GoalStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum CheckInCompletion {
+  NOT_MET
+  PARTIAL
+  MET
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String
+  displayName  String
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(3)
+  goals        Goal[]
+}
+
+model Goal {
+  id          String     @id @default(uuid()) @db.Uuid
+  ownerId     String     @db.Uuid
+  title       String
+  description String?
+  category    String?
+  status      GoalStatus @default(ACTIVE)
+  progress    Int        @default(0)
+  targetDate  DateTime?  @db.Timestamptz(3)
+  createdAt   DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime   @updatedAt @db.Timestamptz(3)
+  owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  checkIns    CheckIn[]
+  @@index([ownerId])
+  @@index([ownerId, status])
+}
+
+model CheckIn {
+  id         String            @id @default(uuid()) @db.Uuid
+  goalId     String            @db.Uuid
+  progress   Int
+  difficulty Int
+  completion CheckInCompletion
+  notes      String?
+  createdAt  DateTime          @default(now()) @db.Timestamptz(3)
+  goal       Goal              @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  @@index([goalId])
+  @@index([goalId, createdAt])
+}

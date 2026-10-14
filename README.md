@@ -1005,135 +1005,85 @@ preferentemente mediante Docker Compose.
 
 # Desarrollo local
 
-> Esta sección representa el flujo objetivo del monorepo. Los comandos estarán plenamente operativos una vez inicializados los componentes correspondientes.
+MVP-0 implementa autenticación, perfil, objetivos, check-ins e historial. Los módulos posteriores continúan sujetos al roadmap. Versiones verificadas: Node 22.16.0, Flutter 3.47.5 / Dart 3.13.4, PostgreSQL 16 mediante Docker.
 
-## 1. Clonar
+## 1. Preparar entorno local
+
+Desde la raíz del repositorio (primera ejecución):
 
 ```bash
-git clone <repository-url>
+git clone --branch mvp0 https://github.com/CarlosAM03/neuro-connect.git
 cd neuro-connect
-```
-
----
-
-## 2. Configurar backend
-
-```bash
-cd backend
-cp .env.example .env
-```
-
-Configurar las variables necesarias.
-
----
-
-## 3. Levantar PostgreSQL
-
-Desde la raíz:
-
-```bash
-docker compose up -d postgres
-```
-
----
-
-## 4. Instalar backend
-
-```bash
+node infra/setup-local.cjs
+docker compose up -d --wait postgres
 cd backend
 npm ci
+npm run prisma:generate
+npm run migrate:deploy
+npm run seed
 ```
 
----
+El setup genera credenciales aleatorias en `.env` y `backend/.env`, ignorados por Git, y conserva cualquier configuración existente. Para configuración manual utiliza los `.env.example`. El seed utiliza `SEED_PASSWORD` de `backend/.env`; crea `demo@neuroconnect.local`, tres objetivos y quince check-ins sintéticos. Reejecutarlo reemplaza únicamente los historiales demo identificados por el seed. No se ejecuta automáticamente al arrancar.
 
-## 5. Generar Prisma Client
+## 2. Iniciar backend
 
-```bash
-npx prisma generate
-```
-
----
-
-## 6. Aplicar migraciones
-
-Desarrollo:
-
-```bash
-npx prisma migrate dev
-```
-
-Producción:
-
-```bash
-npx prisma migrate deploy
-```
-
-`migrate dev` no deberá utilizarse en producción.
-
----
-
-## 7. Seed
-
-Cuando exista un seed disponible:
-
-```bash
-npx prisma db seed
-```
-
-Los datos de seed corresponden a:
-
-```text
-desarrollo
-+
-demostración
-```
-
-y no constituyen datos científicos.
-
----
-
-## 8. Ejecutar backend
+Opción local, desde `backend/`:
 
 ```bash
 npm run start:dev
 ```
 
----
-
-## 9. Configurar Flutter
+Opción Docker, desde raíz (utiliza migraciones versionadas antes de arrancar):
 
 ```bash
+docker compose --profile full up -d --build --wait
+```
+
+Utiliza una opción a la vez para evitar competir por el puerto 3000. API: `http://localhost:3000/api/v1`; Swagger: `http://localhost:3000/api/docs`; readiness: `http://localhost:3000/api/v1/health/ready`. PostgreSQL se expone únicamente en loopback, puerto 5434, con volumen persistente.
+
+## 3. Iniciar Flutter Web
+
+En otra terminal, desde `app/`:
+
+```bash
+flutter pub get --enforce-lockfile
+flutter run -d chrome --web-port=5173 --dart-define=API_BASE_URL=http://localhost:3000/api/v1
+```
+
+También puede usarse `-d web-server --web-hostname=127.0.0.1`. `CORS_ORIGINS` debe incluir `http://localhost:5173`. La UI permite registro, login, restauración de sesión, logout, perfil, Goal CRUD/lifecycle, check-ins e historial. Dashboard, Analytics, IA y red de apoyo pertenecen a siguientes incrementos.
+
+## 4. Validar
+
+Desde raíz:
+
+```bash
+node infra/setup-test.cjs
+cd backend
+npm run lint
+npm test
+npm run test:e2e
+npm run build
+npm run smoke
 cd ../app
-flutter pub get
+flutter analyze
+flutter test
+flutter build web --dart-define=API_BASE_URL=http://localhost:3000/api/v1
 ```
 
----
+`test:e2e` requiere `TEST_DATABASE_URL` y rechaza bases cuyo nombre no termine en `_test`. `setup-test.cjs` configura una base separada en el PostgreSQL del proyecto. `smoke` requiere el backend escuchando en 3000; ejecuta el flujo HTTP con dos cuentas sintéticas y limpia sus propios datos. No imprime tokens ni contraseñas.
 
-## 10. Ejecutar Flutter Web
+Desde raíz:
 
 ```bash
-flutter run -d chrome \
-  --dart-define=API_BASE_URL=http://localhost:<port>/api/v1
+docker build -t neuroconnect-backend:mvp0 ./backend
+docker compose --profile full stop
 ```
 
----
+Detener Compose conserva el volumen PostgreSQL. No es necesario eliminarlo para validar.
 
-## 11. Ejecutar Android
-
-```bash
-flutter run \
-  --dart-define=API_BASE_URL=<development-api-url>/api/v1
-```
-
-La URL exacta dependerá de si el backend se ejecuta:
-
-- en el host;
-- en Docker;
-- mediante emulador;
-- en un dispositivo físico.
+Android e iOS conservan proyecto generado; sus builds no son gate de MVP-0. Para dispositivos usa una API HTTPS accesible y configura `API_BASE_URL`. Detalle operativo, resultados y checklist: [MVP0_REPORT.md](harness/codex/MVP0_REPORT.md).
 
 ---
-
 # Variables de entorno
 
 El backend utilizará variables equivalentes a:
