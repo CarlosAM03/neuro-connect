@@ -75,6 +75,40 @@ async function smoke() {
     2,
   );
   await call('GET', `${path}/check-ins/${latest.id}`, undefined, b, 404);
+  const analyticsPath = `/analytics/goals/${goal.id}`;
+  await call('GET', analyticsPath, undefined, b, 404);
+  const growing = await call('GET', analyticsPath, undefined, a);
+  assert.equal(growing.trend, 'PROGRESSING');
+  assert.equal(growing.progressDelta, 30);
+  assert.deepEqual(
+    growing.timeline.map((point) => point.progress),
+    [35, 65],
+  );
+  assert.equal(growing.averageDifficulty, 3);
+  assert.equal(
+    JSON.stringify(growing).includes('Synthetic smoke record'),
+    false,
+  );
+  const overview = await call('GET', '/analytics/overview', undefined, a);
+  assert.equal(overview.totalGoals, 1);
+  assert.equal(overview.averageProgress, 65);
+  assert.equal(overview.checkInFrequencyPerWeek, 0.5);
+  assert.equal(
+    (await call('GET', '/analytics/overview', undefined, b)).totalGoals,
+    0,
+  );
+  const declining = await call(
+    'POST',
+    `${path}/check-ins`,
+    { ...check, progress: 40 },
+    a,
+    201,
+  );
+  assert.equal(
+    (await call('GET', analyticsPath, undefined, a)).trend,
+    'DECLINING',
+  );
+  await call('DELETE', `${path}/check-ins/${declining.id}`, undefined, a, 204);
   for (const status of ['PAUSED', 'COMPLETED']) {
     await call('PATCH', path, { status }, a);
     await call('POST', `${path}/check-ins`, check, a, 409);
@@ -87,7 +121,7 @@ async function smoke() {
   await call('GET', path, undefined, a, 404);
   await call('GET', '/goals', undefined, undefined, 401);
   console.log(
-    'PASS: live HTTP register → login → profile → Goal CRUD/lifecycle → CheckIns → snapshot/history → isolation (2 users) → cleanup.',
+    'PASS: live HTTP register → login → profile → Goal CRUD/lifecycle → CheckIns → snapshot/history → Analytics overview/timeline/PROGRESSING/DECLINING → isolation (2 users) → cleanup.',
   );
 }
 smoke()
