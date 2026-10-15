@@ -35,8 +35,12 @@ No equivale a completar todo MVP-3 ni la versión v1.0.0.
 
 **Avance 1:** baseline funcional hasta MVP-1.5 + foundation técnica de MVP-2 +
 sprint de estabilización AVANCE-1-CLOSEOUT. El cierre técnico y sus gates se
-registran en `harness/codex/AVANCE1_CLOSEOUT_REPORT.md`; aceptación del sprint pendiente
-de revisión humana y merge.
+registran en `harness/codex/AVANCE1_CLOSEOUT_REPORT.md`. Closeout integrado humanamente
+mediante PR #5 el 15 de octubre de 2026, merge `fad9cf73924fc334c57a77526a9f017069ceb4c5`.
+La fuente consolidada del corte, inventario porcentual y trabajo restante es
+[AVANCE1_BASELINE_FREEZE](AVANCE1_BASELINE_FREEZE.md). AVANCE 1 CLOSED; el PLAN ORIGINAL
+y sus fechas se conservan sin modificación. La aceptación del bloque documental
+de freeze requiere su propia revisión humana.
 
 **Avance 2 (trabajo futuro, no ejecutado en closeout):** investigación de 6+ modelos
 candidatos, comparación, matriz de decisión ponderada, benchmark ciego NeuroConnect,
