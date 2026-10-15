@@ -27,4 +27,12 @@ From the root, `docker compose up -d --build --wait` starts the complete local s
 
 With the stack running and backend `.env` configured, `npm run smoke` checks MVP-0 plus analytics and cross-user isolation; `npm run smoke:seed` validates demo trend patterns and numeric metrics without altering the seed.
 
+Avance 1 adds AiModule/AiSummaryService, SummaryContextBuilder, vendor-neutral PromptBuilder, AiProvider and deterministic MockAiProvider. The only public AI route is authenticated `GET /api/v1/ai/summary/context`. It returns `{context,prompt,providerConfigured:false}`, performs no generation and writes no summaries. Owner filtering and calculations stay in AnalyticsModule using one RepeatableRead source snapshot; the context builder explicitly allowlists fields and excludes IDs, notes, identity and secrets. `insufficientHistory` is retained so prompts acknowledge limited data. Titles are JSON data, never instructions.
+
+Set `AI_PREVIEW_ENABLED=true` to enable the technical endpoint; default is false outside local Compose. The production template disables it. `AI_PROVIDER=mock` is the only supported adapter; AI_MODEL/AI_API_KEY remain empty and are not consumed. Mock generation is an internal development seam (no public endpoint), labelled **Development mock only**, and rejects NODE_ENV=production. Preview never invokes it. No provider SDK/API or model selection exists yet.
+
+`AISummary` is a physical scaffold required by PLAN §7.4/ADR-001, with PENDING/COMPLETED/FAILED enum, JSONB snapshot, nullable output/provider/model, UTC period/createdAt, owner FK/cascade and indexes. A CHECK enforces periodStart≤periodEnd. No summary generation lifecycle, persistence service or CRUD API is exposed in Avance 1.
+
+From root, `docker compose exec backend node scripts/smoke.cjs` validates the full HTTP flow including preview and two-user isolation using the container runtime only; synthetic accounts are cleaned up. NODE_ENV=production refuses this script before DB access. Final evidence/checklist: `../harness/codex/MVP2_AVANCE1_REPORT.md`.
+
 API: `/api/v1`. Swagger: `/api/docs` when `SWAGGER_ENABLED=true`. Readiness: `/api/v1/health/ready`. Configuration is validated before startup. Never commit `.env`.
