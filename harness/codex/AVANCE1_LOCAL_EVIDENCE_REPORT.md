@@ -111,7 +111,7 @@ Esta limitación afecta únicamente a la evidencia visual 17, no a las otras 18.
 
 ## Archivos, validaciones y Git
 
-Changes funcionales: **NONE**. No código, dependencias, schema, migrations, tests,
+Cambios funcionales: **NONE**. No código, dependencias, schema, migrations, tests,
 workflows, Compose, arquitectura, dominio ni contratos modificados. No se crearon
 funciones nuevas ni se corrigieron bugs. No se ejecutaron tests/builds locales de
 producto innecesarios en un bloque de capturas; se comprueba CI remoto separadamente.
@@ -133,8 +133,21 @@ Capturas de main e81fcbd:
 - Backend CI: [38720476346 — success](https://github.com/CarlosAM03/neuro-connect/actions/runs/38720476346).
 - Frontend CI: [38720476335 — success](https://github.com/CarlosAM03/neuro-connect/actions/runs/38720476335).
 
-Publicación de la rama y CI del bloque: pendiente de la comprobación posterior al push;
-se actualizará este apartado con resultados reales antes del handoff final.
+Rama publicada en origin y con upstream configurado. CI del conjunto completo en
+`f0289d30b2dd125d393fe1118bb4e0c1cfe5783a`:
+- Backend CI: [38735923942 — success](https://github.com/CarlosAM03/neuro-connect/actions/runs/38735923942).
+- Frontend CI: [38735923956 — success](https://github.com/CarlosAM03/neuro-connect/actions/runs/38735923956).
+
+Commits separados: `8f90a05` (14 pantallas), `156e1f3` (4 evidencias técnicas),
+`f0289d3` (índice/reporte), y cierre de resultados CI en el commit de este reporte.
+El último commit cambia únicamente este documento; sus workflows se comprueban de
+nuevo antes del handoff. Los resultados exactos del HEAD final se entregan en la
+respuesta operativa para evitar un ciclo de commits que solo registren su propio CI.
+
+- [Branch remoto](https://github.com/CarlosAM03/neuro-connect/tree/docs/avance1-local-evidence).
+- [Compare, sin PR creado](https://github.com/CarlosAM03/neuro-connect/compare/main...docs/avance1-local-evidence).
+- Última comprobación de diff: únicamente los 20 archivos autorizados; producto NONE.
+- Working tree limpio tras los commits y push; temporales ignorados fuera del entregable.
 
 ## Validación humana
 
@@ -147,6 +160,7 @@ se actualizará este apartado con resultados reales antes del handoff final.
 - [x] Fixture temporal no versionado.
 - [x] README y reporte creados.
 - [ ] Revisar localmente las 18 imágenes y completar la captura 17 en terminal.
-- [ ] Publicación/CI/working tree final: completar tras push.
+- [x] Rama publicada, ambos CI del conjunto completo PASS y working tree limpio.
 
 Status: **READY_FOR_HUMAN_VALIDATION_WITH_DOCUMENTED_GAPS**. No HUMAN_ACCEPTED.
+
