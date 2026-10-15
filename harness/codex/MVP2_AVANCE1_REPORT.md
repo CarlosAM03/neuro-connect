@@ -4,7 +4,9 @@
 - Branch: mvp2-avance1, creada directamente de origin/main después de fetch y fast-forward local seguro.
 - Base commit: dcc91e24fdf5ad338159e67cb72374eb805f2a78, merge humano PR #2; PR #1 también presente.
 - Final commit: commit documental final que contiene este reporte; resolver con `git log -1 --format=%H -- harness/codex/MVP2_AVANCE1_REPORT.md`. Implementation commit validado: `5597689bebf57d3915c7c992a33a5e43d0abda04`. El hash de un commit no puede incluirse dentro de su propio contenido.
-- Status técnico: READY_FOR_HUMAN_VALIDATION. Entrega Git/PR y CI remoto: pendientes de publicación al completar handoff; se actualizarán aquí con evidencia real.
+- Status técnico: READY_FOR_HUMAN_VALIDATION. `origin/mvp2-avance1` publicada. La creación automática devolvió403 «Resource not accessible by integration» y no se extrajeron/reutilizaron credenciales. CarlosAM03 creó el PR#3 externamente y después lo fusionó mientras terminaba CI: https://github.com/CarlosAM03/neuro-connect/pull/3; adjuntado a esta tarea, sin duplicado. No merge/auto-merge ni push a main por el agente.
+- Merge externo observado: `04f6c8983b18881ba9d52899f70348bb1673d9f4`, incorporando head `0629b6b9f58cbb8459e897f3d88b1862dd24ff5c`. El último commit que actualiza ESTE reporte es posterior al merge humano y queda publicado en mvp2-avance1, no incluido en aquel merge. No se crea otro PR ni se modifica main para incorporarlo.
+- Título/cuerpo preparados en `harness/codex/MVP2_AVANCE1_PR.md`; el PR externo tenía cuerpo vacío y el conector no pudo publicarlo. Los checks completos del push/PR pasaron sobre0629b6b; detalle abajo.
 - Fecha de validación: 14 de octubre de 2026, America/Tijuana. Node22.16.0, Flutter3.47.5/Dart3.13.4, PostgreSQL16, Docker Desktop Linux containers.
 
 ## Stabilization performed
@@ -66,7 +68,7 @@ Nuevo feature backend/src/ai y método de fuente Analytics; AppModule/config/Swa
 
 Conservados Dockerfiles productivos multi-stage/sin root/sin devDependencies, imágenes independientes y PostgreSQL externo mediante DATABASE_URL en plantilla productiva. Backend runtime incluye únicamente el smoke operativo seleccionado en scripts/smoke.cjs; resto de tests sigue excluido del contexto. Compose mantiene PostgreSQL16→readiness backend→frontend healthy y un comando `docker compose up -d --build --wait`. Smoke se puede ejecutar dentro del contenedor sin Node/Flutter en host. Config productiva validada con valores sintéticos y sin conexiones externas.
 
-CI conserva gates e incorpora branch mvp2-avance1; runner E2E habilita preview/mock sin claves ni APIs externas. Resultado remoto pendiente hasta push; no se afirma antes de observar Actions.
+CI conserva gates e incorpora branch mvp2-avance1; runner E2E habilita preview/mock sin claves ni APIs externas. Los cuatro runs sobre `0629b6b9f58cbb8459e897f3d88b1862dd24ff5c` terminaron SUCCESS, incluidos Docker builds: [Backend push](https://github.com/CarlosAM03/neuro-connect/actions/runs/38672155115), [Frontend push](https://github.com/CarlosAM03/neuro-connect/actions/runs/38672155131), [Backend PR#3](https://github.com/CarlosAM03/neuro-connect/actions/runs/38672339972), [Frontend PR#3](https://github.com/CarlosAM03/neuro-connect/actions/runs/38672340014). El commit de cierre posterior cambia únicamente este reporte; no modifica implementación ni tests. Estos son resultados observados, no una afirmación anticipada sobre runs posteriores.
 
 ## Tests executed / Test results / Build results
 
@@ -114,6 +116,8 @@ Evidencias: docs/evidence/avance1/dashboard-chart.png y ai-preview.json. Test de
 ## Known limitations / Deviations / Technical debt / Explicit deferred MVP-2 work
 
 Sin blocker funcional conocido. No desviaciones de arquitectura/dominio/documentación. No MVP-2 DONE ni versión1.0.0 DONE. Proveedor/modelo definitivo PENDING; no benchmark, llamadas LLM, evaluación clínica ni resultados generativos reales. Mock no valida calidad de un futuro modelo. No lifecycle productivo/persistencia/historial de resúmenes ni frontend final IA; no red de apoyo, permisos delegados, cloud, deployment/TLS, monitoreo/backup/hardening MVP-4, RAG/agentes/colas.
+
+Limitación de entrega: conector GitHub403; cuerpo preparado en archivo. PR#3 fue creado/fusionado externamente antes del cierre del agente. El reporte actualizado con esos hechos y CI se publica en un commit posterior de mvp2-avance1, por lo que su última versión no forma parte del merge04f6c898. Se conserva este hecho explícito en lugar de reescribir historia o alterar main. La integración externa no se presenta como aceptación académica/humana de este reporte.
 
 Analytics lee todo el historial y dashboard consulta por Goal como baseline. Advertencia Prisma package.json config y advisories heredadas quedan para actualización/hardening, sin audit fix --force. Android/iOS y DB productiva externa no ejecutados. Primera build necesita Internet. Backup IPC local de cero bytes permanece preservado fuera del repo. Docs/AVANCE-1.md tiene exactamente seis secciones académicas y marca retroalimentación/valoración humana con [PENDIENTE DE VALIDACIÓN DEL AUTOR]; no PDF final ni porcentajes globales artificiales.
 
