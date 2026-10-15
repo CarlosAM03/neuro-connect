@@ -9,6 +9,8 @@ if (!url || !/^\/[a-zA-Z0-9_]*_test$/.test(new URL(url).pathname)) {
 }
 process.env.DATABASE_URL = url;
 process.env.NODE_ENV = 'test';
+process.env.AI_PREVIEW_ENABLED = 'true';
+process.env.AI_PROVIDER = 'mock';
 const run = (file, args) => {
   const result = spawnSync(process.execPath, [require.resolve(file), ...args], {
     stdio: 'inherit',
