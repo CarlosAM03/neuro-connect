@@ -42,7 +42,7 @@ export function appendAudit(
   entityId: string,
   input: Prisma.InputJsonObject = {},
 ) {
-  const payload: Prisma.InputJsonObject = {};
+  const payload: Record<string, Prisma.InputJsonValue | null> = {};
   for (const key of allowed[action]) {
     if (input[key] !== undefined) payload[key] = input[key];
   }
