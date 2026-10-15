@@ -1005,7 +1005,7 @@ preferentemente mediante Docker Compose.
 
 # Desarrollo local
 
-MVP-0 ofrece autenticación, perfil, objetivos, lifecycle, check-ins e historial. MVP-1 añade Analytics determinístico, seguimiento, tendencias y gráficas. Avance 1 inicia MVP-2 con contexto/prompt técnico y mock de desarrollo, sin proveedor generativo real. Versiones verificadas: Node 22.16.0, Flutter 3.47.5 / Dart 3.13.4, PostgreSQL 16.
+MVP-0 ofrece autenticación, perfil, objetivos, lifecycle, check-ins e historial. MVP-1 añade Analytics determinístico, seguimiento, tendencias y gráficas. Avance 1 inicia MVP-2 con contexto/prompt técnico y mock de desarrollo, sin proveedor generativo real. MVP-1.5 incorpora ADR-008: cancelación persistente, invalidación de check-ins, auditoría privada y red de apoyo con permisos de lectura, expiración y revocación/reactivación. Versiones verificadas: Node 22.16.0, Flutter 3.47.5 / Dart 3.13.4, PostgreSQL 16.
 
 ## Local con Docker
 
@@ -1031,7 +1031,7 @@ Seed opcional, desde raíz:
 docker compose exec backend node seed-dist/seed.js
 ```
 
-El seed crea `demo@neuroconnect.local`, tres objetivos y quince check-ins: progreso creciente, estable y sin seguimiento reciente. Usa la contraseña `SEED_PASSWORD` de `.env`; no se ejecuta al iniciar. Reejecutarlo reemplaza solamente los historiales demo identificados por el seed.
+El seed crea el owner `demo@neuroconnect.local`, `supporter@neuroconnect.local` (objetivos y progreso) y `supporter-goals@neuroconnect.local` (solo objetivos), cinco objetivos y veinticinco check-ins. Conserva los patrones creciente, estable e inactivo y agrega un objetivo completado y otro cancelado. Las tres cuentas utilizan `SEED_PASSWORD` local; nunca se imprime. Reejecutarlo conserva registros, estados, permisos y auditoría existentes; no reinicia cambios del usuario. Para repetir el escenario original utiliza una base de prueba nueva, sin borrar el volumen de desarrollo.
 
 Smoke técnico completo, también sin Node/Flutter locales:
 
@@ -1039,7 +1039,7 @@ Smoke técnico completo, también sin Node/Flutter locales:
 docker compose exec backend node scripts/smoke.cjs
 ```
 
-Crea dos cuentas sintéticas, valida Auth/Goals/CheckIns/Analytics/AI Preview y elimina únicamente sus datos. Es development-only y rechaza NODE_ENV=production antes de acceder a la base. El dashboard y la gráfica se validan desde el navegador.
+Crea dos cuentas sintéticas, valida Auth/Goals/CheckIns/Analytics/AI Preview, permisos Owner/Supporter, cancelación, void, expiración, revocación/reactivación y auditoría. Limpia únicamente sus fixtures mediante Prisma interno; las APIs públicas no borran dominio. Es development-only y rechaza NODE_ENV=production antes de acceder a la base. El dashboard y la gráfica se validan desde el navegador.
 
 En Swagger autoriza un JWT obtenido con `/auth/login` y prueba `GET /api/v1/ai/summary/context`. Devuelve `{context,prompt,providerConfigured:false}`: datos propios minimizados y prompt SYSTEM/USER, sin llamar al mock/proveedor ni persistir AISummary. `AI_PREVIEW_ENABLED` controla el endpoint (false responde404 con sesión válida); Compose local lo habilita por defecto, la plantilla productiva lo deshabilita. Solo está soportado `AI_PROVIDER=mock`; no requiere AI_API_KEY ni selecciona modelo. El mock interno se identifica como **Development mock only** y no tiene endpoint público de generación ni pantalla Flutter. El modelo AISummary existe como scaffold requerido por PLAN §7.4, con FK/índices/periodo, para completar MVP-2 posteriormente.
 
@@ -1098,7 +1098,7 @@ docker build -t neuroconnect-backend:local ./backend
 docker build -t neuroconnect-frontend:local ./app
 ```
 
-E2E utiliza PostgreSQL real y una base separada cuyo nombre termina en `_test`. `setup-test.cjs` prepara esa base. El smoke requiere backend escuchando en 3000 y `backend/.env` configurado; verifica MVP-0 y Analytics con dos cuentas sintéticas y elimina únicamente sus datos. No imprime tokens ni contraseñas. Para verificar también las tres tendencias del seed: desde `backend`, `npm run smoke:seed` después de ejecutar el seed.
+E2E utiliza PostgreSQL real y una base separada cuyo nombre termina en `_test`. `setup-test.cjs` prepara esa base. El smoke requiere backend escuchando en 3000 y `backend/.env` configurado; verifica MVP-0 y Analytics con dos cuentas sintéticas y elimina únicamente sus datos. No imprime tokens ni contraseñas. Para verificar tendencias, estados históricos y métricas del seed: desde `backend`, `npm run smoke:seed` después de ejecutar el seed. `npm run smoke:migrations` aplica la cadena completa y seed dos veces en una DB temporal nueva con sufijo `_test`, valida que no se dupliquen eventos y limpia solo esa DB. Requiere `TEST_DATABASE_URL` y `SEED_PASSWORD` locales.
 
 ## Artefactos productivos
 
@@ -1106,7 +1106,9 @@ E2E utiliza PostgreSQL real y una base separada cuyo nombre termina en `_test`. 
 
 En producción, PostgreSQL es externo y se localiza exclusivamente mediante `DATABASE_URL`. El ejemplo `infra/compose/compose.prod.example.yml` contiene frontend/backend y ninguna base de datos; utiliza secretos del entorno y `API_BASE_URL` HTTPS pública al compilar. Es una plantilla operativa, no un deployment ejecutado. TLS, hosting público y hardening corresponden a bloques posteriores.
 
-Android e iOS conservan los proyectos existentes; este bloque valida Web. Para dispositivos usa una API HTTPS accesible. Evidencias y checklist del cierre: [MVP2_AVANCE1_REPORT.md](harness/codex/MVP2_AVANCE1_REPORT.md). Documento académico editable: [AVANCE-1.md](docs/AVANCE-1.md); requiere revisión del autor y no constituye el PDF final.
+Android e iOS conservan los proyectos existentes; este bloque valida Web. Para dispositivos usa una API HTTPS accesible. MVP-1.5: desde Perfil abre **Mi red de apoyo**, **Personas a las que apoyo** o **Historial de actividad**. Comparte por correo exacto de una cuenta existente; las notas siempre son privadas. Los objetivos cancelados permanecen visibles; progreso detallado requiere permiso adicional. Las vistas compartidas son solo lectura y Actualizar vuelve a comprobar acceso/permisos. Resúmenes compartidos está preparado como permiso y colección vacía, sin IA real. Reporte y checklist: [MVP15_REPORT.md](harness/codex/MVP15_REPORT.md).
+
+Evidencias y checklist del cierre: [MVP2_AVANCE1_REPORT.md](harness/codex/MVP2_AVANCE1_REPORT.md). Documento académico editable: [AVANCE-1.md](docs/AVANCE-1.md); requiere revisión del autor y no constituye el PDF final.
 
 ---
 

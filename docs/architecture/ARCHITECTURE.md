@@ -1,4 +1,4 @@
-# Implemented architecture — Avance 1
+# Implemented architecture — MVP-1.5
 
 This operational document describes the implementation; the accepted ADRs remain authoritative.
 
@@ -15,4 +15,8 @@ Local HTTP is used on loopback for development. Public deployment must use HTTPS
 
 AnalyticsModule computes read-only metrics/trends from Goal/CheckIn. Flutter consumes these through repositories/providers and displays dashboard/chart; it never classifies trends independently.
 
-AiModule is started, not complete: AnalyticsService.summarySource (one owner/RepeatableRead snapshot) → SummaryContextBuilder allowlist → PromptBuilder fixed SYSTEM + JSON USER → authenticated technical preview. Preview is feature-gated and does not invoke a provider or write AISummary. AiProvider has an internal deterministic MockAiProvider for development/tests, explicitly not real AI. No model SDK/network generation, production summary lifecycle or SupportNetwork exists. AISummary is only a database scaffold required for this advance. See ADR-005 and the operational handoff report for deferred work.
+AiModule is started, not complete: AnalyticsService.summarySource (one owner/RepeatableRead snapshot) → SummaryContextBuilder allowlist → PromptBuilder fixed SYSTEM + JSON USER → authenticated technical preview. Preview is feature-gated and does not invoke a provider or write AISummary. AiProvider has an internal deterministic MockAiProvider for development/tests, explicitly not real AI. No model SDK/network generation or productive summary lifecycle exists. CANCELLED remains explicit and is not interpreted as failure or a clinical/emotional condition.
+
+ADR-008 adds AuditModule (private paginated owner activity) and SupportNetworkModule. SupportAccessService checks relationship/expiry/revocation/permission for every delegated request; a shared relationship row lock holds authorization while the safe projection is read. Owner permission/revoke/reactivate writes take an exclusive relationship lock. No permission cache, worker or global role is used. Delegated routes expose only safe fields; notes never cross the boundary. Critical writes plus minimized append-only audit share a PostgreSQL transaction.
+
+Flutter adds separate owner network, supported owners, shared read-only and activity features. Navigation is available from Perfil, without a role switch. Typed repositories isolate HTTP from widgets; session-dependent auto-disposed providers avoid cross-identity data. Refresh fetches both permissions and shared goals, removing stale projections if access is lost. Voided CheckIns are excluded from functional history; cancelled Goals remain visible in own/shared lists and Dashboard.

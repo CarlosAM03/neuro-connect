@@ -36,3 +36,21 @@ Set `AI_PREVIEW_ENABLED=true` to enable the technical endpoint; default is false
 From root, `docker compose exec backend node scripts/smoke.cjs` validates the full HTTP flow including preview and two-user isolation using the container runtime only; synthetic accounts are cleaned up. NODE_ENV=production refuses this script before DB access. Final evidence/checklist: `../harness/codex/MVP2_AVANCE1_REPORT.md`.
 
 API: `/api/v1`. Swagger: `/api/docs` when `SWAGGER_ENABLED=true`. Readiness: `/api/v1/health/ready`. Configuration is validated before startup. Never commit `.env`.
+
+
+## MVP-1.5 / ADR-008
+
+Goals use persistent CANCELLED/reactivate actions; CheckIns use voidedAt and effective snapshot recomputation. Deprecated DELETE aliases execute cancellation/void only. Lifecycle: PAUSED cannot go directly to COMPLETED; reactivate first. Analytics ignores voided CheckIns, adds cancelledGoals and excludes cancelled goals from completionRate eligibility.
+
+AuditModule exposes owner-only paginated GET /api/v1/audit-events, with action/entityType/from/to filters. All critical mutations append minimized events in the same database transaction. SQL triggers reject updates/direct deletes; no audit write API exists. Internal synthetic cleanup uses account FK cascades; no account-delete API exists.
+
+SupportNetworkModule uses per-request SupportAccessService and row locks, with no role column or cache. Relationships use exact existing email, unique owner/supporter pair, three dependent permission booleans, expiry/revocation/reactivation. Separate delegated GET routes expose snapshots/effective progress without notes. Summaries checks permission and returns [] until productive AI exists. Full routes: ../docs/architecture/API.md. Flutter is an untrusted client.
+
+Seed: owner demo@neuroconnect.local plus supporter@neuroconnect.local (goals/progress), supporter-goals@neuroconnect.local (goals only); all use local SEED_PASSWORD. Five goals (including COMPLETED and CANCELLED), 25 CheckIns; existing rows are preserved on rerun. No backfilled audit is invented for baseline rows.
+
+```sh
+npm run smoke:migrations
+npm run smoke:seed
+```
+
+Migration smoke creates a uniquely named empty PostgreSQL *_test database from TEST_DATABASE_URL, applies all migrations, seeds twice and verifies stable audit/history; finally drops only that newly created DB. It requires local SEED_PASSWORD. Baseline upgrade was also verified against the existing database. Operational report: ../harness/codex/MVP15_REPORT.md.
