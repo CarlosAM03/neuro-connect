@@ -9,6 +9,7 @@ const select = {
   status: true,
   progress: true,
   checkIns: {
+    where: { voidedAt: null },
     select: { progress: true, difficulty: true, createdAt: true },
     orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
   },

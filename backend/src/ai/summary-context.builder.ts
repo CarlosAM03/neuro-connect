@@ -15,6 +15,7 @@ export class SummaryContextBuilder {
       activeGoals: metrics.activeGoals,
       pausedGoals: metrics.pausedGoals,
       completedGoals: metrics.completedGoals,
+      cancelledGoals: metrics.cancelledGoals,
       completionRate: metrics.completionRate,
       averageProgress: metrics.averageProgress,
       checkInsLast28Days: metrics.checkInsLast28Days,

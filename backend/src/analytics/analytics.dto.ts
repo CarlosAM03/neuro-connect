@@ -26,6 +26,7 @@ export class OverviewResponse {
   @ApiProperty() activeGoals!: number;
   @ApiProperty() pausedGoals!: number;
   @ApiProperty() completedGoals!: number;
+  @ApiProperty() cancelledGoals!: number;
   @ApiProperty() completionRate!: number;
   @ApiProperty() averageProgress!: number;
   @ApiProperty() checkInsLast28Days!: number;

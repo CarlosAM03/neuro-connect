@@ -10,6 +10,7 @@ import { CheckInsModule } from './check-ins/check-ins.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AiModule } from './ai/ai.module';
 import { AuditModule } from './audit/audit.module';
+import { SupportNetworkModule } from './support-network/support-network.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AuditModule } from './audit/audit.module';
     AnalyticsModule,
     AiModule,
     AuditModule,
+    SupportNetworkModule,
   ],
   controllers: [HealthController],
 })
