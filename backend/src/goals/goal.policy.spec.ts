@@ -6,7 +6,13 @@ describe('Goal lifecycle', () => {
   for (const from of states)
     for (const to of states) {
       it(`${from} → ${to}`, () => {
-        if (from === 'COMPLETED' && to === 'PAUSED')
+        const permitted: Record<GoalStatus, GoalStatus[]> = {
+          ACTIVE: ['ACTIVE', 'PAUSED', 'COMPLETED', 'CANCELLED'],
+          PAUSED: ['PAUSED', 'ACTIVE', 'CANCELLED'],
+          COMPLETED: ['COMPLETED', 'ACTIVE'],
+          CANCELLED: ['CANCELLED', 'ACTIVE'],
+        };
+        if (!permitted[from].includes(to))
           expect(() => assertTransition(from, to)).toThrow();
         else expect(() => assertTransition(from, to)).not.toThrow();
       });

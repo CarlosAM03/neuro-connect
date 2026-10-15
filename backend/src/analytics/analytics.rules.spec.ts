@@ -18,12 +18,19 @@ const goal = (data: Partial<AnalyticsGoal> = {}): AnalyticsGoal => ({
   ...data,
 });
 describe('deterministic analytics / ADR-002', () => {
+  it('ADR-008 excludes cancelled from completion denominator and inactivity', () => {
+    const cancelled = goal({ status: 'CANCELLED', progress: 40, checkIns: [check(40, 50)] });
+    expect(goalAnalytics(cancelled, now).trend).toBe('STABLE');
+    expect(overviewAnalytics([cancelled], now)).toMatchObject({ totalGoals: 1, cancelledGoals: 1, inactiveGoals: 0, completionRate: 0 });
+    expect(overviewAnalytics([cancelled, goal({ status: 'COMPLETED' }), goal({ status: 'PAUSED' })], now)).toMatchObject({ totalGoals: 3, cancelledGoals: 1, completionRate: 50 });
+  });
   it('empty owner has finite zero metrics', () =>
     expect(overviewAnalytics([], now)).toEqual({
       totalGoals: 0,
       activeGoals: 0,
       pausedGoals: 0,
       completedGoals: 0,
+      cancelledGoals: 0,
       completionRate: 0,
       averageProgress: 0,
       checkInsLast28Days: 0,
@@ -158,6 +165,7 @@ describe('deterministic analytics / ADR-002', () => {
       activeGoals: 1,
       pausedGoals: 1,
       completedGoals: 1,
+      cancelledGoals: 0,
       completionRate: 33.33,
       averageProgress: 43.33,
       inactiveGoals: 1,

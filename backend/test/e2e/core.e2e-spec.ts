@@ -359,6 +359,17 @@ describe('MVP-0 / real PostgreSQL', () => {
   });
   it('enforces lifecycle and retains progress when completed below 100', async () => {
     for (const status of ['PAUSED', 'COMPLETED']) {
+      if (status === 'COMPLETED') {
+        await request(app.getHttpServer())
+          .patch(`${api}/goals/${goalId}`)
+          .set(asA())
+          .send({ status: 'COMPLETED' })
+          .expect(409);
+        await request(app.getHttpServer())
+          .post(`${api}/goals/${goalId}/reactivate`)
+          .set(asA())
+          .expect(200);
+      }
       await request(app.getHttpServer())
         .patch(`${api}/goals/${goalId}`)
         .set(asA())
@@ -397,9 +408,9 @@ describe('MVP-0 / real PostgreSQL', () => {
       .send({ status: 'ACTIVE' })
       .expect(200);
   });
-  it('restores snapshot after deleting newest, older and final records', async () => {
+  it('restores snapshot after voiding newest, older and final records', async () => {
     let history = await prisma.checkIn.findMany({
-      where: { goalId },
+      where: { goalId, voidedAt: null },
       orderBy: { createdAt: 'desc' },
     });
     await request(app.getHttpServer())
@@ -423,8 +434,20 @@ describe('MVP-0 / real PostgreSQL', () => {
     expect(
       (await prisma.goal.findUniqueOrThrow({ where: { id: goalId } })).progress,
     ).toBe(0);
-    history = await prisma.checkIn.findMany({ where: { goalId } });
-    expect(history).toHaveLength(0);
+    history = await prisma.checkIn.findMany({
+      where: { goalId, voidedAt: null },
+    });
+    for (const item of history)
+      await request(app.getHttpServer())
+        .post(`${api}/goals/${goalId}/check-ins/${item.id}/void`)
+        .set(asA())
+        .expect(204);
+    expect(
+      await prisma.checkIn.count({ where: { goalId, voidedAt: null } }),
+    ).toBe(0);
+    expect(await prisma.checkIn.count({ where: { goalId } })).toBeGreaterThan(
+      0,
+    );
   });
   it('serializes concurrent CheckIns and lifecycle changes', async () => {
     await Promise.all(
@@ -437,7 +460,7 @@ describe('MVP-0 / real PostgreSQL', () => {
       ),
     );
     const history = await prisma.checkIn.findMany({
-      where: { goalId },
+      where: { goalId, voidedAt: null },
       orderBy: { createdAt: 'desc' },
     });
     expect(new Set(history.map((item) => item.createdAt.getTime())).size).toBe(
@@ -459,7 +482,7 @@ describe('MVP-0 / real PostgreSQL', () => {
     expect(results[0].status).toBe(200);
     expect([201, 409]).toContain(results[1].status);
     const latest = await prisma.checkIn.findFirstOrThrow({
-      where: { goalId },
+      where: { goalId, voidedAt: null },
       orderBy: { createdAt: 'desc' },
     });
     expect(
@@ -481,7 +504,7 @@ describe('MVP-0 / real PostgreSQL', () => {
       }),
     ).rejects.toThrow();
   });
-  it('validates IDs and cascades goal deletion without affecting the other owner', async () => {
+  it('validates IDs and preserves cancelled history without affecting the other owner', async () => {
     await request(app.getHttpServer())
       .get(`${api}/goals/not-a-uuid`)
       .set(asA())
@@ -494,7 +517,12 @@ describe('MVP-0 / real PostgreSQL', () => {
       .delete(`${api}/goals/${goalId}`)
       .set(asA())
       .expect(204);
-    expect(await prisma.checkIn.count({ where: { goalId } })).toBe(0);
+    expect(await prisma.checkIn.count({ where: { goalId } })).toBeGreaterThan(
+      0,
+    );
+    expect(
+      (await prisma.goal.findUniqueOrThrow({ where: { id: goalId } })).status,
+    ).toBe('CANCELLED');
     await request(app.getHttpServer())
       .get(`${api}/goals/${otherGoalId}`)
       .set(asB())

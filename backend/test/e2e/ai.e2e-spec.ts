@@ -171,6 +171,7 @@ describe('Avance 1 AI Preview / real PostgreSQL', () => {
     expect(result.body.context).toMatchObject({
       totalGoals: 0,
       completedGoals: 0,
+      cancelledGoals: 0,
       completionRate: 0,
       averageProgress: 0,
       checkInFrequencyPerWeek: 0,

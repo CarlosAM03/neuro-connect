@@ -111,6 +111,7 @@ describe('MVP-1 Analytics / PostgreSQL', () => {
       activeGoals: 6,
       pausedGoals: 1,
       completedGoals: 1,
+      cancelledGoals: 0,
       completionRate: 12.5,
       averageProgress: 37.63,
       checkInsLast28Days: 8,
