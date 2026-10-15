@@ -16,10 +16,16 @@ import {
   ApiOperation,
   ApiTags,
   PickType,
+  OmitType,
+  ApiProperty,
 } from '@nestjs/swagger';
 import { CurrentUser, SafeUser } from '../auth/auth.guard';
 import { GoalResponse } from '../common/response.dto';
-import { GoalAnalyticsResponse } from '../analytics/analytics.dto';
+import {
+  GoalAnalyticsResponse,
+  TimelinePointResponse,
+} from '../analytics/analytics.dto';
+import { CheckInCompletion } from '@prisma/client';
 import { SupportAccessService } from './support-access.service';
 import { SupportNetworkService } from './support-network.service';
 import {
@@ -38,6 +44,16 @@ class SharedGoalResponse extends PickType(GoalResponse, [
   'progress',
   'targetDate',
 ] as const) {}
+class SharedTimelinePointResponse extends TimelinePointResponse {
+  @ApiProperty({ minimum: 1, maximum: 5 }) difficulty!: number;
+  @ApiProperty({ enum: CheckInCompletion }) completion!: CheckInCompletion;
+}
+class SharedProgressResponse extends OmitType(GoalAnalyticsResponse, [
+  'timeline',
+] as const) {
+  @ApiProperty({ type: [SharedTimelinePointResponse] })
+  timeline!: SharedTimelinePointResponse[];
+}
 
 @ApiTags('Support network')
 @ApiBearerAuth()
@@ -133,7 +149,7 @@ class SupportNetworkController {
   }
   @Get('owners/:ownerId/goals/:goalId/progress')
   @ApiOkResponse({
-    type: GoalAnalyticsResponse,
+    type: SharedProgressResponse,
     description:
       'VIEW_PROGRESS; timeline additionally includes difficulty and completion, never notes or voided records.',
   })

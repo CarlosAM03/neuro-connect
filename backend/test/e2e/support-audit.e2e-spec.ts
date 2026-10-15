@@ -524,7 +524,9 @@ describe('ADR-008 / real PostgreSQL owner-supporter history', () => {
     await expect(
       db.auditEvent.update({ where: { id: auditId }, data: { payload: {} } }),
     ).rejects.toThrow();
-    await expect(db.auditEvent.delete({ where: { id: auditId } })).rejects.toThrow();
+    await expect(
+      db.auditEvent.delete({ where: { id: auditId } }),
+    ).rejects.toThrow();
   });
   it('rolls back domain writes/snapshot/permissions when audit insertion fails', async () => {
     // Test DB only: force the actual PostgreSQL audit insert to fail, without mocks.
@@ -536,6 +538,66 @@ describe('ADR-008 / real PostgreSQL owner-supporter history', () => {
     );
     try {
       const before = await db.goal.findUniqueOrThrow({ where: { id: goal } });
+      const failedEmail = `rollback-${suffix}@example.com`;
+      await http()
+        .post(`${api}/auth/register`)
+        .send({
+          email: failedEmail,
+          password: 'Test-only-register-827!',
+          displayName: 'Rollback account',
+        })
+        .expect(500);
+      expect(await db.user.count({ where: { email: failedEmail } })).toBe(0);
+      await http()
+        .patch(`${api}/goals/${goal}`)
+        .set(header())
+        .send({ title: 'Rollback title' })
+        .expect(500);
+      expect(
+        (await db.goal.findUniqueOrThrow({ where: { id: goal } })).title,
+      ).toBe(before.title);
+      await http()
+        .post(`${api}/support-network/relationships`)
+        .set(header())
+        .send({ supporterEmail: emails[2], ...permissions })
+        .expect(500);
+      expect(
+        await db.supportRelationship.count({
+          where: { ownerId: users[0], supporterId: users[2] },
+        }),
+      ).toBe(0);
+      await http()
+        .patch(relationship())
+        .set(header())
+        .send({ expiresAt: '2000-01-01T00:00:00Z' })
+        .expect(500);
+      expect(
+        (
+          await db.supportRelationship.findUniqueOrThrow({
+            where: { id: relation },
+          })
+        ).expiresAt,
+      ).toBeNull();
+      await db.supportRelationship.update({
+        where: { id: relation },
+        data: { revokedAt: new Date() },
+      });
+      await http()
+        .post(`${relationship()}/reactivate`)
+        .set(header())
+        .send({ ...permissions, canViewProgress: true, expiresAt: null })
+        .expect(500);
+      expect(
+        (
+          await db.supportRelationship.findUniqueOrThrow({
+            where: { id: relation },
+          })
+        ).revokedAt,
+      ).not.toBeNull();
+      await db.supportRelationship.update({
+        where: { id: relation },
+        data: { revokedAt: null },
+      });
       await http()
         .post(`${api}/goals/${goal}/cancel`)
         .set(header())

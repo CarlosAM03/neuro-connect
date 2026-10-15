@@ -145,20 +145,116 @@ async function smoke() {
     (await call('GET', analyticsPath, undefined, a)).trend,
     'DECLINING',
   );
-  await call('DELETE', `${path}/check-ins/${declining.id}`, undefined, a, 204);
+  await call(
+    'POST',
+    `${path}/check-ins/${declining.id}/void`,
+    undefined,
+    a,
+    204,
+  );
   for (const status of ['PAUSED', 'COMPLETED']) {
+    if (status === 'COMPLETED') {
+      await call('PATCH', path, { status }, a, 409);
+      await call('POST', `${path}/reactivate`, undefined, a);
+    }
     await call('PATCH', path, { status }, a);
     await call('POST', `${path}/check-ins`, check, a, 409);
   }
   await call('PATCH', path, { status: 'ACTIVE' }, a);
-  await call('DELETE', `${path}/check-ins/${latest.id}`, undefined, a, 204);
+  await call('POST', `${path}/check-ins/${latest.id}/void`, undefined, a, 204);
   assert.equal((await call('GET', path, undefined, a)).progress, 35);
   await call('GET', '/goals', undefined, a);
-  await call('DELETE', path, undefined, a, 204);
-  await call('GET', path, undefined, a, 404);
+  await call('POST', `${path}/cancel`, undefined, a);
+  assert.equal((await call('GET', path, undefined, a)).status, 'CANCELLED');
+  assert.ok((await prisma.checkIn.count({ where: { goalId: goal.id } })) > 0);
+  const activeGoal = await call(
+    'POST',
+    '/goals',
+    { title: 'Smoke: objetivo activo compartido' },
+    a,
+    201,
+  );
+  const permissions = {
+    canViewGoals: true,
+    canViewProgress: false,
+    canViewSummaries: false,
+  };
+  const relation = await call(
+    'POST',
+    '/support-network/relationships',
+    { supporterEmail: emails[1], ...permissions },
+    a,
+    201,
+  );
+  const owner = await call('GET', '/auth/me', undefined, a);
+  const delegated = `/support-network/owners/${owner.id}`;
+  const relPath = `/support-network/relationships/${relation.id}`;
+  assert.equal(
+    (await call('GET', '/support-network/owners', undefined, b)).length,
+    1,
+  );
+  const shared = await call('GET', `${delegated}/goals`, undefined, b);
+  assert.ok(shared.some((g) => g.id === goal.id && g.status === 'CANCELLED'));
+  assert.ok(
+    shared.some((g) => g.id === activeGoal.id && g.status === 'ACTIVE'),
+  );
+  await call(
+    'GET',
+    `${delegated}/goals/${goal.id}/progress`,
+    undefined,
+    b,
+    404,
+  );
+  await call('PATCH', relPath, { canViewProgress: true }, a);
+  const progress = await call(
+    'GET',
+    `${delegated}/goals/${goal.id}/progress`,
+    undefined,
+    b,
+  );
+  assert.equal(progress.currentProgress, 35);
+  assert.equal(progress.totalCheckIns, 1);
+  assert.equal(JSON.stringify(progress).includes(check.notes), false);
+  assert.equal(JSON.stringify(progress).includes('notes'), false);
+  await call('POST', `${path}/reactivate`, undefined, b, 404);
+  await call('POST', `${relPath}/revoke`, undefined, a);
+  await call('GET', `${delegated}/goals`, undefined, b, 404);
+  assert.ok(
+    (
+      await prisma.supportRelationship.findUnique({
+        where: { id: relation.id },
+      })
+    ).revokedAt,
+  );
+  await call(
+    'POST',
+    `${relPath}/reactivate`,
+    { ...permissions, expiresAt: null },
+    a,
+  );
+  await call('GET', `${delegated}/goals`, undefined, b);
+  await call('PATCH', relPath, { expiresAt: '2000-01-01T00:00:00Z' }, a);
+  await call('GET', `${delegated}/goals`, undefined, b, 404);
+  const audit = await call('GET', '/audit-events?limit=100', undefined, a);
+  for (const action of [
+    'GOAL_CREATED',
+    'CHECKIN_CREATED',
+    'CHECKIN_VOIDED',
+    'GOAL_CANCELLED',
+    'SUPPORT_RELATIONSHIP_CREATED',
+    'SUPPORT_PERMISSIONS_UPDATED',
+    'SUPPORT_RELATIONSHIP_REVOKED',
+    'SUPPORT_RELATIONSHIP_REACTIVATED',
+    'SUPPORT_EXPIRATION_UPDATED',
+  ])
+    assert.ok(audit.items.some((e) => e.action === action));
+  assert.equal(JSON.stringify(audit).includes(check.notes), false);
+  assert.ok(
+    audit.items.every((e) => e.ownerId === owner.id && e.actorId === owner.id),
+  );
   await call('GET', '/goals', undefined, undefined, 401);
   console.log(
-    'PASS: live HTTP register → login → profile → Goal CRUD/lifecycle → CheckIns → snapshot/history → Analytics overview/timeline/PROGRESSING/DECLINING → AI context/prompt preview (no provider, no persistence) → isolation (2 users) → cleanup.',
+    'PASS: live HTTP Auth/profile → Goals/lifecycle/CANCELLED → CheckIns/void/snapshot/history → Analytics → AI Preview → Owner/Supporter permissions/no notes/read-only/expiry/revoke/reactivate → private audit → controlled synthetic cleanup.',
   );
 }
 smoke()
