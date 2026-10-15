@@ -264,6 +264,9 @@ export class SupportNetworkService {
       ownerId,
       'canViewProgress',
       async (tx) => {
+        // Core history mutations lock this parent FOR UPDATE. Hold a shared lock
+        // so the snapshot and effective history cannot come from different writes.
+        await tx.$queryRaw`SELECT "id" FROM "Goal" WHERE "id" = ${id}::uuid AND "ownerId" = ${ownerId}::uuid FOR SHARE`;
         const goal = await tx.goal.findFirst({
           where: { id, ownerId },
           select: {

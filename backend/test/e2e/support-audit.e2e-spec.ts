@@ -322,6 +322,37 @@ describe('ADR-008 / real PostgreSQL owner-supporter history', () => {
       .send({ canViewProgress: true })
       .expect(200);
   });
+  it('keeps delegated snapshot and effective timeline consistent during concurrent CheckIns', async () => {
+    const id = (
+      await http()
+        .post(`${api}/goals`)
+        .set(header())
+        .send({ title: 'Concurrent shared goal' })
+        .expect(201)
+    ).body.id as string;
+    await http()
+      .post(`${api}/goals/${id}/check-ins`)
+      .set(header())
+      .send({ ...check, progress: 10 })
+      .expect(201);
+    for (const progress of [30, 50, 60]) {
+      const [, read] = await Promise.all([
+        http()
+          .post(`${api}/goals/${id}/check-ins`)
+          .set(header())
+          .send({ ...check, progress })
+          .expect(201),
+        http()
+          .get(`${shared()}/goals/${id}/progress`)
+          .set(header(1))
+          .expect(200),
+      ]);
+      expect(read.body.currentProgress).toBe(
+        read.body.timeline.at(-1).progress,
+      );
+      expect(JSON.stringify(read.body)).not.toContain(check.notes);
+    }
+  });
   it('B cannot write through owner or delegated routes and cannot read owner audit', async () => {
     for (const action of ['cancel', 'reactivate'])
       await http()
