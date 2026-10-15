@@ -9,6 +9,7 @@ import * as argon2 from 'argon2';
 import { PrismaService } from '../prisma/prisma.service';
 import { safeUserSelect } from '../users/users.service';
 import { LoginDto, RegisterDto } from './auth.dto';
+import { appendAudit } from '../audit/audit';
 
 @Injectable()
 export class AuthService {
@@ -21,9 +22,17 @@ export class AuthService {
       type: argon2.argon2id,
     });
     try {
-      return await this.prisma.user.create({
-        data: { email: dto.email, displayName: dto.displayName, passwordHash },
-        select: safeUserSelect,
+      return await this.prisma.$transaction(async (tx) => {
+        const user = await tx.user.create({
+          data: {
+            email: dto.email,
+            displayName: dto.displayName,
+            passwordHash,
+          },
+          select: safeUserSelect,
+        });
+        await appendAudit(tx, user.id, 'ACCOUNT_REGISTERED', 'USER', user.id);
+        return user;
       });
     } catch (error) {
       if (

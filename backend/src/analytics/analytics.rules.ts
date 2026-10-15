@@ -69,6 +69,7 @@ export function goalAnalytics(goal: AnalyticsGoal, now: Date) {
 }
 
 export function overviewAnalytics(goals: AnalyticsGoal[], now: Date) {
+  const eligible = goals.filter((goal) => goal.status !== 'CANCELLED').length;
   const completedGoals = goals.filter(
     (goal) => goal.status === 'COMPLETED',
   ).length;
@@ -82,8 +83,9 @@ export function overviewAnalytics(goals: AnalyticsGoal[], now: Date) {
     activeGoals: goals.filter((goal) => goal.status === 'ACTIVE').length,
     pausedGoals: goals.filter((goal) => goal.status === 'PAUSED').length,
     completedGoals,
-    completionRate: goals.length
-      ? roundMetric((completedGoals / goals.length) * 100)
+    cancelledGoals: goals.filter((goal) => goal.status === 'CANCELLED').length,
+    completionRate: eligible
+      ? roundMetric((completedGoals / eligible) * 100)
       : 0,
     averageProgress: goals.length
       ? roundMetric(

@@ -11,6 +11,7 @@ enum GoalStatus {
   ACTIVE
   PAUSED
   COMPLETED
+  CANCELLED
 }
 
 enum CheckInCompletion {
@@ -26,14 +27,18 @@ enum AISummaryStatus {
 }
 
 model User {
-  id           String   @id @default(uuid()) @db.Uuid
-  email        String   @unique
+  id           String                @id @default(uuid()) @db.Uuid
+  email        String                @unique
   passwordHash String
   displayName  String
-  createdAt    DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt    DateTime @updatedAt @db.Timestamptz(3)
+  createdAt    DateTime              @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime              @updatedAt @db.Timestamptz(3)
   goals        Goal[]
   aiSummaries  AISummary[]
+  supportOwned SupportRelationship[] @relation("SupportOwner")
+  supportGiven SupportRelationship[] @relation("Supporter")
+  auditOwned   AuditEvent[]          @relation("AuditOwner")
+  auditActed   AuditEvent[]          @relation("AuditActor")
 }
 
 // Avance 1 scaffold only; preview and development mock do not persist summaries.
@@ -67,6 +72,7 @@ model Goal {
   updatedAt   DateTime   @updatedAt @db.Timestamptz(3)
   owner       User       @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   checkIns    CheckIn[]
+
   @@index([ownerId])
   @@index([ownerId, status])
 }
@@ -78,8 +84,68 @@ model CheckIn {
   difficulty Int
   completion CheckInCompletion
   notes      String?
+  voidedAt   DateTime?         @db.Timestamptz(3)
   createdAt  DateTime          @default(now()) @db.Timestamptz(3)
   goal       Goal              @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
   @@index([goalId])
   @@index([goalId, createdAt])
+}
+
+enum AuditEntityType {
+  USER
+  GOAL
+  CHECK_IN
+  SUPPORT_RELATIONSHIP
+}
+
+enum AuditAction {
+  ACCOUNT_REGISTERED
+  PROFILE_UPDATED
+  GOAL_CREATED
+  GOAL_UPDATED
+  GOAL_STATUS_CHANGED
+  GOAL_CANCELLED
+  GOAL_REACTIVATED
+  CHECKIN_CREATED
+  CHECKIN_VOIDED
+  SUPPORT_RELATIONSHIP_CREATED
+  SUPPORT_PERMISSIONS_UPDATED
+  SUPPORT_RELATIONSHIP_REVOKED
+  SUPPORT_RELATIONSHIP_REACTIVATED
+  SUPPORT_EXPIRATION_UPDATED
+}
+
+model SupportRelationship {
+  id               String    @id @default(uuid()) @db.Uuid
+  ownerId          String    @db.Uuid
+  supporterId      String    @db.Uuid
+  canViewGoals     Boolean
+  canViewProgress  Boolean
+  canViewSummaries Boolean
+  authorizedAt     DateTime  @default(now()) @db.Timestamptz(3)
+  expiresAt        DateTime? @db.Timestamptz(3)
+  revokedAt        DateTime? @db.Timestamptz(3)
+  owner            User      @relation("SupportOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  supporter        User      @relation("Supporter", fields: [supporterId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, supporterId])
+  @@index([ownerId])
+  @@index([supporterId])
+}
+
+model AuditEvent {
+  id         String          @id @default(uuid()) @db.Uuid
+  ownerId    String          @db.Uuid
+  actorId    String          @db.Uuid
+  action     AuditAction
+  entityType AuditEntityType
+  entityId   String          @db.Uuid
+  payload    Json            @db.JsonB
+  occurredAt DateTime        @default(now()) @db.Timestamptz(3)
+  owner      User            @relation("AuditOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  actor      User            @relation("AuditActor", fields: [actorId], references: [id], onDelete: Cascade)
+
+  @@index([ownerId, occurredAt])
+  @@index([ownerId, entityType, entityId])
 }

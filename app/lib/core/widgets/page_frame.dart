@@ -18,7 +18,10 @@ class PageFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final path = GoRouterState.of(context).uri.path;
-    final selected = path.startsWith('/profile')
+    final selected =
+        (path.startsWith('/profile') ||
+            path.startsWith('/support') ||
+            path.startsWith('/activity'))
         ? 2
         : path.startsWith('/goals')
         ? 1
@@ -109,7 +112,7 @@ Future<bool> confirmDeletion(BuildContext context, String message) async =>
     await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmar eliminación'),
+        title: const Text('Confirmar cambio'),
         content: Text(message),
         actions: [
           TextButton(
@@ -118,7 +121,7 @@ Future<bool> confirmDeletion(BuildContext context, String message) async =>
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Eliminar'),
+            child: const Text('Confirmar'),
           ),
         ],
       ),

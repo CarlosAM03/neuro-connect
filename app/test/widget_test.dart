@@ -61,6 +61,7 @@ class FixtureAdapter implements HttpClientAdapter {
         'activeGoals': empty ? 0 : 1,
         'pausedGoals': 0,
         'completedGoals': 0,
+        'cancelledGoals': 0,
         'completionRate': 0,
         'averageProgress': empty ? 0 : 20,
         'checkInsLast28Days': empty ? 0 : 2,

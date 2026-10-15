@@ -13,6 +13,9 @@ import '../features/goals/goal_detail_page.dart';
 import '../features/check_ins/check_in_page.dart';
 import '../features/analytics/dashboard_page.dart';
 import '../features/analytics/goal_analytics_page.dart';
+import '../features/support/owner_support_page.dart';
+import '../features/support/supporter_page.dart';
+import '../features/activity/activity_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier(0);
@@ -34,6 +37,20 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/support/relationships',
+        builder: (_, _) => const OwnerSupportPage(),
+      ),
+      GoRoute(
+        path: '/support/owners',
+        builder: (_, _) => const SupporterPage(),
+      ),
+      GoRoute(
+        path: '/support/owners/:ownerId',
+        builder: (_, state) =>
+            SharedOwnerPage(ownerId: state.pathParameters['ownerId']!),
+      ),
+      GoRoute(path: '/activity', builder: (_, _) => const ActivityPage()),
       GoRoute(path: '/dashboard', builder: (_, _) => const DashboardPage()),
       GoRoute(
         path: '/goals/:id/analytics',

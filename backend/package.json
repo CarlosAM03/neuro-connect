@@ -18,7 +18,8 @@
     "migrate:deploy": "prisma migrate deploy",
     "seed": "tsx prisma/seed.ts",
     "smoke": "node test/smoke.cjs",
-    "smoke:seed": "node test/seed-smoke.cjs"
+    "smoke:seed": "node test/seed-smoke.cjs",
+    "smoke:migrations": "node test/migration-smoke.cjs"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"

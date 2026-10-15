@@ -4,9 +4,10 @@ import { GoalStatus, Prisma } from '@prisma/client';
 export function assertTransition(from: GoalStatus, to: GoalStatus) {
   if (from === to) return;
   const allowed: Record<GoalStatus, GoalStatus[]> = {
-    ACTIVE: ['PAUSED', 'COMPLETED'],
-    PAUSED: ['ACTIVE', 'COMPLETED'],
+    ACTIVE: ['PAUSED', 'COMPLETED', 'CANCELLED'],
+    PAUSED: ['ACTIVE', 'CANCELLED'],
     COMPLETED: ['ACTIVE'],
+    CANCELLED: ['ACTIVE'],
   };
   if (!allowed[from].includes(to))
     throw new ConflictException('Transición de objetivo no permitida');

@@ -2,19 +2,26 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateGoalDto, UpdateGoalDto } from './goal.dto';
 import { assertTransition, lockOwnedGoal } from './goal.policy';
+import { appendAudit } from '../audit/audit';
 
 @Injectable()
 export class GoalsService {
   constructor(private readonly prisma: PrismaService) {}
   create(ownerId: string, dto: CreateGoalDto) {
-    return this.prisma.goal.create({
-      data: {
-        ownerId,
-        title: dto.title,
-        description: dto.description,
-        category: dto.category,
-        targetDate: dto.targetDate ? new Date(dto.targetDate) : null,
-      },
+    return this.prisma.$transaction(async (tx) => {
+      const goal = await tx.goal.create({
+        data: {
+          ownerId,
+          title: dto.title,
+          description: dto.description,
+          category: dto.category,
+          targetDate: dto.targetDate ? new Date(dto.targetDate) : null,
+        },
+      });
+      await appendAudit(tx, ownerId, 'GOAL_CREATED', 'GOAL', goal.id, {
+        title: goal.title,
+      });
+      return goal;
     });
   }
   list(ownerId: string) {
@@ -32,7 +39,7 @@ export class GoalsService {
     return this.prisma.$transaction(async (tx) => {
       const goal = await lockOwnedGoal(tx, ownerId, id);
       if (dto.status !== undefined) assertTransition(goal.status, dto.status);
-      return tx.goal.update({
+      const updated = await tx.goal.update({
         where: { id },
         data: {
           title: dto.title,
@@ -47,12 +54,35 @@ export class GoalsService {
           status: dto.status,
         },
       });
+      const changedFields = (
+        ['title', 'description', 'category', 'targetDate'] as const
+      ).filter((key) => dto[key] !== undefined);
+      if (changedFields.length)
+        await appendAudit(tx, ownerId, 'GOAL_UPDATED', 'GOAL', id, {
+          title: updated.title,
+          changedFields,
+        });
+      if (goal.status !== updated.status)
+        await appendAudit(
+          tx,
+          ownerId,
+          updated.status === 'CANCELLED'
+            ? 'GOAL_CANCELLED'
+            : updated.status === 'ACTIVE'
+              ? 'GOAL_REACTIVATED'
+              : 'GOAL_STATUS_CHANGED',
+          'GOAL',
+          id,
+          {
+            title: updated.title,
+            previousStatus: goal.status,
+            newStatus: updated.status,
+          },
+        );
+      return updated;
     });
   }
   async delete(ownerId: string, id: string) {
-    await this.prisma.$transaction(async (tx) => {
-      await lockOwnedGoal(tx, ownerId, id);
-      await tx.goal.delete({ where: { id } });
-    });
+    await this.update(ownerId, id, { status: 'CANCELLED' });
   }
 }

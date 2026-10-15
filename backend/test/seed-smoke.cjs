@@ -27,6 +27,8 @@ async function run() {
     ['00000000-0000-4000-8000-000000000001', 'PROGRESSING'],
     ['00000000-0000-4000-8000-000000000002', 'STABLE'],
     ['00000000-0000-4000-8000-000000000003', 'INACTIVE'],
+    ['00000000-0000-4000-8000-000000000004', 'PROGRESSING'],
+    ['00000000-0000-4000-8000-000000000005', 'PROGRESSING'],
   ]);
   let recent = 0;
   const now = Date.now();
@@ -44,13 +46,16 @@ async function run() {
     ).length;
   }
   const overview = await get('/analytics/overview');
-  assert.equal(overview.totalGoals, 3);
-  assert.equal(overview.averageProgress, 47.33);
+  assert.equal(overview.totalGoals, 5);
+  assert.equal(overview.averageProgress, 55.4);
+  assert.equal(overview.cancelledGoals, 1);
+  assert.equal(overview.completedGoals, 1);
+  assert.equal(overview.completionRate, 25);
   assert.equal(overview.checkInsLast28Days, recent);
   assert.equal(overview.checkInFrequencyPerWeek, recent / 4);
   assert.equal(overview.inactiveGoals, 1);
   console.log(
-    'PASS: seed live API PROGRESSING / STABLE / INACTIVE, timelines and overview (3 goals, 15 CheckIns).',
+    'PASS: seed live API trends, timelines, CANCELLED / COMPLETED and eligible completion rate (5 goals, 25 CheckIns).',
   );
 }
 run().catch((error) => {

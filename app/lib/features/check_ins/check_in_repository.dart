@@ -25,8 +25,8 @@ class CheckInRepository {
     await api.dio.post<dynamic>('/goals/$goalId/check-ins', data: data);
   }
 
-  Future<void> delete(String goalId, String id) async {
-    await api.dio.delete<dynamic>('/goals/$goalId/check-ins/$id');
+  Future<void> voidCheckIn(String goalId, String id) async {
+    await api.dio.post<dynamic>('/goals/$goalId/check-ins/$id/void');
   }
 }
 
