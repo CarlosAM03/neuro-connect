@@ -25,7 +25,7 @@ export function configureApp(app: INestApplication) {
   app.enableShutdownHooks();
   if (config.get<string>('SWAGGER_ENABLED') === 'true') {
     const spec = new DocumentBuilder()
-      .setTitle('NeuroConnect MVP-0')
+      .setTitle('NeuroConnect API — Avance 1')
       .setVersion('0.1.0')
       .addBearerAuth()
       .build();

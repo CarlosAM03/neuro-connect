@@ -28,5 +28,16 @@ export function validateEnvironment(env: Record<string, unknown>) {
     )
       throw new Error('Invalid CORS_ORIGINS');
   }
-  return { ...env, PORT: port };
+  const preview = env.AI_PREVIEW_ENABLED ?? 'false';
+  if (!['true', 'false'].includes(String(preview)))
+    throw new Error('AI_PREVIEW_ENABLED must be true or false');
+  const provider = env.AI_PROVIDER ?? 'mock';
+  if (provider !== 'mock')
+    throw new Error('Only AI_PROVIDER=mock is supported during Avance 1');
+  return {
+    ...env,
+    PORT: port,
+    AI_PREVIEW_ENABLED: String(preview) === 'true',
+    AI_PROVIDER: provider,
+  };
 }
