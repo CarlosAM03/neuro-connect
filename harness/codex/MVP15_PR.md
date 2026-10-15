@@ -36,3 +36,6 @@ docker compose ps
 Abrir `http://127.0.0.1:5173` y `http://127.0.0.1:3000/api/docs`. Owner `demo@neuroconnect.local`; supporters `supporter@neuroconnect.local` (objetivos/progreso) y `supporter-goals@neuroconnect.local` (solo objetivos), todos con SEED_PASSWORD local. Desde Perfil revisar red, vistas compartidas y Activity. Los datos existentes se conservan; no eliminar el volumen para repetir el seed.
 
 Limitaciones: no reconstruye historia físicamente eliminada antes de ADR-008; IA real/modelo/AISummary productivo/UI IA siguen diferidos. Web validada; APK/iOS no compilados. Findings previos de dependencias documentados en el reporte (runtime2 moderate/3 high), sin introducir dependencias nuevas. No paid services ni deployment nuevo. Aceptación humana pendiente.
+
+
+Creación automática del PR: el conector GitHub devolvió403 `Resource not accessible by integration`. Rama publicada, validación técnica READY_FOR_HUMAN_VALIDATION. [Abrir comparación y crear PR manual](https://github.com/CarlosAM03/neuro-connect/compare/main...mvp1.5-support-audit?expand=1). Título recomendado: `feat: add NeuroConnect support network and historical audit`. Este archivo conserva el body completo para la revisión manual; no se realizó merge ni auto-merge.

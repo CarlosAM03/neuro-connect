@@ -5,7 +5,7 @@
 - Base commit: `04f6c8983b18881ba9d52899f70348bb1673d9f4` (`origin/main`, human merge PR #3).
 - ADR-008 commit: `dc1acb1` (adoption only; normative content unchanged).
 - Final commit: delivered branch `HEAD` (resolve with `git rev-parse HEAD`); final validated code/test commit `fa503c96cbd78147d11932213692e4f7a8f7ca23`. Subsequent handoff commits change documentation only.
-- Status: READY_FOR_HUMAN_VALIDATION — local gates, dual-user smoke and both remote CI workflows PASS. PR creation is the remaining delivery action; human acceptance is pending.
+- Status: READY_FOR_HUMAN_VALIDATION — local gates, dual-user smoke and both remote CI workflows PASS. Automatic PR creation is externally blocked by GitHub connector403; human acceptance is pending.
 
 ## Scope
 
@@ -193,7 +193,12 @@ code/test commit `fa503c96cbd78147d11932213692e4f7a8f7ca23`:
 - [Frontend CI — success](https://github.com/CarlosAM03/neuro-connect/actions/runs/38699154991): analyze,25 tests, web build, Docker image.
 
 Following handoff edits are documentation only. Final branch-head workflows are
-checked again after publication without changing product code or weakening checks.
+checked again after publication before final response, without changing product code
+or weakening checks. Live final-head results: [Backend branch runs](https://github.com/CarlosAM03/neuro-connect/actions/workflows/backend-ci.yml?query=branch%3Amvp1.5-support-audit),
+[Frontend branch runs](https://github.com/CarlosAM03/neuro-connect/actions/workflows/frontend-ci.yml?query=branch%3Amvp1.5-support-audit).
+The exact delivered handoff SHA is `git rev-parse HEAD`; the report cannot embed its
+own commit hash without changing that hash. All executable code/tests are identified
+by the validated `fa503c9` ancestor above.
 
 ## Browser smoke
 
@@ -247,6 +252,7 @@ No architectural deviation; no productive AI represented as complete.
 - Android/iOS projects retained; this block validates Web, not APK/iOS builds.
 - Existing dependency audit findings remain: production2 moderate/3 high;
   full dev install6 moderate/32 high. No dependency upgrade or weakening of checks.
+- Automatic PR creation is blocked by connector403; branch/compare/title/body are delivered for manual creation.
 - Human acceptance remains pending; never inferred from tests/CI.
 
 ## Continuation after usage-limit interruption
@@ -281,7 +287,14 @@ uncertain ownership. No git clean/reset or destructive filesystem operation used
 
 Published only origin/mvp1.5-support-audit. Both main and origin/main remain
 `04f6c8983b18881ba9d52899f70348bb1673d9f4`. All10 original commits preserved.
-PR attempt pending; body is prepared in `harness/codex/MVP15_PR.md`.
+Attempted the authorized PR with the GitHub connector after both workflows passed;
+GitHub returned403 `Resource not accessible by integration`. This is the only
+external delivery blocker, not a technical validation failure. No local credentials
+were extracted or reused. Full title/body is in `harness/codex/MVP15_PR.md`.
+
+[Create/review the PR: main...mvp1.5-support-audit](https://github.com/CarlosAM03/neuro-connect/compare/main...mvp1.5-support-audit?expand=1).
+PR number/URL: not created automatically (403). No merge or auto-merge performed.
+The branch remains available for manual PR creation and review.
 No merge, auto-merge, force-push or credential extraction is authorized/performed.
 
 ## Human validation commands
