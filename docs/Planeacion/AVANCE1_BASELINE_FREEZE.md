@@ -459,6 +459,8 @@ Cambiar el forecast o priorización no implica aprobar un proveedor, modelo o ga
   No notes/secretos en payload. Eventos anteriores no se reescriben y Activity
   conserva lectura compatible. actorId==ownerId aceptado para mutaciones owner-only;
   cambio de actor exige revisar firma/autorización, no inferir nuevos roles.
+  Las cascadas FK permanecen para limpieza interna controlada de datos sintéticos;
+  no existe API de borrado de cuenta ni eliminación física normal del dominio.
 - SupportRelationship con permisos VIEW_GOALS/VIEW_PROGRESS/VIEW_SUMMARIES; progress
   y summaries requieren goals, all-false rechazado, sin autorelación/duplicados.
   Expiry/revoke se evalúan por request; reactivate conserva relación/historia.
