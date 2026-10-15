@@ -1,6 +1,10 @@
 # Avance 1 — NeuroConnect
 
-Documento editable de evidencia técnica para el autor. Corte: 14 de octubre de 2026 (America/Tijuana). No es el PDF académico final. La validación humana del cierre está pendiente; las integraciones de MVP-0/1 fueron confirmadas por el responsable en PR #1 y PR #2.
+Documento editable de evidencia técnica para el autor. Corte histórico inicial:
+14 de octubre de 2026; actualización de ejecución real: 15 de octubre de 2026
+(America/Tijuana). No es el PDF académico final. Las secciones 1–6 conservan el
+corte del bloque 3; la sección posterior distingue la ejecución real y el cierre
+técnico. La aceptación humana del sprint closeout permanece pendiente.
 
 ## 1. Breve recordatorio del objetivo y planificación inicial
 
@@ -47,3 +51,42 @@ Deuda no bloqueante heredada: advertencia de configuración Prisma y advisories 
 Validar humanamente la rama mvp2-avance1, revisar reporte/Swagger/flujo Docker y PR antes de merge manual. Consolidar evidencia académica con el autor; no producir todavía PDF final.
 
 Completar MVP-2 posteriormente: evaluación formal ADR-005, comparación de modelos con inputs/criterios congelados, selección sustentada de proveedor/modelo, integración real sin mezclar cálculo oficial, lifecycle/persistencia/historia AISummary, errores/timeouts y frontend final. Después: red de apoyo/permisos y hardening/deployment conforme roadmap. Mantener costo obligatorio cero y no adelantar servicios pagados, RAG ni agentes.
+
+## 7. Resultado real — actualización posterior a MVP-1.5
+
+**Plan inicial de Avance 1:** MVP-0 completo + MVP-1 completo + inicio de MVP-2.
+
+**Resultado real:** MVP-0 completo + MVP-1 completo + foundation de MVP-2 +
+MVP-1.5 completo + estabilización AVANCE-1-CLOSEOUT. MVP-1.5 fue una modificación
+al plan inicial debido a un avance técnico superior al cronograma previsto. Permitió
+validar anticipadamente persistencia histórica, auditoría, red de apoyo, permisos,
+autorización entre usuarios, revocación y vistas delegadas antes de integrar IA real.
+Estas capacidades adelantaron el core previsto para MVP-3; no formaban parte del
+plan original de Avance 1 ni implican todo MVP-3 finalizado.
+
+PR #4 fue integrado humanamente en `d3920d955956263b3baac72d0dd4a350e697df9e`.
+El responsable confirmó PASS local para build/start Compose, seed, smoke completo y
+los tres servicios healthy. La sección post-merge de MVP15_REPORT conserva esa
+aceptación sin cambiar el registro pre-merge. No se inventa feedback académico.
+
+| Capacidad al cierre técnico | Estado |
+| --- | --- |
+| Auth, Profile, Goals, CheckIns | DONE |
+| Persistencia histórica, auditoría | DONE |
+| Analytics, Dashboard | DONE |
+| SupportNetwork core, permisos delegados | DONE |
+| Arquitectura IA, contexto, safety prompt, abstracción de proveedor | DONE |
+| LLM real, evaluación de modelos, AISummary productivo, UI IA | NOT STARTED |
+| Deployment público, aceptación Android, release hardening | PENDING |
+
+El contrato PostgreSQL → Analytics → SummaryContext se estabiliza en este sprint:
+averageProgress excluye CANCELLED y CHECKIN_VOIDED distingue el progreso invalidado
+del snapshot resultante. Los eventos históricos permanecen inmutables. La evidencia
+final de pruebas, seguridad, CI y reproducibilidad corresponde a
+`harness/codex/AVANCE1_CLOSEOUT_REPORT.md`.
+
+Avance 2 comenzará posteriormente con investigación de modelos candidatos,
+comparación, matriz ponderada, benchmark ciego, spike operativo, decisión conforme
+ADR-005, proveedor real, lifecycle AISummary, UI IA y finalización MVP-2. Ninguna
+investigación o integración externa se ejecuta en este sprint. `release-check.yml`
+queda DEFERRED → MVP-4; no se crean tags/releases ni se declara v1.0.0 completa.

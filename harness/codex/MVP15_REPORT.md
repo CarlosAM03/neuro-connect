@@ -336,6 +336,28 @@ cd ..
 docker compose stop
 ```
 
+## Post-Merge Human Acceptance
+
+Date: 2026-10-15
+
+PR #4: MERGED
+
+Merge commit: `d3920d955956263b3baac72d0dd4a350e697df9e`
+
+Human local validation: PASS, confirmada por el responsable y su log PowerShell.
+
+Validated:
+
+- Docker Compose build/start.
+- Seed y full smoke HTTP.
+- PostgreSQL, backend y frontend healthy.
+
+Final acceptance: **HUMAN_ACCEPTED**, exclusivamente para MVP-1.5.
+Los estados pre-merge de este reporte se conservan como evidencia histórica.
+Los hallazgos posteriores de payload CHECKIN_VOIDED, averageProgress, dependencias,
+CI y coherencia documental se atienden por AVANCE-1-CLOSEOUT; su evidencia vigente
+se encuentra en `AVANCE1_CLOSEOUT_REPORT.md`. Esta aceptación no aprueba ese sprint.
+
 ## Human Validation Checklist
 
 These checkboxes are reserved for manual human validation; automated evidence is above.
