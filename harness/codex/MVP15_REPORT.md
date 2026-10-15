@@ -4,8 +4,8 @@
 - Branch: `mvp1.5-support-audit`.
 - Base commit: `04f6c8983b18881ba9d52899f70348bb1673d9f4` (`origin/main`, human merge PR #3).
 - ADR-008 commit: `dc1acb1` (adoption only; normative content unchanged).
-- Final commit: pending implementation and validation.
-- Status: implementation in progress; no completion claim.
+- Final commit: delivered branch `HEAD` (resolve with `git rev-parse HEAD`); final validated code/test commit `fa503c96cbd78147d11932213692e4f7a8f7ca23`. Subsequent handoff commits change documentation only.
+- Status: PARTIALLY_COMPLETE — all local gates and dual-user browser smoke pass; publication/remote CI and PR are the remaining delivery steps.
 
 ## Scope
 
@@ -162,9 +162,9 @@ supersedes old deletion/lifecycle expectations; no tests skipped or requirements
 
 ## Tests executed / results / builds
 
-- Backend lint: PASS. Unit:67 PASS /4 suites. E2E:70 PASS /4 suites. Build:PASS.
-- Flutter analyze:PASS; initial full regression23 PASS, extended final25-test gate in progress.
-- Flutter release web:PASS including Wasm dry run; final wording rebuild in progress.
+- Backend lint: PASS. Unit:67 PASS /4 suites. E2E:72 PASS /4 suites (final continuation). Build:PASS.
+- Flutter analyze:PASS; final complete suite25 PASS (including all previous15).
+- Flutter release web:PASS including Wasm dry run; final continuation build138.2 s.
 - Empty PostgreSQL migrations + seed twice:PASS. Existing DB upgrade:PASS.
 - Live `npm run smoke:seed`:PASS (5 goals/25 CheckIns; cancelled/completed/eligible completion rate).
 - Container HTTP smoke:PASS full core/analytics/AI/owner-supporter/expiry/revoke/reactivate/audit.
@@ -181,7 +181,7 @@ Both Docker images built successfully; full Compose3 services healthy, migration
 automatic before backend startup, compiled seed and HTTP smoke run without host
 Node/Flutter. PostgreSQL16 named volume retained. Production example unchanged:
 separate frontend/backend images, external PostgreSQL via DATABASE_URL.
-Final source rebuild/smoke in progress. No paid services or deployment used.
+Final continuation source build/smoke:PASS; all3 services healthy. No paid services or deployment used.
 
 ## CI
 
@@ -190,11 +190,37 @@ publication after local validation; links/validated SHA recorded at completion.
 
 ## Browser smoke
 
-In progress using two integrated-browser tabs and synthetic local accounts.
-Baseline Owner registration/login/session restore/dashboard observed before new
-features. Owner has created ACTIVE Goal and private40% CheckIn, then a second Goal.
-Supporter registered/logged in; its initial supported-owner list is empty.
-Final permission/cancel/revoke/reactivate/activity evidence recorded after execution.
+PASS, completed on2026-10-15 after resuming the interrupted execution. Old tabs
+had closed, so two tabs were recreated and authenticated with the same existing
+synthetic accounts; no domain fixtures were rebuilt or discarded.
+
+- Owner sees the persisted Cancelado Goal and its earlier CheckIn. The final
+  cancellation confirmation explicitly says history is retained and reactivation
+  remains available (verified before interruption; final UI source and tests unchanged).
+- Supporter with VIEW_GOALS only lists the owner and sees ACTIVE and CANCELLED
+  snapshots; no detailed-progress control or private notes.
+- Owner enables VIEW_PROGRESS. The next refresh exposes authorized detailed progress:
+  active Goal40%, effective timeline/date/difficulty/completion, no notes or writes.
+- Owner Activity displays readable GOAL_CREATED, CHECKIN_CREATED, GOAL_CANCELLED,
+  SUPPORT_RELATIONSHIP_CREATED and SUPPORT_PERMISSIONS_UPDATED descriptions.
+- Owner revokes; relation remains visibly Revocada. Supporter's next refresh removes
+  all shared Goals and shows access unavailable. Owner Activity shows revocation.
+- Owner reactivates with explicit goals=true/progress=true/summaries=false/no expiry.
+  Supporter retries and recovers both Goals and progress, including the cancelled
+  Goal's retained effective CheckIn. Activity shows reactivation followed by revoke
+  and prior events in descending chronology.
+- Direct PostgreSQL/API cross-check confirms one logical relationship, same id in
+  create/revoke/reactivate events, retained cancelled row/CheckIn, and no notes in
+  delegated progress. Supporter writes, permissions/revoke and owner audit return404.
+- Final72 E2E include explicit VIEW_GOALS visibility of all four statuses
+  ACTIVE/PAUSED/COMPLETED/CANCELLED, exact safe fields, and progress denied without
+  VIEW_PROGRESS. API security is tested independently from button visibility.
+
+Screenshots are local review artifacts outside Git in the task visualization
+workspace (cancelled view, note-free progress, denied revoked access, Activity and
+reactivated Activity). Synthetic browser history remains available locally; no
+public product deletion was used. Container HTTP smoke cleans only its own random
+synthetic fixtures internally. Temporary browser tabs are closed after verification.
 
 ## Implementation decisions / deviations / dependencies
 
@@ -215,6 +241,34 @@ No architectural deviation; no productive AI represented as complete.
 - Existing dependency audit findings remain: production2 moderate/3 high;
   full dev install6 moderate/32 high. No dependency upgrade or weakening of checks.
 - Human acceptance remains pending; never inferred from tests/CI.
+
+## Continuation after usage-limit interruption
+
+Resumed2026-10-15 from existing `mvp1.5-support-audit` at `771aac5` without restarting,
+resetting, cleaning, rebasing or rewriting the10 existing commits. Initially modified
+files were inspected before changes:
+
+- `backend/src/support-network/support-network.service.ts`: FOR SHARE parent Goal
+  lock prevents snapshot/history reads observing different concurrent CheckIn writes.
+- `backend/test/e2e/support-audit.e2e-spec.ts`: concurrent owner CheckIns/supporter
+  reads assert snapshot equals last effective timeline point and no private notes.
+
+Both preserved and committed as `d57764587c46bdfebb3f43bf9bb3ca838377228d`
+(`fix(support): keep delegated progress snapshot and timeline consistent`).
+Validation-only addition `fa503c96cbd78147d11932213692e4f7a8f7ca23` explicitly checks
+all four Goal states with VIEW_GOALS, safe projection fields and lack of progress
+permission. No new product capability or migration was introduced in continuation.
+
+Final reruns: backend lint/unit67/E2E72/build PASS; Flutter analyze/tests25/web build
+PASS; Compose image builds/health/seed/HTTP smoke PASS; clean PostgreSQL migration
+chain and seed twice PASS; Swagger JSON/frontend health HTTP200; git diff --check PASS.
+Rollback failures in E2E are injected PostgreSQL audit errors expected to return500.
+No unexplained failure remains.
+
+Temporary inspection: `tmp/`, `tmp-compose-final.log`, `tmp-docker-build.log` are
+ignored/untracked, not part of any commit. Contents predate continuation (Avance1/
+previous MVP validation); retained as prior evidence rather than deleting files with
+uncertain ownership. No git clean/reset or destructive filesystem operation used.
 
 ## Human validation commands
 
