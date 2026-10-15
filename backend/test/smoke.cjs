@@ -252,6 +252,87 @@ async function smoke() {
   assert.ok(
     audit.items.every((e) => e.ownerId === owner.id && e.actorId === owner.id),
   );
+  // Independent owner fixture: prove the exact closeout contract over live HTTP.
+  for (const [status, value] of [
+    ['ACTIVE', 80],
+    ['PAUSED', 40],
+    ['COMPLETED', 100],
+    ['CANCELLED', 10],
+  ]) {
+    const fixture = await call(
+      'POST',
+      '/goals',
+      { title: `Closeout ${status}` },
+      b,
+      201,
+    );
+    const fixturePath = `/goals/${fixture.id}`;
+    if (status === 'ACTIVE') {
+      await call(
+        'POST',
+        `${fixturePath}/check-ins`,
+        { ...check, progress: 40 },
+        b,
+        201,
+      );
+      const invalidated = await call(
+        'POST',
+        `${fixturePath}/check-ins`,
+        { ...check, progress: 70 },
+        b,
+        201,
+      );
+      await call(
+        'POST',
+        `${fixturePath}/check-ins/${invalidated.id}/void`,
+        undefined,
+        b,
+        204,
+      );
+      assert.equal((await call('GET', fixturePath, undefined, b)).progress, 40);
+      const activity = await call(
+        'GET',
+        '/audit-events?action=CHECKIN_VOIDED',
+        undefined,
+        b,
+      );
+      assert.deepEqual(
+        activity.items.find((e) => e.entityId === invalidated.id).payload,
+        {
+          goalId: fixture.id,
+          goalTitle: 'Closeout ACTIVE',
+          voidedProgress: 70,
+          resultingGoalProgress: 40,
+        },
+      );
+    }
+    await call(
+      'POST',
+      `${fixturePath}/check-ins`,
+      { ...check, progress: value },
+      b,
+      201,
+    );
+    if (status !== 'ACTIVE') await call('PATCH', fixturePath, { status }, b);
+  }
+  const eligible = await call('GET', '/analytics/overview', undefined, b);
+  assert.equal(eligible.totalGoals, 4);
+  assert.equal(eligible.cancelledGoals, 1);
+  assert.equal(eligible.averageProgress, 73.33);
+  assert.equal(eligible.completionRate, 33.33);
+  const eligiblePreview = await call('GET', previewPath, undefined, b);
+  assert.equal(eligiblePreview.context.averageProgress, 73.33);
+  assert.equal(eligiblePreview.providerConfigured, false);
+  assert.equal(JSON.stringify(eligiblePreview).includes(check.notes), false);
+  assert.equal(
+    await prisma.aISummary.count({
+      where: { user: { email: { in: emails } } },
+    }),
+    summariesBefore,
+  );
+  console.log(
+    'PASS: CHECKIN_VOIDED 70 / resultingGoalProgress 40; eligible average 73.33 in Analytics and AI Preview; no notes/provider/summary persistence.',
+  );
   await call('GET', '/goals', undefined, undefined, 401);
   console.log(
     'PASS: live HTTP Auth/profile → Goals/lifecycle/CANCELLED → CheckIns/void/snapshot/history → Analytics → AI Preview → Owner/Supporter permissions/no notes/read-only/expiry/revoke/reactivate → private audit → controlled synthetic cleanup.',

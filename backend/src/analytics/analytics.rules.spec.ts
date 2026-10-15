@@ -18,6 +18,22 @@ const goal = (data: Partial<AnalyticsGoal> = {}): AnalyticsGoal => ({
   ...data,
 });
 describe('deterministic analytics / ADR-002', () => {
+  it('averages eligible statuses only, retaining cancelled in totalGoals', () => {
+    const input = [
+      goal({ status: 'ACTIVE', progress: 80 }),
+      goal({ status: 'PAUSED', progress: 40 }),
+      goal({ status: 'COMPLETED', progress: 100 }),
+      goal({ status: 'CANCELLED', progress: 10 }),
+    ];
+    const before = JSON.stringify(input);
+    expect(overviewAnalytics(input, now)).toMatchObject({
+      totalGoals: 4,
+      cancelledGoals: 1,
+      averageProgress: 73.33,
+      completionRate: 33.33,
+    });
+    expect(JSON.stringify(input)).toBe(before);
+  });
   it('ADR-008 excludes cancelled from completion denominator and inactivity', () => {
     const cancelled = goal({
       status: 'CANCELLED',
@@ -30,6 +46,7 @@ describe('deterministic analytics / ADR-002', () => {
       cancelledGoals: 1,
       inactiveGoals: 0,
       completionRate: 0,
+      averageProgress: 0,
     });
     expect(
       overviewAnalytics(

@@ -28,7 +28,11 @@ export class OverviewResponse {
   @ApiProperty() completedGoals!: number;
   @ApiProperty() cancelledGoals!: number;
   @ApiProperty() completionRate!: number;
-  @ApiProperty() averageProgress!: number;
+  @ApiProperty({
+    description:
+      'Average progress of ACTIVE, PAUSED and COMPLETED Goals; 0 if none. CANCELLED remains in totalGoals only.',
+  })
+  averageProgress!: number;
   @ApiProperty() checkInsLast28Days!: number;
   @ApiProperty() checkInFrequencyPerWeek!: number;
   @ApiProperty() inactiveGoals!: number;

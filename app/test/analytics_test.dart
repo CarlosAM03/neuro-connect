@@ -29,6 +29,17 @@ Future<ProviderContainer> mount(
 
 void main() {
   testWidgets(
+    'dashboard renders eligible API average without dividing by totalGoals',
+    (tester) async {
+      await mount(tester, FixtureAdapter()..eligibleFixture = true);
+      expect(find.text('73.33%'), findsOneWidget);
+      expect(find.text('57.50%'), findsNothing);
+      await tester.scrollUntilVisible(find.textContaining('Total: 4'), 150);
+      expect(find.textContaining('Cancelados: 1'), findsOneWidget);
+      expect(find.textContaining('Cumplimiento: 33.33%'), findsOneWidget);
+    },
+  );
+  testWidgets(
     'dashboard consumes repository metrics and backend trend, then opens goal analytics',
     (tester) async {
       final adapter = FixtureAdapter();

@@ -89,10 +89,12 @@ describe('SummaryContext privacy boundary', () => {
   it('uses Analytics authority once and preserves metrics and trends without recalculation', async () => {
     const { analytics, contexts, result } = setup();
     result.overview.completionRate = 23.41;
+    result.overview.averageProgress = 73.33;
     const context = await contexts.build('authenticated-owner');
     expect(analytics.summarySource).toHaveBeenCalledWith('authenticated-owner');
     expect(analytics.summarySource).toHaveBeenCalledTimes(1);
     expect(context.completionRate).toBe(23.41);
+    expect(context.averageProgress).toBe(73.33);
     expect(context.goals[0]).toEqual({
       title: 'Organizar actividades',
       status: 'ACTIVE',
