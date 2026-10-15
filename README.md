@@ -1005,7 +1005,7 @@ preferentemente mediante Docker Compose.
 
 # Desarrollo local
 
-MVP-0 ofrece autenticación, perfil, objetivos, lifecycle, check-ins e historial. MVP-1 añade Analytics determinístico, seguimiento, tendencias y gráficas. Versiones verificadas: Node 22.16.0, Flutter 3.47.5 / Dart 3.13.4, PostgreSQL 16.
+MVP-0 ofrece autenticación, perfil, objetivos, lifecycle, check-ins e historial. MVP-1 añade Analytics determinístico, seguimiento, tendencias y gráficas. Avance 1 inicia MVP-2 con contexto/prompt técnico y mock de desarrollo, sin proveedor generativo real. Versiones verificadas: Node 22.16.0, Flutter 3.47.5 / Dart 3.13.4, PostgreSQL 16.
 
 ## Local con Docker
 
@@ -1032,6 +1032,16 @@ docker compose exec backend node seed-dist/seed.js
 ```
 
 El seed crea `demo@neuroconnect.local`, tres objetivos y quince check-ins: progreso creciente, estable y sin seguimiento reciente. Usa la contraseña `SEED_PASSWORD` de `.env`; no se ejecuta al iniciar. Reejecutarlo reemplaza solamente los historiales demo identificados por el seed.
+
+Smoke técnico completo, también sin Node/Flutter locales:
+
+```sh
+docker compose exec backend node scripts/smoke.cjs
+```
+
+Crea dos cuentas sintéticas, valida Auth/Goals/CheckIns/Analytics/AI Preview y elimina únicamente sus datos. Es development-only y rechaza NODE_ENV=production antes de acceder a la base. El dashboard y la gráfica se validan desde el navegador.
+
+En Swagger autoriza un JWT obtenido con `/auth/login` y prueba `GET /api/v1/ai/summary/context`. Devuelve `{context,prompt,providerConfigured:false}`: datos propios minimizados y prompt SYSTEM/USER, sin llamar al mock/proveedor ni persistir AISummary. `AI_PREVIEW_ENABLED` controla el endpoint (false responde404 con sesión válida); Compose local lo habilita por defecto, la plantilla productiva lo deshabilita. Solo está soportado `AI_PROVIDER=mock`; no requiere AI_API_KEY ni selecciona modelo. El mock interno se identifica como **Development mock only** y no tiene endpoint público de generación ni pantalla Flutter. El modelo AISummary existe como scaffold requerido por PLAN §7.4, con FK/índices/periodo, para completar MVP-2 posteriormente.
 
 `API_BASE_URL` se incorpora al **build** del frontend. Su valor local predeterminado es `http://localhost:3000/api/v1`, accesible desde el navegador. Cambiarlo requiere reconstruir la imagen. No uses el hostname interno `backend`. Si cambias frontend host/puerto, actualiza también `CORS_ORIGINS` y `FRONTEND_PORT`. CORS permite por defecto localhost y 127.0.0.1:5173.
 
@@ -1096,7 +1106,7 @@ E2E utiliza PostgreSQL real y una base separada cuyo nombre termina en `_test`. 
 
 En producción, PostgreSQL es externo y se localiza exclusivamente mediante `DATABASE_URL`. El ejemplo `infra/compose/compose.prod.example.yml` contiene frontend/backend y ninguna base de datos; utiliza secretos del entorno y `API_BASE_URL` HTTPS pública al compilar. Es una plantilla operativa, no un deployment ejecutado. TLS, hosting público y hardening corresponden a bloques posteriores.
 
-Android e iOS conservan los proyectos existentes; este bloque valida Web. Para dispositivos usa una API HTTPS accesible. Evidencias y checklist: [MVP1_REPORT.md](harness/codex/MVP1_REPORT.md).
+Android e iOS conservan los proyectos existentes; este bloque valida Web. Para dispositivos usa una API HTTPS accesible. Evidencias y checklist del cierre: [MVP2_AVANCE1_REPORT.md](harness/codex/MVP2_AVANCE1_REPORT.md). Documento académico editable: [AVANCE-1.md](docs/AVANCE-1.md); requiere revisión del autor y no constituye el PDF final.
 
 ---
 

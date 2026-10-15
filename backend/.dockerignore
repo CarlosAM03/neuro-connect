@@ -4,5 +4,6 @@ dist
 .env
 .env.*
 coverage
-test
+test/*
+!test/smoke.cjs
 *.log

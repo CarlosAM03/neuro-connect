@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { GoalsModule } from './goals/goals.module';
 import { CheckInsModule } from './check-ins/check-ins.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { AiModule } from './ai/ai.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AnalyticsModule } from './analytics/analytics.module';
     GoalsModule,
     CheckInsModule,
     AnalyticsModule,
+    AiModule,
   ],
   controllers: [HealthController],
 })

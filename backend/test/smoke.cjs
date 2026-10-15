@@ -1,4 +1,8 @@
 require('dotenv/config');
+if (process.env.NODE_ENV === 'production') {
+  console.error('Synthetic smoke is development-only');
+  process.exit(1);
+}
 const assert = require('node:assert/strict');
 const { randomUUID } = require('node:crypto');
 const { PrismaClient } = require('@prisma/client');
@@ -97,6 +101,39 @@ async function smoke() {
     (await call('GET', '/analytics/overview', undefined, b)).totalGoals,
     0,
   );
+  const previewPath = '/ai/summary/context';
+  await call('GET', previewPath, undefined, undefined, 401);
+  const summariesBefore = await prisma.aISummary.count({
+    where: { user: { email: { in: emails } } },
+  });
+  const preview = await call('GET', previewPath, undefined, a);
+  assert.equal(preview.providerConfigured, false);
+  assert.equal(preview.context.periodDays, 28);
+  assert.equal(preview.context.totalGoals, overview.totalGoals);
+  assert.equal(preview.context.averageProgress, overview.averageProgress);
+  assert.equal(preview.context.goals[0].trend, 'PROGRESSING');
+  assert.equal(preview.context.goals[0].insufficientHistory, false);
+  assert.deepEqual(
+    JSON.parse(preview.prompt.split('\n\nUSER\n')[1]),
+    preview.context,
+  );
+  assert.ok(preview.prompt.includes('No diagnostiques'));
+  const serialized = JSON.stringify(preview);
+  for (const sensitive of [a, b, ...emails, password, goal.id, check.notes])
+    assert.equal(
+      serialized.includes(sensitive),
+      false,
+      'Preview leaked excluded data',
+    );
+  const emptyPreview = await call('GET', previewPath, undefined, b);
+  assert.equal(emptyPreview.context.totalGoals, 0);
+  assert.deepEqual(emptyPreview.context.goals, []);
+  assert.equal(
+    await prisma.aISummary.count({
+      where: { user: { email: { in: emails } } },
+    }),
+    summariesBefore,
+  );
   const declining = await call(
     'POST',
     `${path}/check-ins`,
@@ -121,7 +158,7 @@ async function smoke() {
   await call('GET', path, undefined, a, 404);
   await call('GET', '/goals', undefined, undefined, 401);
   console.log(
-    'PASS: live HTTP register → login → profile → Goal CRUD/lifecycle → CheckIns → snapshot/history → Analytics overview/timeline/PROGRESSING/DECLINING → isolation (2 users) → cleanup.',
+    'PASS: live HTTP register → login → profile → Goal CRUD/lifecycle → CheckIns → snapshot/history → Analytics overview/timeline/PROGRESSING/DECLINING → AI context/prompt preview (no provider, no persistence) → isolation (2 users) → cleanup.',
   );
 }
 smoke()

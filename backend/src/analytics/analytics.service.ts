@@ -17,6 +17,28 @@ const select = {
 @Injectable()
 export class AnalyticsService {
   constructor(private readonly prisma: PrismaService) {}
+  // One source snapshot for the privacy boundary; calculations remain here.
+  summarySource(ownerId: string) {
+    return this.prisma.$transaction(
+      async (tx) => {
+        const goals = await tx.goal.findMany({
+          where: { ownerId },
+          select: { ...select, title: true },
+          orderBy: { id: 'asc' },
+        });
+        const now = new Date();
+        return {
+          overview: overviewAnalytics(goals, now),
+          goals: goals.map((goal) => ({
+            title: goal.title,
+            status: goal.status,
+            analytics: goalAnalytics(goal, now),
+          })),
+        };
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead },
+    );
+  }
   overview(ownerId: string) {
     return this.prisma.$transaction(
       async (tx) => {
