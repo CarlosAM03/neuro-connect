@@ -15,6 +15,7 @@ import {
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiResponse,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { CheckInResponse, ErrorResponse } from '../common/response.dto';
 import { CurrentUser, SafeUser } from '../auth/auth.guard';
@@ -56,8 +57,25 @@ export class CheckInsController {
   ) {
     return this.checkIns.detail(user.id, goalId, id);
   }
+  @Post(':checkInId/void')
+  @HttpCode(204)
   @ApiNoContentResponse({
-    description: 'CheckIn deleted and progress snapshot recalculated',
+    description:
+      'Invalidated, retained; effective progress recalculated atomically.',
+  })
+  void(
+    @CurrentUser() user: SafeUser,
+    @Param('goalId', ParseUUIDPipe) goalId: string,
+    @Param('checkInId', ParseUUIDPipe) id: string,
+  ) {
+    return this.checkIns.delete(user.id, goalId, id);
+  }
+  @ApiOperation({
+    deprecated: true,
+    description: 'Compatibility alias for void. No rows are deleted.',
+  })
+  @ApiNoContentResponse({
+    description: 'CheckIn invalidated and effective progress recalculated',
   })
   @Delete(':checkInId')
   @HttpCode(204)

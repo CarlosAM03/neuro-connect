@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { GoalsService } from '../goals/goals.service';
 import { assertActive, lockOwnedGoal } from '../goals/goal.policy';
 import { CreateCheckInDto } from './check-in.dto';
+import { appendAudit } from '../audit/audit';
 
 @Injectable()
 export class CheckInsService {
@@ -37,13 +38,21 @@ export class CheckInsService {
         where: { id: goalId },
         data: { progress: checkIn.progress },
       });
+      await appendAudit(
+        tx,
+        ownerId,
+        'CHECKIN_CREATED',
+        'CHECK_IN',
+        checkIn.id,
+        { goalId, goalTitle: goal.title, progress: checkIn.progress },
+      );
       return checkIn;
     });
   }
   async history(ownerId: string, goalId: string) {
     await this.goals.detail(ownerId, goalId);
     return this.prisma.checkIn.findMany({
-      where: { goalId, goal: { ownerId } },
+      where: { goalId, goal: { ownerId }, voidedAt: null },
       orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
     });
   }
@@ -56,16 +65,24 @@ export class CheckInsService {
   }
   async delete(ownerId: string, goalId: string, id: string) {
     await this.prisma.$transaction(async (tx) => {
-      await lockOwnedGoal(tx, ownerId, goalId);
-      const result = await tx.checkIn.deleteMany({ where: { id, goalId } });
+      const goal = await lockOwnedGoal(tx, ownerId, goalId);
+      const result = await tx.checkIn.updateMany({
+        where: { id, goalId, voidedAt: null },
+        data: { voidedAt: new Date() },
+      });
       if (!result.count) throw new NotFoundException('Check-in no encontrado');
       const latest = await tx.checkIn.findFirst({
-        where: { goalId },
+        where: { goalId, voidedAt: null },
         orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       });
       await tx.goal.update({
         where: { id: goalId },
         data: { progress: latest?.progress ?? 0 },
+      });
+      await appendAudit(tx, ownerId, 'CHECKIN_VOIDED', 'CHECK_IN', id, {
+        goalId,
+        goalTitle: goal.title,
+        progress: latest?.progress ?? 0,
       });
     });
   }

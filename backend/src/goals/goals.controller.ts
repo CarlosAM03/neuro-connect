@@ -16,6 +16,7 @@ import {
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiResponse,
+  ApiOperation,
 } from '@nestjs/swagger';
 import { GoalResponse, ErrorResponse } from '../common/response.dto';
 import { CurrentUser, SafeUser } from '../auth/auth.guard';
@@ -58,7 +59,34 @@ export class GoalsController {
   ) {
     return this.goals.update(user.id, id, dto);
   }
-  @ApiNoContentResponse({ description: 'Goal and associated CheckIns deleted' })
+  @Post(':goalId/cancel')
+  @HttpCode(200)
+  @ApiOkResponse({
+    type: GoalResponse,
+    description: 'Cancel without removing history; only ACTIVE or PAUSED.',
+  })
+  cancel(
+    @CurrentUser() user: SafeUser,
+    @Param('goalId', ParseUUIDPipe) id: string,
+  ) {
+    return this.goals.update(user.id, id, { status: 'CANCELLED' });
+  }
+  @Post(':goalId/reactivate')
+  @HttpCode(200)
+  @ApiOkResponse({ type: GoalResponse })
+  reactivate(
+    @CurrentUser() user: SafeUser,
+    @Param('goalId', ParseUUIDPipe) id: string,
+  ) {
+    return this.goals.update(user.id, id, { status: 'ACTIVE' });
+  }
+  @ApiOperation({
+    deprecated: true,
+    description: 'Compatibility alias for cancel. No rows are deleted.',
+  })
+  @ApiNoContentResponse({
+    description: 'Goal cancelled; all history preserved',
+  })
   @Delete(':goalId')
   @HttpCode(204)
   delete(

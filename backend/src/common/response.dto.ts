@@ -38,6 +38,8 @@ export class CheckInResponse {
     description: 'Private owner-only note',
   })
   notes!: string | null;
+  @ApiPropertyOptional({ nullable: true, type: String, format: 'date-time' })
+  voidedAt!: string | null;
   @ApiProperty({ format: 'date-time' }) createdAt!: string;
 }
 export class ErrorResponse {
