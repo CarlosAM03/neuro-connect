@@ -266,6 +266,49 @@ describe('ADR-008 / real PostgreSQL owner-supporter history', () => {
     ])
       await http().get(path).set(header(2)).expect(404);
   });
+  it('VIEW_GOALS exposes all four lifecycle states without detailed progress', async () => {
+    for (const status of ['PAUSED', 'COMPLETED']) {
+      const created = await http()
+        .post(`${api}/goals`)
+        .set(header())
+        .send({ title: `Shared ${status} fixture` })
+        .expect(201);
+      await http()
+        .patch(`${api}/goals/${created.body.id}`)
+        .set(header())
+        .send({ status })
+        .expect(200);
+      const detail = await http()
+        .get(`${shared()}/goals/${created.body.id}`)
+        .set(header(1))
+        .expect(200);
+      expect(detail.body.status).toBe(status);
+      expect(Object.keys(detail.body).sort()).toEqual(
+        [
+          'id',
+          'title',
+          'description',
+          'category',
+          'status',
+          'progress',
+          'targetDate',
+        ].sort(),
+      );
+      await http()
+        .get(`${shared()}/goals/${created.body.id}/progress`)
+        .set(header(1))
+        .expect(404);
+    }
+    const list = (
+      await http().get(`${shared()}/goals`).set(header(1)).expect(200)
+    ).body;
+    expect(list.map((g: { status: string }) => g.status).sort()).toEqual([
+      'ACTIVE',
+      'CANCELLED',
+      'COMPLETED',
+      'PAUSED',
+    ]);
+  });
   it('updates permission dependencies and grants real effective timeline without notes', async () => {
     await http()
       .patch(relationship())
