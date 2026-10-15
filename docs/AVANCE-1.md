@@ -4,7 +4,8 @@ Documento editable de evidencia técnica para el autor. Corte histórico inicial
 14 de octubre de 2026; actualización de ejecución real: 15 de octubre de 2026
 (America/Tijuana). No es el PDF académico final. Las secciones 1–6 conservan el
 corte del bloque 3; la sección posterior distingue la ejecución real y el cierre
-técnico. La aceptación humana del sprint closeout permanece pendiente.
+técnico. El closeout ya fue integrado mediante PR #5 el 15 de octubre de 2026;
+la fuente consolidada del corte es [AVANCE1_BASELINE_FREEZE](Planeacion/AVANCE1_BASELINE_FREEZE.md).
 
 ## 1. Breve recordatorio del objetivo y planificación inicial
 
@@ -34,7 +35,30 @@ Comparación: se conservan arquitectura y dominio originales; frontend y Analyti
 | MVP-2 | Inicio técnico, no módulo completo |8/8 entregables del inicio: módulo, servicio, contexto, prompt, interfaz, mock, preview y scaffold AISummary| Tests de privacidad/ownership y pipeline; gates finales en reporte |
 | MVP-3/MVP-4 | Fuera de estos bloques | No adelantados deliberadamente | No reclamados |
 
-Los porcentajes de 100 % de MVP-0/1 corresponden a sus entregables y DoD, no al proyecto completo ni a eficacia clínica. MVP-2 permanece **STARTED**: no se asigna 20 %, 25 % o 30 % porque no existe un denominador ponderado aprobado que lo sustente. La relación 8/8 describe solamente el subconjunto inicial, no el 100 % de MVP-2. No se calcula un porcentaje global ficticio de la versión 1.0.0. Porcentajes y valoración académica final: **[PENDIENTE DE VALIDACIÓN DEL AUTOR]**.
+Para el freeze de Avance 1 se incorpora una **Estimación técnica por entregables
+verificables**, con inventario atómico y fuentes publicados en
+[AVANCE1_BASELINE_FREEZE](Planeacion/AVANCE1_BASELINE_FREEZE.md), §§7–10.
+No representa una calificación académica, una ponderación oficial del profesor ni
+eficacia clínica. La tabla anterior conserva el corte histórico del bloque3;
+el inventario actualizado prevalece para esta medición. La relación 8/8 histórica
+describe solo la foundation inicial, no todo MVP-2.
+
+**Overall technical completion: 54.7 %** (81 DONE / 148 entregables).
+**Remaining v1.0.0 scope: 45.3 %** (67 PENDING).
+
+| MVP original | Total | DONE | PENDING | Avance técnico |
+| --- | ---: | ---: | ---: | ---: |
+| MVP-0 | 26 | 26 | 0 | 100.0 % |
+| MVP-1 | 15 | 15 | 0 | 100.0 % |
+| MVP-2 | 40 | 10 | 30 | 25.0 % |
+| MVP-3 | 26 | 23 | 3 | 88.5 % |
+| MVP-4 | 41 | 7 | 34 | 17.1 % |
+
+MVP-1.5 se mapea a los MVP originales, sin sexto subtotal ni doble conteo.
+MVP-3 aún requiere resúmenes delegados productivos; MVP-4 tiene prerrequisitos
+locales realizados, pero su aceptación final sigue pendiente. El restante se
+distribuye en 20.3 puntos de MVP-2, 2.0 de MVP-3 y 23.0 de MVP-4, sobre 148 unidades.
+Valoración académica y revisión humana de esta estimación: pendientes del autor.
 
 ## 4. Dificultades
 
@@ -104,3 +128,17 @@ Estado del sprint: **READY_FOR_HUMAN_VALIDATION**. Este cierre técnico no susti
 la validación local/revisión/PR/merge humanos. No se declara HUMAN_ACCEPTED para
 closeout. La baseline funcional y los contratos Analytics/SummaryContext quedan
 preparados para Avance2, sin iniciarlo automáticamente ni crear tag/release.
+
+### Estado posterior al merge del closeout — 15 de octubre de 2026
+
+El párrafo anterior registra el handoff previo al merge. El PR #5 ya está
+**MERGED** en `fad9cf73924fc334c57a77526a9f017069ceb4c5`, baseline humana aceptada
+para el freeze. **AVANCE 1 — CLOSED**. Esta actualización no reescribe los reportes
+históricos ni equivale a aceptar el nuevo bloque documental.
+
+El [freeze consolidado](Planeacion/AVANCE1_BASELINE_FREEZE.md) distingue plan original,
+ejecución real, 148 entregables, avance 54.7 % / restante 45.3 %, variaciones de fechas
+verificadas y forecast técnico sin mover el objetivo académico de la primera semana
+de diciembre de 2026. Avance 2 comienza posteriormente con investigación/evaluación
+formal, implementación real de MVP-2, después MVP-3 remainder y MVP-4. Este texto
+es fuente técnica para el futuro documento/PDF académico, no su versión final.
