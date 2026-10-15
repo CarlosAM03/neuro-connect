@@ -6,6 +6,7 @@ class AnalyticsOverview {
       activeGoals = json['activeGoals'] as int,
       pausedGoals = json['pausedGoals'] as int,
       completedGoals = json['completedGoals'] as int,
+      cancelledGoals = json['cancelledGoals'] as int,
       completionRate = (json['completionRate'] as num).toDouble(),
       averageProgress = (json['averageProgress'] as num).toDouble(),
       checkInsLast28Days = json['checkInsLast28Days'] as int,
@@ -16,6 +17,7 @@ class AnalyticsOverview {
       activeGoals,
       pausedGoals,
       completedGoals,
+      cancelledGoals,
       checkInsLast28Days,
       inactiveGoals;
   final double completionRate, averageProgress, checkInFrequencyPerWeek;

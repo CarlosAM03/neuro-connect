@@ -37,13 +37,14 @@ class GoalRepository {
           data: data,
         )).data!,
       );
-  Future<void> delete(String id) async {
-    await api.dio.delete<dynamic>('/goals/$id');
+  Future<void> cancel(String id) async {
+    await api.dio.post<dynamic>('/goals/$id/cancel');
   }
 }
 
 String statusLabel(String status) => switch (status) {
   'PAUSED' => 'Pausado',
   'COMPLETED' => 'Completado',
+  'CANCELLED' => 'Cancelado',
   _ => 'Activo',
 };

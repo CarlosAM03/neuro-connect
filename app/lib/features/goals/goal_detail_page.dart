@@ -89,7 +89,7 @@ class _GoalDetailPageState extends ConsumerState<GoalDetailPage> {
                       if (goal.status == 'ACTIVE') 'PAUSED': 'Pausar objetivo',
                       if (goal.status != 'ACTIVE')
                         'ACTIVE': 'Reactivar objetivo',
-                      if (goal.status != 'COMPLETED')
+                      if (goal.status == 'ACTIVE')
                         'COMPLETED': 'Marcar como completado',
                     }.entries)
                       OutlinedButton(
@@ -103,26 +103,27 @@ class _GoalDetailPageState extends ConsumerState<GoalDetailPage> {
                               }),
                         child: Text(action.value),
                       ),
-                    TextButton(
-                      onPressed: _busy
-                          ? null
-                          : () async {
-                              if (!await confirmDeletion(
-                                context,
-                                '¿Eliminar este objetivo? También se eliminará su historial de check-ins.',
-                              )) {
-                                return;
-                              }
-                              if (!mounted) return;
-                              await _operate(() async {
-                                await ref
-                                    .read(goalRepositoryProvider)
-                                    .delete(goal.id);
-                                if (context.mounted) context.go('/goals');
-                              });
-                            },
-                      child: const Text('Eliminar objetivo'),
-                    ),
+                    if (goal.status == 'ACTIVE' || goal.status == 'PAUSED')
+                      TextButton(
+                        onPressed: _busy
+                            ? null
+                            : () async {
+                                if (!await confirmDeletion(
+                                  context,
+                                  '¿Cancelar este objetivo? Conservarás su historial y podrás reactivarlo.',
+                                )) {
+                                  return;
+                                }
+                                if (!mounted) return;
+                                await _operate(() async {
+                                  await ref
+                                      .read(goalRepositoryProvider)
+                                      .cancel(goal.id);
+                                  if (context.mounted) context.go('/goals');
+                                });
+                              },
+                        child: const Text('Cancelar objetivo'),
+                      ),
                   ],
                 ),
                 TextButton(
@@ -188,7 +189,7 @@ class _GoalDetailPageState extends ConsumerState<GoalDetailPage> {
                                           : () async {
                                               if (!await confirmDeletion(
                                                 context,
-                                                '¿Eliminar este check-in creado por error? El progreso actual puede cambiar si es el último registro.',
+                                                '¿Invalidar este check-in creado por error? Se conservará el registro y se recalculará el progreso efectivo.',
                                               )) {
                                                 return;
                                               }
@@ -198,10 +199,13 @@ class _GoalDetailPageState extends ConsumerState<GoalDetailPage> {
                                                     .read(
                                                       checkInRepositoryProvider,
                                                     )
-                                                    .delete(goal.id, item.id),
+                                                    .voidCheckIn(
+                                                      goal.id,
+                                                      item.id,
+                                                    ),
                                               );
                                             },
-                                      child: const Text('Eliminar check-in'),
+                                      child: const Text('Invalidar check-in'),
                                     ),
                                   ],
                                 ),

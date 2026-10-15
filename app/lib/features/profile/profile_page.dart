@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/auth/session.dart';
 import '../../core/widgets/page_frame.dart';
@@ -66,6 +67,18 @@ class _ProfileFormState extends ConsumerState<_ProfileForm> {
   Widget build(BuildContext context) => ListView(
     padding: const EdgeInsets.all(24),
     children: [
+      OutlinedButton(
+        onPressed: () => context.go('/support/relationships'),
+        child: const Text('Mi red de apoyo'),
+      ),
+      OutlinedButton(
+        onPressed: () => context.go('/support/owners'),
+        child: const Text('Personas a las que apoyo'),
+      ),
+      OutlinedButton(
+        onPressed: () => context.go('/activity'),
+        child: const Text('Historial de actividad'),
+      ),
       Text(widget.user.email),
       const SizedBox(height: 24),
       Form(

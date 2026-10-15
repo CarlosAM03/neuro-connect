@@ -36,6 +36,7 @@ void main() {
       expect(find.text('Mi seguimiento'), findsOneWidget);
       expect(find.text('20.00%'), findsOneWidget);
       expect(find.text('Objetivos activos'), findsOneWidget);
+      await tester.scrollUntilVisible(find.byType(LineChart), 150);
       expect(find.byType(LineChart), findsOneWidget);
       expect(
         adapter.requests.any((r) => r.path == '/analytics/goals/goal-a'),
@@ -59,6 +60,9 @@ void main() {
     await mount(tester, FixtureAdapter()..empty = true);
     expect(find.text('Crear primer objetivo'), findsOneWidget);
     expect(find.byType(LineChart), findsNothing);
+    await tester.scrollUntilVisible(find.text('Crear primer objetivo'), 150);
+    await tester.drag(find.byType(ListView), const Offset(0, -200));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Crear primer objetivo'));
     await tester.pumpAndSettle();
     expect(find.text('Guardar objetivo'), findsOneWidget);
@@ -73,6 +77,7 @@ void main() {
     await tester.tap(find.text('Reintentar'));
     await tester.pumpAndSettle();
     expect(find.text('Objetivos activos'), findsOneWidget);
+    await tester.scrollUntilVisible(find.byType(LineChart), 150);
     expect(find.byType(LineChart), findsOneWidget);
   });
   testWidgets(

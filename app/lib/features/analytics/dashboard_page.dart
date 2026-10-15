@@ -105,7 +105,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Total: ${metrics.totalGoals} · Pausados: ${metrics.pausedGoals} · Cumplimiento: ${metrics.completionRate.toStringAsFixed(2)}%',
+                    'Total: ${metrics.totalGoals} · Pausados: ${metrics.pausedGoals} · Cancelados: ${metrics.cancelledGoals} · Cumplimiento: ${metrics.completionRate.toStringAsFixed(2)}%',
                   ),
                   Text(
                     'Frecuencia: ${metrics.checkInFrequencyPerWeek.toStringAsFixed(2)} check-ins por semana (últimos 28 días)',
