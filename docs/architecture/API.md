@@ -54,3 +54,18 @@ Every effective business mutation writes minimized owner/actor audit in the same
 Errors contain `statusCode`, `code`, `message`, `path`, `timestamp`. Invalid DTOs return 400; missing/expired credentials return 401; unknown/foreign resources return 404; duplicate email and invalid lifecycle return 409; auth rate limits return 429. Internal errors never expose stack traces or database details. Safe User responses contain id, email, displayName and timestamps, never passwordHash. Goal and CheckIn ownership always comes from the authenticated identity and parent relation, never request body.
 
 AI Preview is API/Swagger evidence only, with no Flutter screen. Disabled preview returns404 to an authenticated caller. Context includes periodDays28, overview metrics and per-Goal title/status/progress/trend/averageDifficulty/daysSinceLastCheckIn/insufficientHistory. It excludes IDs, identity/email, notes/description, tokens, permissions and environment secrets. Prompt is a string with fixed SYSTEM restrictions and JSON USER data; providerConfigured is always false. No network generation or summary persistence occurs. Mock is internal, development-only, not a public generation API; real provider/model evaluation remains pending.
+
+## Avance 1 closeout contract
+
+`averageProgress` averages only ACTIVE + PAUSED + COMPLETED, rounded to two
+decimals; no eligible Goals returns 0. CANCELLED still participates in totalGoals
+and historical per-Goal analytics. Example: 80/40/100 eligible plus CANCELLED10
+returns 73.33, totalGoals4 and completionRate33.33. Dashboard consumes the returned
+metric; SummaryContextBuilder copies Analytics without an alternate calculation.
+
+New CHECKIN_VOIDED payloads contain exactly goalId, goalTitle, voidedProgress and
+resultingGoalProgress. The original effective CheckIn is read before voiding under
+the parent lock. Void, snapshot recomputation and audit insert remain atomic.
+40→70→void70 produces voidedProgress70/resultingGoalProgress40. Existing append-only
+events retain their former payload; Activity uses a generic message for those
+legacy records and explicitly names both percentages for new ones. No notes added.

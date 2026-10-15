@@ -274,6 +274,84 @@ describe('Avance 1 AI Preview / real PostgreSQL', () => {
     );
     await prisma.aISummary.delete({ where: { id: row.id } });
   });
+  it('propagates eligible average 73.33 to preview, then zero for cancelled-only without provider or persistence', async () => {
+    const provider = jest.spyOn(app.get(MockAiProvider), 'generateSummary');
+    const credential = { Authorization: `Bearer ${stranger}` };
+    const goalIds: string[] = [];
+    const summaryCount = await prisma.aISummary.count();
+    try {
+      for (const [status, progress] of [
+        ['ACTIVE', 80],
+        ['PAUSED', 40],
+        ['COMPLETED', 100],
+        ['CANCELLED', 10],
+      ] as const) {
+        const goal = await request(app.getHttpServer())
+          .post('/api/v1/goals')
+          .set(credential)
+          .send({ title: `Eligible ${status}` })
+          .expect(201);
+        goalIds.push(goal.body.id);
+        await request(app.getHttpServer())
+          .post(`/api/v1/goals/${goal.body.id}/check-ins`)
+          .set(credential)
+          .send({
+            progress,
+            difficulty: 2,
+            completion: 'PARTIAL',
+            notes: 'PRIVATE_FIXTURE_NOTES',
+          })
+          .expect(201);
+        if (status !== 'ACTIVE')
+          await request(app.getHttpServer())
+            .patch(`/api/v1/goals/${goal.body.id}`)
+            .set(credential)
+            .send({ status })
+            .expect(200);
+      }
+      const overview = await request(app.getHttpServer())
+        .get('/api/v1/analytics/overview')
+        .set(credential)
+        .expect(200);
+      expect(overview.body).toMatchObject({
+        totalGoals: 4,
+        cancelledGoals: 1,
+        averageProgress: 73.33,
+        completionRate: 33.33,
+      });
+      const result = await preview(stranger).expect(200);
+      expect(result.body.providerConfigured).toBe(false);
+      expect(result.body.context).toMatchObject(overview.body);
+      expect(
+        result.body.context.goals.find(
+          (g: { status: string }) => g.status === 'CANCELLED',
+        ),
+      ).toMatchObject({ progress: 10 });
+      expect(JSON.stringify(result.body)).not.toMatch(
+        /PRIVATE_|notes|ownerId|passwordHash/,
+      );
+      for (const id of goalIds.slice(0, 3)) {
+        await request(app.getHttpServer())
+          .post(`/api/v1/goals/${id}/reactivate`)
+          .set(credential)
+          .expect(200);
+        await request(app.getHttpServer())
+          .post(`/api/v1/goals/${id}/cancel`)
+          .set(credential)
+          .expect(200);
+      }
+      expect((await preview(stranger).expect(200)).body.context).toMatchObject({
+        totalGoals: 4,
+        cancelledGoals: 4,
+        averageProgress: 0,
+        completionRate: 0,
+      });
+      expect(provider).not.toHaveBeenCalled();
+      expect(await prisma.aISummary.count()).toBe(summaryCount);
+    } finally {
+      provider.mockRestore();
+    }
+  });
   it('publishes only technical preview API with Swagger shape and security, no generation endpoint', async () => {
     const document = (
       await request(app.getHttpServer()).get('/api/docs-json').expect(200)

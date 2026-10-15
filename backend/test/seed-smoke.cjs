@@ -47,7 +47,7 @@ async function run() {
   }
   const overview = await get('/analytics/overview');
   assert.equal(overview.totalGoals, 5);
-  assert.equal(overview.averageProgress, 55.4);
+  assert.equal(overview.averageProgress, 60.5);
   assert.equal(overview.cancelledGoals, 1);
   assert.equal(overview.completedGoals, 1);
   assert.equal(overview.completionRate, 25);

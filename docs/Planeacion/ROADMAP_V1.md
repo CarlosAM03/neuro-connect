@@ -13,6 +13,45 @@
 
 ---
 
+# ESTADO REAL / EJECUCIÓN REAL — corte 2026-10-15
+
+Esta sección distingue la ejecución real del **PLAN ORIGINAL** que se conserva
+íntegro a continuación, incluyendo su cronograma y secuencia objetivo.
+
+| Incremento | Estado real |
+| --- | --- |
+| MVP-0 | DONE |
+| MVP-1 | DONE |
+| MVP-1.5 | DONE, ADR-008 / PR #4 integrado y validado localmente |
+| MVP-2 | STARTED / foundation only |
+| MVP-3 core | ADVANCED THROUGH MVP-1.5 |
+| MVP-4 | PENDING |
+
+MVP-1.5 adelantó deliberadamente capacidades originalmente previstas en MVP-3:
+persistencia histórica, auditoría, red de apoyo y lectura delegada con permisos,
+expiración, revocación y reactivación. Fue una modificación al plan inicial por
+avance técnico superior al cronograma, para validar autorización antes de IA real.
+No equivale a completar todo MVP-3 ni la versión v1.0.0.
+
+**Avance 1:** baseline funcional hasta MVP-1.5 + foundation técnica de MVP-2 +
+sprint de estabilización AVANCE-1-CLOSEOUT. El cierre técnico y sus gates se
+registran en `harness/codex/AVANCE1_CLOSEOUT_REPORT.md`; aceptación del sprint pendiente
+de revisión humana y merge.
+
+**Avance 2 (trabajo futuro, no ejecutado en closeout):** investigación de 6+ modelos
+candidatos, comparación, matriz de decisión ponderada, benchmark ciego NeuroConnect,
+spike operativo, decisión formal de modelo conforme ADR-005, integración de proveedor,
+AISummary productivo, UI de IA y finalización MVP-2. PostgreSQL → Analytics →
+SummaryContext será el contrato estable de entrada, sujeto solo a defectos
+confirmados, seguridad, requisitos aprobados o decisiones formales de MVP-2.
+
+`release-check.yml`: **DEFERRED → MVP-4**. Verifica release readiness, no la baseline
+funcional de Avance 1. Entonces deberá considerar CI backend/frontend, Android,
+migrations, seguridad, artefactos Docker, backup/restore y metadata de release.
+No se implementa workflow ni tag/release durante este sprint.
+
+# PLAN ORIGINAL
+
 # 1. Propósito
 
 Este documento define el roadmap completo de implementación de NeuroConnect desde la baseline documental actual hasta la entrega de la versión académica:

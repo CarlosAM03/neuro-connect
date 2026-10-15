@@ -131,6 +131,26 @@ Future<ProviderContainer> mountSupport(
 }
 
 void main() {
+  test('void activity distinguishes original and resulting progress, preserving legacy events', () {
+    ActivityEntry entry(Map<String, dynamic> payload) =>
+        ActivityEntry.fromJson({
+          'action': 'CHECKIN_VOIDED',
+          'payload': {'goalTitle': 'Lectura', ...payload},
+          'occurredAt': '2026-10-15T00:00:00Z',
+        });
+    expect(
+      entry({'voidedProgress': 70, 'resultingGoalProgress': 40}).message,
+      'Invalidaste un check-in de “Lectura”: progreso invalidado 70%; progreso efectivo 40%.',
+    );
+    expect(
+      entry({'voidedProgress': 40, 'resultingGoalProgress': 0}).message,
+      contains('efectivo 0%'),
+    );
+    expect(
+      entry({'progress': 40}).message,
+      'Invalidaste un check-in de “Lectura”.',
+    );
+  });
   testWidgets(
     'cancelled owner goal retains history and offers reactivation only',
     (t) async {

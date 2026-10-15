@@ -34,6 +34,7 @@ class FixtureAdapter implements HttpClientAdapter {
   int analyticsStatus = 200;
   bool empty = false;
   bool insufficient = false;
+  bool eligibleFixture = false;
   final requests = <RequestOptions>[];
   Completer<void>? gate;
   Completer<void>? analyticsGate;
@@ -57,13 +58,13 @@ class FixtureAdapter implements HttpClientAdapter {
         'displayName': 'Persona A',
       },
       '/analytics/overview' => {
-        'totalGoals': empty ? 0 : 1,
+        'totalGoals': empty ? 0 : (eligibleFixture ? 4 : 1),
         'activeGoals': empty ? 0 : 1,
-        'pausedGoals': 0,
-        'completedGoals': 0,
-        'cancelledGoals': 0,
-        'completionRate': 0,
-        'averageProgress': empty ? 0 : 20,
+        'pausedGoals': eligibleFixture ? 1 : 0,
+        'completedGoals': eligibleFixture ? 1 : 0,
+        'cancelledGoals': eligibleFixture ? 1 : 0,
+        'completionRate': eligibleFixture ? 33.33 : 0,
+        'averageProgress': empty ? 0 : (eligibleFixture ? 73.33 : 20),
         'checkInsLast28Days': empty ? 0 : 2,
         'checkInFrequencyPerWeek': empty ? 0 : 0.5,
         'inactiveGoals': 0,

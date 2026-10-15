@@ -1878,9 +1878,16 @@ Arquitectura integral
 DevOps
 → ADR-007
 
+Persistencia histórica / auditoría / red de apoyo
+→ ADR-008
+
 Roadmap
 → ROADMAP_V1.md
 ```
+
+Un ADR posterior prevalece únicamente sobre los puntos que modifica explícitamente;
+el resto de las decisiones anteriores conserva su autoridad. El estado real del
+cierre se registra en `docs/AVANCE-1.md` y en el reporte AVANCE1_CLOSEOUT.
 
 ---
 

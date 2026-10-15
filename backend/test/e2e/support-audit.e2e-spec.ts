@@ -144,6 +144,15 @@ describe('ADR-008 / real PostgreSQL owner-supporter history', () => {
     expect(
       (await db.goal.findUniqueOrThrow({ where: { id: goal } })).progress,
     ).toBe(40);
+    const voidEvent = await db.auditEvent.findFirstOrThrow({
+      where: { entityId: last, action: 'CHECKIN_VOIDED' },
+    });
+    expect(voidEvent.payload).toEqual({
+      goalId: goal,
+      goalTitle: 'Active owner goal',
+      voidedProgress: 70,
+      resultingGoalProgress: 40,
+    });
     const analytics = (
       await http()
         .get(`${api}/analytics/goals/${goal}`)

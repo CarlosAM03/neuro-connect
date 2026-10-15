@@ -20,3 +20,18 @@ AiModule is started, not complete: AnalyticsService.summarySource (one owner/Rep
 ADR-008 adds AuditModule (private paginated owner activity) and SupportNetworkModule. SupportAccessService checks relationship/expiry/revocation/permission for every delegated request; a shared relationship row lock holds authorization while the safe projection is read. Owner permission/revoke/reactivate writes take an exclusive relationship lock. No permission cache, worker or global role is used. Delegated routes expose only safe fields; notes never cross the boundary. Critical writes plus minimized append-only audit share a PostgreSQL transaction.
 
 Flutter adds separate owner network, supported owners, shared read-only and activity features. Navigation is available from Perfil, without a role switch. Typed repositories isolate HTTP from widgets; session-dependent auto-disposed providers avoid cross-identity data. Refresh fetches both permissions and shared goals, removing stale projections if access is lost. Voided CheckIns are excluded from functional history; cancelled Goals remain visible in own/shared lists and Dashboard.
+
+## Closeout implementation decisions
+
+`actorId == ownerId`: **DECISION ACCEPTED FOR V1**. Every audited business mutation
+is owner-only, supporters remain read-only, and there are no administrative/system
+actors. appendAudit's signature stays unchanged. Refactor trigger: any mutation
+where actorId differs from ownerId (administrator, writing supporter, automatic
+system action or background worker). At that point ownerId and actorId must become
+separate authenticated/controlled inputs; this sprint introduces no abstraction.
+
+CI validates all pushes and all pull requests, keeping the existing backend,
+PostgreSQL E2E, Flutter Web and Docker gates. `release-check.yml` is **DEFERRED →
+MVP-4**: release readiness requires backend/frontend CI, Android, migrations,
+security, Docker artifacts, backup/restore and release metadata. Those release
+checks are outside the functional Avance 1 baseline and are not added prematurely.
