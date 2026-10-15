@@ -5,7 +5,7 @@
 - Base commit: `04f6c8983b18881ba9d52899f70348bb1673d9f4` (`origin/main`, human merge PR #3).
 - ADR-008 commit: `dc1acb1` (adoption only; normative content unchanged).
 - Final commit: delivered branch `HEAD` (resolve with `git rev-parse HEAD`); final validated code/test commit `fa503c96cbd78147d11932213692e4f7a8f7ca23`. Subsequent handoff commits change documentation only.
-- Status: PARTIALLY_COMPLETE — all local gates and dual-user browser smoke pass; publication/remote CI and PR are the remaining delivery steps.
+- Status: READY_FOR_HUMAN_VALIDATION — local gates, dual-user smoke and both remote CI workflows PASS. PR creation is the remaining delivery action; human acceptance is pending.
 
 ## Scope
 
@@ -185,8 +185,15 @@ Final continuation source build/smoke:PASS; all3 services healthy. No paid servi
 
 ## CI
 
-Both workflow push triggers include mvp1.5-support-audit. Remote validation pending
-publication after local validation; links/validated SHA recorded at completion.
+Both workflow push triggers include mvp1.5-support-audit. Remote CI PASS on
+`550e8acde141be05e942c634ed44294121685cea`, containing the final validated
+code/test commit `fa503c96cbd78147d11932213692e4f7a8f7ca23`:
+
+- [Backend CI — success](https://github.com/CarlosAM03/neuro-connect/actions/runs/38699155050): lint,67 unit,72 PostgreSQL E2E, build, Docker image.
+- [Frontend CI — success](https://github.com/CarlosAM03/neuro-connect/actions/runs/38699154991): analyze,25 tests, web build, Docker image.
+
+Following handoff edits are documentation only. Final branch-head workflows are
+checked again after publication without changing product code or weakening checks.
 
 ## Browser smoke
 
@@ -270,13 +277,20 @@ ignored/untracked, not part of any commit. Contents predate continuation (Avance
 previous MVP validation); retained as prior evidence rather than deleting files with
 uncertain ownership. No git clean/reset or destructive filesystem operation used.
 
+## Pull request / delivery
+
+Published only origin/mvp1.5-support-audit. Both main and origin/main remain
+`04f6c8983b18881ba9d52899f70348bb1673d9f4`. All10 original commits preserved.
+PR attempt pending; body is prepared in `harness/codex/MVP15_PR.md`.
+No merge, auto-merge, force-push or credential extraction is authorized/performed.
+
 ## Human validation commands
 
 From repository root (existing .env is preserved; new clone can use setup-local):
 
 ```powershell
 git switch mvp1.5-support-audit
-node infra/setup-local.cjs
+if (-not (Test-Path .env) -and -not (Test-Path backend/.env)) { node infra/setup-local.cjs }
 docker compose up -d --build --wait
 docker compose exec -T backend node seed-dist/seed.js
 docker compose exec -T backend node scripts/smoke.cjs

@@ -18,7 +18,7 @@ Validación local completa:
 - Regresión Auth/Goals/CheckIns/Analytics/Dashboard/AI Preview: PASS; providerConfigured=false y sin proveedor externo.
 - `git diff --check`: PASS.
 
-CI remoto: pendiente del push validado. Se actualizará con los enlaces antes del handoff.
+CI remoto sobre `550e8acde141be05e942c634ed44294121685cea`: [Backend CI PASS](https://github.com/CarlosAM03/neuro-connect/actions/runs/38699155050) y [Frontend CI PASS](https://github.com/CarlosAM03/neuro-connect/actions/runs/38699154991), incluidas imágenes Docker. Los commits posteriores de handoff solo actualizan documentación.
 
 Reporte completo y checklist humano: `harness/codex/MVP15_REPORT.md`.
 
@@ -26,7 +26,7 @@ Validación humana desde la raíz:
 
 ```powershell
 git switch mvp1.5-support-audit
-node infra/setup-local.cjs
+if (-not (Test-Path .env) -and -not (Test-Path backend/.env)) { node infra/setup-local.cjs }
 docker compose up -d --build --wait
 docker compose exec -T backend node seed-dist/seed.js
 docker compose exec -T backend node scripts/smoke.cjs
