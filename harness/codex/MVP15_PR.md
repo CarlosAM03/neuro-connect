@@ -39,3 +39,6 @@ Limitaciones: no reconstruye historia físicamente eliminada antes de ADR-008; I
 
 
 Creación automática del PR: el conector GitHub devolvió403 `Resource not accessible by integration`. Rama publicada, validación técnica READY_FOR_HUMAN_VALIDATION. [Abrir comparación y crear PR manual](https://github.com/CarlosAM03/neuro-connect/compare/main...mvp1.5-support-audit?expand=1). Título recomendado: `feat: add NeuroConnect support network and historical audit`. Este archivo conserva el body completo para la revisión manual; no se realizó merge ni auto-merge.
+
+
+Actualización de entrega: se detectó el PR manual [#4 — Mvp1.5 support audit](https://github.com/CarlosAM03/neuro-connect/pull/4), abierto hacia main y sin auto-merge. El agente preservó el título/body existentes y adjuntó el PR al chat; este archivo conserva la descripción completa propuesta. El403 corresponde al intento automático previo, no a ausencia actual del PR.

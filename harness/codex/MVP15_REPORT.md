@@ -5,7 +5,7 @@
 - Base commit: `04f6c8983b18881ba9d52899f70348bb1673d9f4` (`origin/main`, human merge PR #3).
 - ADR-008 commit: `dc1acb1` (adoption only; normative content unchanged).
 - Final commit: delivered branch `HEAD` (resolve with `git rev-parse HEAD`); final validated code/test commit `fa503c96cbd78147d11932213692e4f7a8f7ca23`. Subsequent handoff commits change documentation only.
-- Status: READY_FOR_HUMAN_VALIDATION — local gates, dual-user smoke and both remote CI workflows PASS. Automatic PR creation is externally blocked by GitHub connector403; human acceptance is pending.
+- Status: READY_FOR_HUMAN_VALIDATION — local gates, dual-user smoke and both remote CI workflows PASS. PR #4 is open for manual review; automatic creation returned connector403 before the externally created PR was detected. Human acceptance is pending.
 
 ## Scope
 
@@ -252,7 +252,7 @@ No architectural deviation; no productive AI represented as complete.
 - Android/iOS projects retained; this block validates Web, not APK/iOS builds.
 - Existing dependency audit findings remain: production2 moderate/3 high;
   full dev install6 moderate/32 high. No dependency upgrade or weakening of checks.
-- Automatic PR creation is blocked by connector403; branch/compare/title/body are delivered for manual creation.
+- Connector PR creation returned403. A manually created PR #4 was subsequently detected open; its existing title/body were preserved. Full proposed title/body remain in MVP15_PR.md.
 - Human acceptance remains pending; never inferred from tests/CI.
 
 ## Continuation after usage-limit interruption
@@ -288,13 +288,15 @@ uncertain ownership. No git clean/reset or destructive filesystem operation used
 Published only origin/mvp1.5-support-audit. Both main and origin/main remain
 `04f6c8983b18881ba9d52899f70348bb1673d9f4`. All10 original commits preserved.
 Attempted the authorized PR with the GitHub connector after both workflows passed;
-GitHub returned403 `Resource not accessible by integration`. This is the only
-external delivery blocker, not a technical validation failure. No local credentials
+GitHub returned403 `Resource not accessible by integration`. This was an external permission limitation, not a technical validation failure. No local credentials
 were extracted or reused. Full title/body is in `harness/codex/MVP15_PR.md`.
 
 [Create/review the PR: main...mvp1.5-support-audit](https://github.com/CarlosAM03/neuro-connect/compare/main...mvp1.5-support-audit?expand=1).
-PR number/URL: not created automatically (403). No merge or auto-merge performed.
-The branch remains available for manual PR creation and review.
+PR subsequently detected: [#4 — Mvp1.5 support audit](https://github.com/CarlosAM03/neuro-connect/pull/4),
+created externally, open toward main, auto_merge=null. Attached to the Codex task.
+Existing human title and empty body were preserved; the full proposed description
+remains in MVP15_PR.md for manual use. The agent did not create this PR or merge it.
+The connector403 remains historical evidence, not a missing-PR blocker now.
 No merge, auto-merge, force-push or credential extraction is authorized/performed.
 
 ## Human validation commands
