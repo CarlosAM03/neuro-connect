@@ -66,6 +66,11 @@ export class CheckInsService {
   async delete(ownerId: string, goalId: string, id: string) {
     await this.prisma.$transaction(async (tx) => {
       const goal = await lockOwnedGoal(tx, ownerId, goalId);
+      const checkIn = await tx.checkIn.findFirst({
+        where: { id, goalId, voidedAt: null },
+        select: { progress: true },
+      });
+      if (!checkIn) throw new NotFoundException('Check-in no encontrado');
       const result = await tx.checkIn.updateMany({
         where: { id, goalId, voidedAt: null },
         data: { voidedAt: new Date() },
@@ -82,7 +87,8 @@ export class CheckInsService {
       await appendAudit(tx, ownerId, 'CHECKIN_VOIDED', 'CHECK_IN', id, {
         goalId,
         goalTitle: goal.title,
-        progress: latest?.progress ?? 0,
+        voidedProgress: checkIn.progress,
+        resultingGoalProgress: latest?.progress ?? 0,
       });
     });
   }

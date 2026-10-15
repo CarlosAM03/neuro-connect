@@ -10,7 +10,12 @@ const allowed: Record<AuditAction, readonly string[]> = {
   GOAL_CANCELLED: ['title', 'previousStatus', 'newStatus'],
   GOAL_REACTIVATED: ['title', 'previousStatus', 'newStatus'],
   CHECKIN_CREATED: ['goalId', 'goalTitle', 'progress'],
-  CHECKIN_VOIDED: ['goalId', 'goalTitle', 'progress'],
+  CHECKIN_VOIDED: [
+    'goalId',
+    'goalTitle',
+    'voidedProgress',
+    'resultingGoalProgress',
+  ],
   SUPPORT_RELATIONSHIP_CREATED: [
     'supporterName',
     'canViewGoals',

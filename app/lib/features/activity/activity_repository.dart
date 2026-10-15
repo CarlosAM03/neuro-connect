@@ -26,7 +26,11 @@ class ActivityEntry {
       'GOAL_REACTIVATED' => 'Reactivaste el objetivo “${title ?? "Objetivo"}”.',
       'CHECKIN_CREATED' =>
         'Registraste un check-in de “${goal ?? "Objetivo"}”.',
-      'CHECKIN_VOIDED' => 'Invalidaste un check-in de “${goal ?? "Objetivo"}”.',
+      'CHECKIN_VOIDED' =>
+        payload['voidedProgress'] is num &&
+                payload['resultingGoalProgress'] is num
+            ? 'Invalidaste un check-in de “${goal ?? "Objetivo"}”: progreso invalidado ${payload['voidedProgress']}%; progreso efectivo ${payload['resultingGoalProgress']}%.'
+            : 'Invalidaste un check-in de “${goal ?? "Objetivo"}”.',
       'SUPPORT_RELATIONSHIP_CREATED' =>
         'Agregaste a ${person ?? "un integrante"} a tu red de apoyo.',
       'SUPPORT_PERMISSIONS_UPDATED' =>
