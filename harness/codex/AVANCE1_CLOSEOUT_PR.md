@@ -41,6 +41,13 @@ Sin schema/migrations nuevas;4 migrations desde DB vacía y seed doble no destru
 Compose construye backend y frontend y valida PostgreSQL/backend/frontend healthy;
 smoke ejecutable dentro del container, sin SDK host obligatorio.
 
+Resultados: lint PASS;70 unitarias/73 E2E/27 Flutter PASS; analyze y builds PASS;
+migrations/seed/Compose/full smoke PASS. Backend CI y Frontend CI PASS sobre884fc2f,
+con todos los cambios ejecutables. El HEAD documental final se comprueba nuevamente
+antes del handoff; enlaces y SHA concreto en el reporte/respuesta de entrega.
+Avance1CLOSED técnicamente; sprint READY_FOR_HUMAN_VALIDATION, sin aceptación humana
+implícita ni declaración de MVP2/v1.0.0 completos.
+
 ## Decisiones y diferidos
 
 actorId==ownerId: DECISION ACCEPTED FOR V1 mientras todas las mutaciones sean

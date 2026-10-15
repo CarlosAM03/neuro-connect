@@ -7,7 +7,16 @@
 - Base commit: `d3920d955956263b3baac72d0dd4a350e697df9e` (merge humano PR #4).
 - Primer commit: `4152bf6`, únicamente el plan humano existente, sin editarlo.
 - Scope: correcciones semánticas CHECKIN_VOIDED/averageProgress, auditoría de dependencias, CI general, metadata Flutter y sincronización documental. Sin nuevas capacidades ni IA real.
-- Status: PARTIALLY_COMPLETE provisional: todos los gates locales PASS; CI remoto pendiente de publicación. Final commit pendiente.
+- Status: **READY_FOR_HUMAN_VALIDATION**. **AVANCE 1 — CLOSED** técnicamente;
+  aceptación humana de este sprint pendiente. MVP0/1/1.5DONE; MVP2STARTED foundation;
+  MVP3coreADVANCED THROUGH MVP1.5; MVP4PENDING. No v1.0.0DONE.
+- Validated commit: `884fc2fbaca97218957d56bbfdc791e7621e6f1a`, contiene todos los
+  cambios ejecutables y los gates CI backend/frontend verdes. Cambios posteriores
+  son exclusivamente documentación de cierre.
+- Final commit: commit documental final que contiene este reporte, resoluble con
+  `git log -1 --format=%H -- harness/codex/AVANCE1_CLOSEOUT_REPORT.md` y `git rev-parse HEAD`
+  en la entrega. No se incluye el hash del propio commit en su contenido porque lo
+  alteraría. El SHA concreto de entrega se informa en el handoff final.
 
 ## Baseline antes de modificar código
 
@@ -117,7 +126,7 @@ No cambios de navegación, estado, dependencias Flutter o rediseño.
 | npm run smoke:seed | PASS:5Goals/25CheckIns, averageProgress60.5 |
 | Docker backend/frontend / Compose | PASS:ambas imágenes;3servicios healthy |
 | Container seed / full HTTP smoke | PASS:core/support/audit/AI y contratos70/40,73.33 |
-| Backend CI / Frontend CI | pendiente tras push |
+| Backend CI / Frontend CI | PASS: ambos sobre884fc2f, enlaces abajo |
 
 Swagger JSON y YAML HTTP200; frontend /healthz HTTP200. Imagen final confirma
 js-yaml5.4.3 y ausencia de jest/braces/sprintf-js. Audit de texto final ejecutado
@@ -125,6 +134,44 @@ también sin --json: ambos comandos devuelven1 por advisories conocidos (no ocul
 El build Docker del frontend usa pubspec con los mismos campos; después solo se
 normalizaron líneas vacías de YAML para git diff --check, sin cambio de metadata.
 Los servicios permanecen activos para validación humana y el volumen se conserva.
+
+## Remote CI / delivery
+
+- [Backend CI PASS](https://github.com/CarlosAM03/neuro-connect/actions/runs/38711095196)
+  sobre `884fc2fbaca97218957d56bbfdc791e7621e6f1a`: npm ci, Prisma/migrations,
+  lint,70unit,73E2E,build,Docker.
+- [Frontend CI PASS](https://github.com/CarlosAM03/neuro-connect/actions/runs/38711095122)
+  sobre el mismo SHA: pub lock, analyze,27tests,Web y Docker.
+- La rama nueva recibió automáticamente ambos workflows por push: verificación real
+  de generalización. El commit final documental vuelve a dispararlos; se comprueba
+  su conclusión en el handoff sin modificar producto ni requisitos.
+- Resultados del HEAD entregado: [Backend branch CI](https://github.com/CarlosAM03/neuro-connect/actions/workflows/backend-ci.yml?query=branch%3Asprint%2Favance1-closeout),
+  [Frontend branch CI](https://github.com/CarlosAM03/neuro-connect/actions/workflows/frontend-ci.yml?query=branch%3Asprint%2Favance1-closeout).
+- Publicación exclusiva de `origin/sprint/avance1-closeout`; sin push de main,
+  merge, auto-merge, rebase, amend, force, tags, releases ni intento de crear PR.
+  Main aceptado sigue d3920d9 al cierre del trabajo.
+- [Compare para PR humano](https://github.com/CarlosAM03/neuro-connect/compare/main...sprint/avance1-closeout?expand=1).
+  Título/body completos en `harness/codex/AVANCE1_CLOSEOUT_PR.md`.
+- `git diff --check` PASS; working tree limpio al publicar, y se vuelve a verificar
+  tras el commit documental final. Plan humano idéntico a4152bf6, ADRs intactos.
+
+## Hallazgos cerrados / Definition of Done técnico
+
+- [x] CHECKIN_VOIDED, allowlist, Activity y pruebas corregidos; semántica70/40.
+- [x] averageProgress elegible, solo cancelados0, totalGoals conservado;73.33.
+- [x] Analytics, Dashboard y AI Preview regresión PASS.
+- [x] npm audit completo/runtime, todos los advisories evaluados, fix compatible y documento.
+- [x] CI en ramas futuras demostrado; Backend y Frontend CI PASS.
+- [x] README/ROADMAP/MVP15 post-merge/AVANCE1 sincronizados, sin borrar historia.
+- [x] release-check diferido explícitamente MVP4; actorId aceptado con trigger.
+- [x] Metadata Flutter limpia sin refactor funcional.
+- [x] Backend lint/unit/E2E/build PASS; Flutter analyze/test/Web PASS.
+- [x] Migrations DB vacía y seed repetido PASS; full container HTTP smoke PASS.
+- [x] Ambas imágenes Docker y Compose PASS; PostgreSQL/backend/frontend healthy.
+- [x] diff --check PASS; publicación de rama con working tree limpio verificada.
+
+Checklist técnica completada por evidencia automática; no significa aceptación
+humana del sprint. La checklist manual final permanece sin marcar para el autor.
 
 Las14 respuestas500 con PrismaClientUnknownRequestError durante E2E son fallos de
 auditoría inyectados deliberadamente: verifican rollback atómico. Ningún test
@@ -181,7 +228,15 @@ y comandos de las tablas desde backend/app. DB de tests siempre separada *_test.
 ## Human Validation Checklist
 
 - [ ] Revisar corrección void 70 → snapshot 40 y Activity nueva/histórica.
+- [ ] Confirmar CheckIn70 retenido y excluido de historia efectiva; evento nuevo sin progress ambiguo ni notes.
+- [ ] Confirmar Activity antigua no inventa porcentaje invalidado a partir del snapshot histórico.
 - [ ] Revisar promedio elegible 73.33 y mismo valor en AI Preview.
+- [ ] Confirmar total4, cancelados1 y cumplimiento33.33; solo cancelados→promedio0.
+- [ ] Confirmar Dashboard reproduce73.33% y preview mantiene providerConfigured=false.
 - [ ] Revisar auditoría de seguridad y excepciones documentadas.
+- [ ] Revisar js-yaml5.4.3 y riesgo residual Prisma antes de considerar producción.
 - [ ] Reproducir Compose, seed y smoke completos.
+- [ ] Abrir Web/Swagger y verificar privacidad/read-only Owner/Supporter sin regresión.
+- [ ] Revisar separación plan original/ejecución real y aceptación previa MVP1.5.
+- [ ] Confirmar release-check→MVP4 y trigger futuro de actorId sin ampliación del scope.
 - [ ] Revisar CI final y documentación de cierre antes del PR humano.

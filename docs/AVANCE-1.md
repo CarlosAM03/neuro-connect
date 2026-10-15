@@ -90,3 +90,17 @@ comparación, matriz ponderada, benchmark ciego, spike operativo, decisión conf
 ADR-005, proveedor real, lifecycle AISummary, UI IA y finalización MVP-2. Ninguna
 investigación o integración externa se ejecuta en este sprint. `release-check.yml`
 queda DEFERRED → MVP-4; no se crean tags/releases ni se declara v1.0.0 completa.
+
+## 8. AVANCE 1 — CLOSED
+
+Cierre técnico registrado después de gates locales y Backend CI/Frontend CI PASS
+sobre `884fc2fbaca97218957d56bbfdc791e7621e6f1a`:70 unitarias,73 E2E PostgreSQL,
+27 Flutter, lint/analyze/builds Web,4 migrations desde DB limpia, seed idempotente,
+ambas imágenes Docker, Compose3healthy y full HTTP smoke con70/40 y73.33.
+Dependencias: parche compatible YAML aplicado; riesgos transitivos restantes
+evaluados y documentados explícitamente. Evidencia y pasos exactos en el reporte.
+
+Estado del sprint: **READY_FOR_HUMAN_VALIDATION**. Este cierre técnico no sustituye
+la validación local/revisión/PR/merge humanos. No se declara HUMAN_ACCEPTED para
+closeout. La baseline funcional y los contratos Analytics/SummaryContext quedan
+preparados para Avance2, sin iniciarlo automáticamente ni crear tag/release.
