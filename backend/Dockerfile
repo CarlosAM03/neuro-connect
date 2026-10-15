@@ -20,6 +20,7 @@ COPY --from=build --chown=node:node /app/dist ./dist
 COPY --from=build --chown=node:node /app/seed-dist ./seed-dist
 COPY --from=build --chown=node:node /app/prisma ./prisma
 COPY --chown=node:node package*.json ./
+COPY --chown=node:node test/smoke.cjs ./scripts/smoke.cjs
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=20s --timeout=5s CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||3000)+'/api/v1/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
