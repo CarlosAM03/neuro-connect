@@ -1102,6 +1102,23 @@ E2E utiliza PostgreSQL real y una base separada cuyo nombre termina en `_test`. 
 
 ## Artefactos productivos
 
+La beta pre-IA añade en Perfil **Mis resúmenes** y, con permiso, lecturas de
+resúmenes compartidos. Sin proveedor real, la generación permanece indisponible
+(POST `/api/v1/ai/summaries` devuelve 503 sin persistir). Historial/detalle solo
+leen registros existentes; soporte solo ve COMPLETED y nunca inputSnapshot.
+No se cargan resúmenes simulados en producto. Producción rechaza AI Preview activo.
+
+Operación manual conforme ADR-007, sin despliegue automático:
+[deploy](docs/operations/DEPLOYMENT-RUNBOOK.md),
+[backup/restore](docs/operations/BACKUP-RESTORE-RUNBOOK.md),
+[incidentes](docs/operations/INCIDENT-RUNBOOK.md),
+[release](docs/operations/RELEASE-RUNBOOK.md),
+[Android/iOS y accesibilidad](docs/operations/CLIENT-PLATFORMS.md),
+[auditoría de dependencias](docs/security/DEPENDENCY_AUDIT_PREIA.md).
+Ensayo local de recuperación: `node infra/backup-restore-smoke.cjs` tras configurar
+TEST_DATABASE_URL local y levantar PostgreSQL. El workflow `release-check.yml` es
+manual y solo verifica; no publica, no despliega ni crea releases.
+
 `backend/Dockerfile` produce NestJS/Prisma sin devDependencies y ejecuta como usuario node. `app/Dockerfile` compila Flutter Web y sirve assets mediante Nginx sin root, con fallback SPA y healthcheck. Los artefactos son independientes.
 
 En producción, PostgreSQL es externo y se localiza exclusivamente mediante `DATABASE_URL`. El ejemplo `infra/compose/compose.prod.example.yml` contiene frontend/backend y ninguna base de datos; utiliza secretos del entorno y `API_BASE_URL` HTTPS pública al compilar. Es una plantilla operativa, no un deployment ejecutado. TLS, hosting público y hardening corresponden a bloques posteriores.

@@ -47,3 +47,9 @@ temporalmente esas restricciones o autorizar un incremento separado de Prisma
 cuando exista parche compatible. Ver DEC-001 en resultados del sprint. Los gates
 funcionales pueden pasar sin que la auditoría devuelva cero; el workflow muestra
 el advisory y no decide esa aceptación humana.
+
+`npm run audit:gate` falla cerrado si la consulta no está disponible o aparece
+cualquier paquete/advisory distinto del residual documentado. Solo permite ese
+advisory y sus tres nombres afectados, informa el conteo y exige revisión humana
+antes de desplegar. El workflow manual ejecuta esta política, sin ignorar
+genéricamente exit codes ni aceptar automáticamente nuevas vulnerabilidades.

@@ -1,0 +1,94 @@
+name: Manual beta readiness (no deployment)
+on:
+  workflow_dispatch:
+    inputs:
+      api_base_url:
+        description: 'HTTPS API URL including /api/v1 for Web and Android builds'
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-bookworm
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: neuroconnect_test
+        ports: [5432:5432]
+        options: --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/neuroconnect_test
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/neuroconnect_test
+      JWT_EXPIRES_IN: 8h
+      CORS_ORIGINS: http://localhost:5173
+      AI_PREVIEW_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: |
+          echo "JWT_SECRET=$(openssl rand -hex 48)" >> "$GITHUB_ENV"
+          echo "SEED_PASSWORD=$(openssl rand -hex 24)" >> "$GITHUB_ENV"
+      - run: npm ci
+      - run: npm run prisma:generate
+      - run: npm run lint
+      - run: npm test
+      - run: npm run test:e2e
+      - run: npm run build
+      - run: npm run smoke:migrations
+      - name: Audit policy (fail on new advisories; documented tooling residual only)
+        run: npm run audit:gate
+      - run: docker build -t neuroconnect-backend:readiness .
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    env:
+      API_BASE_URL: ${{ inputs.api_base_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version-file: app/pubspec.yaml
+          channel: stable
+          cache: true
+      - name: Validate public API build configuration
+        run: |
+          python3 -c "import os,urllib.parse; u=urllib.parse.urlparse(os.environ['API_BASE_URL']); assert u.scheme=='https' and u.hostname and not u.username and u.path.endswith('/api/v1')"
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build web --no-web-resources-cdn --dart-define=API_BASE_URL="$API_BASE_URL"
+      - run: flutter build apk --debug --dart-define=API_BASE_URL="$API_BASE_URL"
+      - run: docker build --build-arg API_BASE_URL="$API_BASE_URL" -t neuroconnect-frontend:readiness .
+  recovery:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - run: node infra/setup-local.cjs
+      - run: docker compose up -d --wait postgres
+      - run: node infra/setup-test.cjs
+      - run: npm ci --prefix backend
+      - run: npm run prisma:generate --prefix backend
+      - run: node infra/backup-restore-smoke.cjs
+      - if: always()
+        run: docker compose stop
