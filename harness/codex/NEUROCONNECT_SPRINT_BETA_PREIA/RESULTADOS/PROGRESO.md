@@ -10,7 +10,7 @@
 | 01 | DONE | Core, analytics, soporte y audit existentes. Baseline unit: 5 suites / 70 PASS. Docker inicialmente detenido; Flutter instalado en C:/src/flutter fuera de PATH. | 02 |
 | 02 | DONE | Búsqueda título/categoría, cinco filtros y orden por título. Test widget PASS; confirmaciones y sesión existentes conservadas. | 03 |
 | 03 | DONE | Métricas y tests temporales existentes conservados; tendencia histórica también en soporte. Flutter: 28 PASS antes del ajuste; suite soporte revalidada aparte. E2E PostgreSQL pendiente de terminación. | 04 |
-| 04 | NOT_STARTED | Lectura summaries delegada devuelve [] fijo; no UI owner. | Contratos seguros/UI sin LLM |
+| 04 | DONE | Owner list/detail; soporte COMPLETED list/detail bajo autorización actual; POST 503 sin persistencia; UI honesta con retry/disclaimer. Backend 78 E2E / 5 suites PASS, 70 unit PASS. | 05 |
 | 05 | NOT_STARTED | a11y, dependencia audit, Android, iOS. | Calidad |
 | 06 | NOT_STARTED | Faltan runbooks y release-check. | Operación |
 | 07 | NOT_STARTED | Smoke/regresión/matriz/handoff. | Cierre único |
@@ -23,6 +23,9 @@
 - No cambios de esquema, contratos normativos, fórmulas ni arquitectura previstos.
 
 ## Validación inicial
+
+- Fase 02 commit `5d92b82`; fase 03 `e96b514`. E2E baseline 73/4 PASS; Flutter baseline+filtros 28 PASS, soporte tras cambio 11 PASS.
+- Fase 04: lint/build backend PASS; fixtures solo DB test, proyección exacta, tres identidades, estados PENDING/FAILED no delegados, revocación/expiry/deep links, generación 503. Correcciones locales de analyzer y fechas de fixture en revalidación Flutter.
 
 - Fase 01 commit: `7e88cdf`. Fase 02: lint/build backend exit 0; test nuevo filtros exit 0. Suite Flutter/regresión E2E en ejecución.
 - Docker Desktop 29.9.2 iniciado; PostgreSQL 16 saludable; `node infra/setup-test.cjs` exit 0. Flutter 3.47.5 / Dart 3.13.4 disponible con PATH corregido y ejecución fuera del sandbox del SDK.

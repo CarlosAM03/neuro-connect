@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/widgets/page_frame.dart';
-import '../analytics/analytics_repository.dart';
 import '../analytics/progress_chart.dart';
 import '../check_ins/check_in_repository.dart';
 import '../goals/goal_repository.dart';
@@ -144,7 +143,8 @@ class _SharedOwnerPageState extends ConsumerState<SharedOwnerPage> {
                 ),
               if (data.owner.summaries)
                 TextButton(
-                  onPressed: _summaries,
+                  onPressed: () =>
+                      context.go('/support/owners/${widget.ownerId}/summaries'),
                   child: const Text('Ver resúmenes compartidos'),
                 ),
             ],
@@ -194,26 +194,6 @@ class _SharedOwnerPageState extends ConsumerState<SharedOwnerPage> {
           ],
         ),
       );
-    } catch (e) {
-      if (mounted) {
-        ref.invalidate(sharedDataProvider(widget.ownerId));
-        showFailure(context, e);
-      }
-    }
-  }
-
-  Future<void> _summaries() async {
-    try {
-      await ref.read(supportRepositoryProvider).summaries(widget.ownerId);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Todavía no hay resúmenes IA productivos compartidos.',
-            ),
-          ),
-        );
-      }
     } catch (e) {
       if (mounted) {
         ref.invalidate(sharedDataProvider(widget.ownerId));

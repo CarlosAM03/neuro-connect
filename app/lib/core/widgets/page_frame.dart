@@ -20,6 +20,7 @@ class PageFrame extends StatelessWidget {
     final path = GoRouterState.of(context).uri.path;
     final selected =
         (path.startsWith('/profile') ||
+            path.startsWith('/summaries') ||
             path.startsWith('/support') ||
             path.startsWith('/activity'))
         ? 2

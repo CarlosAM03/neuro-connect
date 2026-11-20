@@ -68,6 +68,10 @@ class _ProfileFormState extends ConsumerState<_ProfileForm> {
     padding: const EdgeInsets.all(24),
     children: [
       OutlinedButton(
+        onPressed: () => context.go('/summaries'),
+        child: const Text('Mis resúmenes'),
+      ),
+      OutlinedButton(
         onPressed: () => context.go('/support/relationships'),
         child: const Text('Mi red de apoyo'),
       ),

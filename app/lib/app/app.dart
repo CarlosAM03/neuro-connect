@@ -16,6 +16,7 @@ import '../features/analytics/goal_analytics_page.dart';
 import '../features/support/owner_support_page.dart';
 import '../features/support/supporter_page.dart';
 import '../features/activity/activity_page.dart';
+import '../features/ai/summaries_page.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final refresh = ValueNotifier(0);
@@ -37,6 +38,22 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      GoRoute(path: '/summaries', builder: (_, _) => const SummariesPage()),
+      GoRoute(
+        path: '/summaries/:id',
+        builder: (_, s) => SummaryDetailPage(id: s.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/support/owners/:ownerId/summaries',
+        builder: (_, s) => SummariesPage(ownerId: s.pathParameters['ownerId']!),
+      ),
+      GoRoute(
+        path: '/support/owners/:ownerId/summaries/:id',
+        builder: (_, s) => SummaryDetailPage(
+          ownerId: s.pathParameters['ownerId']!,
+          id: s.pathParameters['id']!,
+        ),
+      ),
       GoRoute(
         path: '/support/relationships',
         builder: (_, _) => const OwnerSupportPage(),
