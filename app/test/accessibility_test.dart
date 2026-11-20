@@ -52,6 +52,12 @@ void main() {
       await tester.sendKeyEvent(LogicalKeyboardKey.tab);
       await tester.pump();
       expect(FocusManager.instance.primaryFocus, isNotNull);
+      expect(
+        tester
+            .widgetList<EditableText>(find.byType(EditableText))
+            .any((field) => field.focusNode.hasFocus),
+        isTrue,
+      );
       await expectLater(tester, meetsGuideline(textContrastGuideline));
       await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
       await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
