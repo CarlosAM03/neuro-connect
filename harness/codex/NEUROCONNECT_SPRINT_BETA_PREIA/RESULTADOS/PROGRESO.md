@@ -12,8 +12,8 @@
 | 03 | DONE | Métricas y tests temporales existentes conservados; tendencia histórica también en soporte. Flutter: 28 PASS antes del ajuste; suite soporte revalidada aparte. E2E PostgreSQL pendiente de terminación. | 04 |
 | 04 | DONE | Owner list/detail; soporte COMPLETED list/detail bajo autorización actual; POST 503 sin persistencia; UI honesta con retry/disclaimer. Backend 78 E2E / 5 suites PASS, 70 unit PASS. | 05 |
 | 05 | PARTIAL | Parches compatibles: audit 15→3 high, un advisory tooling residual; unit71 PASS. Analyze PASS y a11y 3 PASS tras corregir AppBar. APK exit1: Android SDK ausente; iOS estructural, sin Xcode. | 06 |
-| 06 | IN_PROGRESS | Runbooks, workflow manual sin CD y backup/restore sintético PASS. Compose build y telemetría segura en validación. | Operación |
-| 07 | NOT_STARTED | Smoke/regresión/matriz/handoff. | Cierre único |
+| 06 | DONE | Runbooks, workflow manual sin CD, policy audit gate PASS y backup/restore sintético PASS. Telemetría privada con unit73/6 PASS. YAML parseado, no CI remoto ejecutado. | 07 |
+| 07 | IN_PROGRESS | Regresión ampliada E2E78/5 y Flutter33 PASS; compose build inicial y recompilación final pendientes; preparar evidencia/handoff. | Cierre único |
 
 ## Diagnóstico
 
@@ -23,6 +23,10 @@
 - No cambios de esquema, contratos normativos, fórmulas ni arquitectura previstos.
 
 ## Validación inicial
+
+- Fase05 commits `e1d774d`, `664bbfc`; fase06 `846f47f`, `07790a7`.
+- Fase06: `npm run audit:gate` exit0 (solo advisory residual conocido, no audit=0). Verificador paquete exit0, 51 hashes intactos. YAML manual/Compose parseados con js-yaml. Intento inicial PyYAML no disponible, sustituido por dependencia existente.
+- Fase07: regresión E2E con parches 78/5 PASS, migrations smoke exit0: 4 migraciones, seed dos veces sin duplicar 37 eventos. Flutter final suite33 PASS, analyze sin incidencias; ajuste posterior de refresh delegado revalidado en 13 tests soporte+summaries PASS. Backend con telemetría: lint/build exit0, 73 unit/6 suites PASS.
 
 - Fase 04 commits `b7c4826`, `ccb3fc6`; tests Flutter summaries 2 PASS tras corregir fixture de fecha inválida.
 - Fase 05: `npm ci` y Prisma generate exit0, lint/build exit0, 71 unit PASS; auditorías final/runtime exit1 por 3 high residual. Web build host exit0 (204.9s). Android SDK no disponible (build exit1), no APK/dispositivo probado.

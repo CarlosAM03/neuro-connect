@@ -77,6 +77,7 @@ class _SharedOwnerPageState extends ConsumerState<SharedOwnerPage> {
     child: ref
         .watch(sharedDataProvider(widget.ownerId))
         .when(
+          skipLoadingOnRefresh: false,
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (_, _) => Center(
             child: Column(

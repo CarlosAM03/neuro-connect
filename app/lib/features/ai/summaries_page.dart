@@ -34,6 +34,7 @@ class SummariesPage extends ConsumerWidget {
     child: ref
         .watch(summariesProvider(ownerId))
         .when(
+          skipLoadingOnRefresh: false,
           loading: () => const Center(
             child: CircularProgressIndicator(
               semanticsLabel: 'Cargando resúmenes',
@@ -91,6 +92,7 @@ class SummaryDetailPage extends ConsumerWidget {
       child: ref
           .watch(summaryProvider(key))
           .when(
+            skipLoadingOnRefresh: false,
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) =>
                 ErrorView(e, () => ref.invalidate(summaryProvider(key))),

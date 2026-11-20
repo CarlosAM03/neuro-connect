@@ -47,6 +47,10 @@ async function smoke() {
     password,
   });
   assert.equal((await call('GET', '/auth/me', undefined, a)).email, emails[0]);
+  assert.deepEqual(await call('GET', '/ai/summaries', undefined, a), []);
+  await call('GET', `/ai/summaries/${randomUUID()}`, undefined, b, 404);
+  await call('POST', '/ai/summaries', {}, a, 503);
+  assert.deepEqual(await call('GET', '/ai/summaries', undefined, a), []);
   await call('GET', '/users/me', undefined, a);
   await call('PATCH', '/users/me', { displayName: 'Smoke profile' }, a);
   const goal = await call(

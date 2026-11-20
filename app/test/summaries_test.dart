@@ -86,12 +86,15 @@ void main() {
       expect(find.text('SYNTHETIC TEST FIXTURE'), findsOneWidget);
       expect(find.text(summaryDisclaimer), findsOneWidget);
       adapter.denied = true;
-      c.read(routerProvider).go('/support/owners/owner-a/summaries');
+      await tester.tap(find.byTooltip('Actualizar resumen'));
       await tester.pumpAndSettle();
       expect(find.text('SYNTHETIC TEST FIXTURE'), findsNothing);
       expect(find.text('Reintentar'), findsOneWidget);
       adapter.denied = false;
       await tester.tap(find.text('Reintentar'));
+      await tester.pumpAndSettle();
+      expect(find.text('SYNTHETIC TEST FIXTURE'), findsOneWidget);
+      c.read(routerProvider).go('/support/owners/owner-a/summaries');
       await tester.pumpAndSettle();
       expect(find.byType(ListTile), findsOneWidget);
     },
