@@ -352,13 +352,19 @@ describe('Avance 1 AI Preview / real PostgreSQL', () => {
       provider.mockRestore();
     }
   });
-  it('publishes only technical preview API with Swagger shape and security, no generation endpoint', async () => {
+  it('publishes preview and safe read APIs, with generation explicitly unavailable', async () => {
     const document = (
       await request(app.getHttpServer()).get('/api/docs-json').expect(200)
     ).body;
     expect(
       Object.keys(document.paths).filter((p) => p.startsWith('/api/v1/ai/')),
-    ).toEqual([path]);
+    ).toEqual(
+      expect.arrayContaining([
+        path,
+        '/api/v1/ai/summaries',
+        '/api/v1/ai/summaries/{summaryId}',
+      ]),
+    );
     expect(document.paths[path].get.security).toEqual([{ bearer: [] }]);
     expect(
       document.components.schemas.AiPreviewResponse.properties
@@ -370,5 +376,12 @@ describe('Avance 1 AI Preview / real PostgreSQL', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({})
       .expect(404);
+    const before = await prisma.aISummary.count();
+    await request(app.getHttpServer())
+      .post('/api/v1/ai/summaries')
+      .set('Authorization', `Bearer ${token}`)
+      .send({})
+      .expect(503);
+    expect(await prisma.aISummary.count()).toBe(before);
   });
 });

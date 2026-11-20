@@ -14,6 +14,7 @@ import {
   UpdateSupportDto,
 } from './support.dto';
 import { personSelect, SupportAccessService } from './support-access.service';
+import { summaryReadSelect } from '../ai/summary-read.dto';
 
 const relationInclude = { supporter: { select: personSelect } } as const;
 const goalSelect = {
@@ -299,12 +300,27 @@ export class SupportNetworkService {
     );
   }
   summaries(supporterId: string, ownerId: string) {
-    // No productive summaries exist in this increment; permission boundary is real.
+    return this.access.read(supporterId, ownerId, 'canViewSummaries', (tx) =>
+      tx.aISummary.findMany({
+        where: { userId: ownerId, status: 'COMPLETED' },
+        select: summaryReadSelect,
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      }),
+    );
+  }
+  summary(supporterId: string, ownerId: string, id: string) {
     return this.access.read(
       supporterId,
       ownerId,
       'canViewSummaries',
-      async () => [],
+      async (tx) => {
+        const summary = await tx.aISummary.findFirst({
+          where: { id, userId: ownerId, status: 'COMPLETED' },
+          select: summaryReadSelect,
+        });
+        if (!summary) throw new NotFoundException('Resumen no encontrado');
+        return summary;
+      },
     );
   }
 }

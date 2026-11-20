@@ -5,6 +5,7 @@ import { SummaryContextBuilder } from './summary-context.builder';
 import { PromptBuilder, SUMMARY_SYSTEM_PROMPT } from './prompt.builder';
 import { MockAiProvider } from './mock-ai.provider';
 import { AiSummaryService } from './ai-summary.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 const now = new Date('2026-10-14T12:00:00Z');
 function source() {
@@ -82,7 +83,13 @@ function setup() {
     prompts,
     config,
     mock,
-    service: new AiSummaryService(contexts, prompts, config, mock),
+    service: new AiSummaryService(
+      contexts,
+      prompts,
+      config,
+      mock,
+      {} as PrismaService,
+    ),
   };
 }
 describe('SummaryContext privacy boundary', () => {

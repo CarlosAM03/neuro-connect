@@ -27,6 +27,7 @@ import {
 } from '../analytics/analytics.dto';
 import { CheckInCompletion } from '@prisma/client';
 import { SupportAccessService } from './support-access.service';
+import { SummaryReadResponse } from '../ai/summary-read.dto';
 import { SupportNetworkService } from './support-network.service';
 import {
   CreateSupportDto,
@@ -163,14 +164,23 @@ class SupportNetworkController {
   @Get('owners/:ownerId/summaries')
   @ApiOkResponse({
     description:
-      'VIEW_SUMMARIES; empty collection until productive AI summaries are implemented.',
-    schema: { type: 'array', items: { type: 'object' } },
+      'VIEW_SUMMARIES; only COMPLETED summaries, no snapshots or provider internals.',
+    type: [SummaryReadResponse],
   })
   summaries(
     @CurrentUser() u: SafeUser,
     @Param('ownerId', ParseUUIDPipe) owner: string,
   ) {
     return this.network.summaries(u.id, owner);
+  }
+  @Get('owners/:ownerId/summaries/:summaryId')
+  @ApiOkResponse({ type: SummaryReadResponse })
+  summary(
+    @CurrentUser() u: SafeUser,
+    @Param('ownerId', ParseUUIDPipe) owner: string,
+    @Param('summaryId', ParseUUIDPipe) id: string,
+  ) {
+    return this.network.summary(u.id, owner, id);
   }
 }
 @Module({
