@@ -173,11 +173,7 @@ class _SharedOwnerPageState extends ConsumerState<SharedOwnerPage> {
                   Text(
                     'Solo lectura · Progreso actual: ${analytics.currentProgress}%',
                   ),
-                  Text(trendLabel(analytics.trend)),
-                  if (analytics.insufficientHistory)
-                    const Text(
-                      'Historial insuficiente para una tendencia concluyente.',
-                    ),
+                  TrendSummary(analytics: analytics, status: goal.status),
                   Text(
                     'Check-ins efectivos: ${analytics.totalCheckIns} · Dificultad promedio: ${analytics.averageDifficulty?.toStringAsFixed(2) ?? "Sin datos"}',
                   ),

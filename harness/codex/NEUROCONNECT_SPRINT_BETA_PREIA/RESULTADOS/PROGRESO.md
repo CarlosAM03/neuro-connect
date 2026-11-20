@@ -9,7 +9,7 @@
 |---|---|---|---|
 | 01 | DONE | Core, analytics, soporte y audit existentes. Baseline unit: 5 suites / 70 PASS. Docker inicialmente detenido; Flutter instalado en C:/src/flutter fuera de PATH. | 02 |
 | 02 | DONE | Búsqueda título/categoría, cinco filtros y orden por título. Test widget PASS; confirmaciones y sesión existentes conservadas. | 03 |
-| 03 | NOT_STARTED | Preservar fórmulas 28 días; regresión PostgreSQL/privacidad. | Soporte/audit |
+| 03 | DONE | Métricas y tests temporales existentes conservados; tendencia histórica también en soporte. Flutter: 28 PASS antes del ajuste; suite soporte revalidada aparte. E2E PostgreSQL pendiente de terminación. | 04 |
 | 04 | NOT_STARTED | Lectura summaries delegada devuelve [] fijo; no UI owner. | Contratos seguros/UI sin LLM |
 | 05 | NOT_STARTED | a11y, dependencia audit, Android, iOS. | Calidad |
 | 06 | NOT_STARTED | Faltan runbooks y release-check. | Operación |
