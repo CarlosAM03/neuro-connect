@@ -86,8 +86,10 @@ class ProgressChart extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          spacing: 16,
+          runSpacing: 8,
           children: [
             Text(dateLabel(points.first.date)),
             Text(dateLabel(points.last.date)),

@@ -40,11 +40,19 @@ class _GoalsPageState extends ConsumerState<GoalsPage> {
   Widget build(BuildContext context) => PageFrame(
     title: 'Mis objetivos',
     actions: [
-      TextButton.icon(
-        onPressed: () => context.go('/goals/new'),
-        icon: const Icon(Icons.add),
-        label: const Text('Nuevo objetivo'),
-      ),
+      if (MediaQuery.sizeOf(context).width < 600 ||
+          MediaQuery.textScalerOf(context).scale(1) > 1.3)
+        IconButton(
+          tooltip: 'Nuevo objetivo',
+          onPressed: () => context.go('/goals/new'),
+          icon: const Icon(Icons.add),
+        )
+      else
+        TextButton.icon(
+          onPressed: () => context.go('/goals/new'),
+          icon: const Icon(Icons.add),
+          label: const Text('Nuevo objetivo'),
+        ),
     ],
     child: ref
         .watch(goalsProvider)

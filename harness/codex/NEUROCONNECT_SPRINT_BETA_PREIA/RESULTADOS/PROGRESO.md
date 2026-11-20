@@ -11,8 +11,8 @@
 | 02 | DONE | Búsqueda título/categoría, cinco filtros y orden por título. Test widget PASS; confirmaciones y sesión existentes conservadas. | 03 |
 | 03 | DONE | Métricas y tests temporales existentes conservados; tendencia histórica también en soporte. Flutter: 28 PASS antes del ajuste; suite soporte revalidada aparte. E2E PostgreSQL pendiente de terminación. | 04 |
 | 04 | DONE | Owner list/detail; soporte COMPLETED list/detail bajo autorización actual; POST 503 sin persistencia; UI honesta con retry/disclaimer. Backend 78 E2E / 5 suites PASS, 70 unit PASS. | 05 |
-| 05 | NOT_STARTED | a11y, dependencia audit, Android, iOS. | Calidad |
-| 06 | NOT_STARTED | Faltan runbooks y release-check. | Operación |
+| 05 | PARTIAL | Parches compatibles: audit 15→3 high, un advisory tooling residual; unit71 PASS. Analyze PASS y a11y 3 PASS tras corregir AppBar. APK exit1: Android SDK ausente; iOS estructural, sin Xcode. | 06 |
+| 06 | IN_PROGRESS | Runbooks, workflow manual sin CD y backup/restore sintético PASS. Compose build y telemetría segura en validación. | Operación |
 | 07 | NOT_STARTED | Smoke/regresión/matriz/handoff. | Cierre único |
 
 ## Diagnóstico
@@ -23,6 +23,10 @@
 - No cambios de esquema, contratos normativos, fórmulas ni arquitectura previstos.
 
 ## Validación inicial
+
+- Fase 04 commits `b7c4826`, `ccb3fc6`; tests Flutter summaries 2 PASS tras corregir fixture de fecha inválida.
+- Fase 05: `npm ci` y Prisma generate exit0, lint/build exit0, 71 unit PASS; auditorías final/runtime exit1 por 3 high residual. Web build host exit0 (204.9s). Android SDK no disponible (build exit1), no APK/dispositivo probado.
+- Fase 06: `node infra/backup-restore-smoke.cjs` exit0; PostgreSQL16, filas completas de seis tablas + migration checksums idénticos. Origen/target de ensayo eliminados, volumen preservado.
 
 - Fase 02 commit `5d92b82`; fase 03 `e96b514`. E2E baseline 73/4 PASS; Flutter baseline+filtros 28 PASS, soporte tras cambio 11 PASS.
 - Fase 04: lint/build backend PASS; fixtures solo DB test, proyección exacta, tres identidades, estados PENDING/FAILED no delegados, revocación/expiry/deep links, generación 503. Correcciones locales de analyzer y fechas de fixture en revalidación Flutter.

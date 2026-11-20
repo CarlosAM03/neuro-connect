@@ -123,6 +123,13 @@ class NeuroConnectApp extends ConsumerWidget {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(minimumSize: const Size(48, 48)),
       ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(minimumSize: const Size(48, 48)),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(minimumSize: const Size(48, 48)),
+      ),
+      materialTapTargetSize: MaterialTapTargetSize.padded,
     ),
     routerConfig: ref.watch(routerProvider),
   );

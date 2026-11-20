@@ -45,8 +45,10 @@ class _ActivityPageState extends ConsumerState<ActivityPage> {
                     ),
                   ),
                 ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                spacing: 8,
+                runSpacing: 8,
                 children: [
                   TextButton(
                     onPressed: page > 1 ? () => setState(() => page--) : null,
