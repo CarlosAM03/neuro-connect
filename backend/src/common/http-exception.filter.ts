@@ -25,7 +25,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
           : 'Error interno del servidor';
     if (statusCode === 500)
       this.logger.error(
-        'Unexpected request failure',
+        `Unexpected request failure [${response.locals.requestId ?? 'unavailable'}]`,
         error instanceof Prisma.PrismaClientKnownRequestError
           ? error.code
           : error instanceof Error

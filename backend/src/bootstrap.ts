@@ -3,11 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { HttpExceptionFilter } from './common/http-exception.filter';
+import { requestTelemetry } from './common/request-telemetry';
 
 export function configureApp(app: INestApplication) {
   const config = app.get(ConfigService);
   app.setGlobalPrefix('api/v1');
   app.use(helmet());
+  app.use(requestTelemetry());
   app.enableCors({
     origin: config
       .getOrThrow<string>('CORS_ORIGINS')
