@@ -1,0 +1,63 @@
+# Manifest del paquete de trabajo — NeuroConnect Pre-IA
+
+- Objetivo: `PREIA-BETA-READINESS`, un solo bloque de trabajo con fases 01–07 y handoff humano.
+- Carpeta de destino: `harness/codex/NEUROCONNECT_SPRINT_BETA_PREIA/`.
+- Las referencias literales de `contexto/fuentes-originales/` fueron copiadas de los archivos provistos, sin editar.
+- No se incluye repositorio fuente: se utiliza el clon real `CarlosAM03/neuro-connect` donde se coloca esta carpeta.
+- Fuentes canónicas de Git (`AVANCE1_BASELINE_FREEZE`, reportes de closeout) se leen allí, no se sustituyen por archivos de este ZIP.
+- `.gitignore` evita duplicar los documentos originales dentro del control de versiones.
+- La primera activación es `PROMPTS/ACTIVAR_SPRINT_COMPLETO.md`.
+- `SHA256SUMS.txt` permite confirmar los bytes descargados, con `scripts/verificar_paquete.py`.
+
+## Archivos del paquete
+
+- `.gitignore`
+- `00_LEEME_INICIO.md`
+- `contexto/BASELINE_Y_RUTAS.md`
+- `contexto/fuentes-originales/ADR-001 — Esquema relacional y modelo de datos de NeuroConnect.md`
+- `contexto/fuentes-originales/ADR-002-DOMINIO-Y-DISENO-V1.md`
+- `contexto/fuentes-originales/ADR-003-BACKEND-V1.md`
+- `contexto/fuentes-originales/ADR-004-FRONTEND-V1.md`
+- `contexto/fuentes-originales/ADR-005-INTEGRACION-IA-V1.md`
+- `contexto/fuentes-originales/ADR-006-ARQUITECTURA-SISTEMA-V1.md`
+- `contexto/fuentes-originales/ADR-007-DEVOPS-INFRAESTRUCTURA-V1.md`
+- `contexto/fuentes-originales/ADR-008-Auditoría, persistencia histórica y red de apoyo de NeuroConnect v1.0.0.md`
+- `contexto/fuentes-originales/Anteproyecto_NeuroConnect_IA_G_Carlos_Armenta.pdf`
+- `contexto/fuentes-originales/HARNESS.md`
+- `contexto/fuentes-originales/NeuroConnect_Avance_1_Carlos_Armenta_con_evidencias.pdf`
+- `contexto/fuentes-originales/PLAN_IMPLEMENTACION_AVANCE_1.md`
+- `contexto/fuentes-originales/README.md`
+- `contexto/fuentes-originales/ROADMAP_V1.md`
+- `contexto/FUENTES_Y_INTEGRIDAD.md`
+- `OPERACION/COMANDOS_Y_GATES.md`
+- `OPERACION/DEPLOY_PRIMERA_BETA_CHECKLIST.md`
+- `OPERACION/SMOKE_LOCAL_HUMANO.md`
+- `PLANTILLAS/ACCIONES_EXTERNAS.template.md`
+- `PLANTILLAS/DECISIONES_PENDIENTES.template.md`
+- `PLANTILLAS/HANDOFF_HUMANO.template.md`
+- `PLANTILLAS/PROGRESO.template.md`
+- `PLANTILLAS/REPORTE_FINAL_SPRINT.template.md`
+- `PLANTILLAS/SMOKE_HUMANO.template.md`
+- `PROMPTS/ACTIVAR_FASE_ESPECIFICA.md`
+- `PROMPTS/ACTIVAR_SPRINT_COMPLETO.md`
+- `PROMPTS/CIERRE_POST_SMOKE.md`
+- `PROMPTS/FASE_01_AUDITORIA_INICIAL.md`
+- `PROMPTS/FASE_02_CORE_Y_UX.md`
+- `PROMPTS/FASE_03_ANALYTICS_SOPORTE_AUDITORIA.md`
+- `PROMPTS/FASE_04_UI_Y_CONTRATOS_IA_DIFERIDA.md`
+- `PROMPTS/FASE_05_CALIDAD_SEGURIDAD_ANDROID.md`
+- `PROMPTS/FASE_06_DEVOPS_BETA_READINESS.md`
+- `PROMPTS/FASE_07_REGRESION_Y_HANDOFF.md`
+- `PROMPTS/REANUDAR_SPRINT.md`
+- `RESULTADOS/README.md`
+- `scripts/verificar_paquete.py`
+- `SPEC/01_CONTRATO_SPRINT.md`
+- `SPEC/02_GOBERNANZA_Y_GIT.md`
+- `SPEC/03_ALCANCE_Y_TRAZABILIDAD.md`
+- `SPEC/04_REGLAS_DEL_DOMINIO.md`
+- `SPEC/05_IA_PREPARADA_SIN_LLM.md`
+- `SPEC/06_CALIDAD_SEGURIDAD.md`
+- `SPEC/07_ADR007_DEVOPS.md`
+- `SPEC/08_CRITERIOS_ACEPTACION.md`
+- `SPEC/09_CASOS_PRUEBA.md`
+- `SPEC/10_RIESGOS_Y_DECISIONES.md`

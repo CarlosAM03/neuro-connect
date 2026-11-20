@@ -1,0 +1,8 @@
+# Archivos de referencia ya disponibles como fuentes canónicas en el repositorio.
+/contexto/fuentes-originales/
+# Archivos que puede producir Codex en validaciones locales.
+*.log
+*.tmp
+*.swp
+*.pid
+/RESULTADOS/evidencias-locales/
