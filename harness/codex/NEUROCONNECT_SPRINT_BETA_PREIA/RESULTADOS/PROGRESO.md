@@ -8,7 +8,7 @@
 | Fase | Estado | Evidencia / gaps | Siguiente paso |
 |---|---|---|---|
 | 01 | DONE | Core, analytics, soporte y audit existentes. Baseline unit: 5 suites / 70 PASS. Docker inicialmente detenido; Flutter instalado en C:/src/flutter fuera de PATH. | 02 |
-| 02 | IN_PROGRESS | Faltan filtros/orden de objetivos. Revisar sesión y confirmaciones existentes. | Core/UX |
+| 02 | DONE | Búsqueda título/categoría, cinco filtros y orden por título. Test widget PASS; confirmaciones y sesión existentes conservadas. | 03 |
 | 03 | NOT_STARTED | Preservar fórmulas 28 días; regresión PostgreSQL/privacidad. | Soporte/audit |
 | 04 | NOT_STARTED | Lectura summaries delegada devuelve [] fijo; no UI owner. | Contratos seguros/UI sin LLM |
 | 05 | NOT_STARTED | a11y, dependencia audit, Android, iOS. | Calidad |
@@ -23,6 +23,9 @@
 - No cambios de esquema, contratos normativos, fórmulas ni arquitectura previstos.
 
 ## Validación inicial
+
+- Fase 01 commit: `7e88cdf`. Fase 02: lint/build backend exit 0; test nuevo filtros exit 0. Suite Flutter/regresión E2E en ejecución.
+- Docker Desktop 29.9.2 iniciado; PostgreSQL 16 saludable; `node infra/setup-test.cjs` exit 0. Flutter 3.47.5 / Dart 3.13.4 disponible con PATH corregido y ejecución fuera del sandbox del SDK.
 
 - `npm test` (backend): exit 0, 70 tests / 5 suites.
 - `git fetch origin`: primer intento restringido; reintento autorizado exit 0; main remoto idéntico a local.
