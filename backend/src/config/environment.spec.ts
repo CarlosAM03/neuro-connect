@@ -39,4 +39,17 @@ describe('environment', () => {
       }),
     ).toThrow('JWT_SECRET');
   });
+  it('rejects public development preview even if explicitly enabled', () => {
+    expect(() =>
+      validateEnvironment({
+        ...valid,
+        NODE_ENV: 'production',
+        AI_PREVIEW_ENABLED: 'true',
+      }),
+    ).toThrow('false in production');
+    expect(
+      validateEnvironment({ ...valid, NODE_ENV: 'production' })
+        .AI_PREVIEW_ENABLED,
+    ).toBe(false);
+  });
 });

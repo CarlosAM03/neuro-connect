@@ -31,6 +31,8 @@ export function validateEnvironment(env: Record<string, unknown>) {
   const preview = env.AI_PREVIEW_ENABLED ?? 'false';
   if (!['true', 'false'].includes(String(preview)))
     throw new Error('AI_PREVIEW_ENABLED must be true or false');
+  if (env.NODE_ENV === 'production' && String(preview) === 'true')
+    throw new Error('AI_PREVIEW_ENABLED must be false in production');
   const provider = env.AI_PROVIDER ?? 'mock';
   if (provider !== 'mock')
     throw new Error('Only AI_PROVIDER=mock is supported during Avance 1');
