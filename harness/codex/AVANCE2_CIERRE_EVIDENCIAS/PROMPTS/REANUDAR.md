@@ -1,0 +1,1 @@
+Reanuda únicamente el bloque AVANCE2_CIERRE_EVIDENCIAS: inspecciona rama `sprint/pre-ia-beta`, Git status y `docs/evidence/avance2/` para identificar lo realizado; lee SPEC y el último handoff. Continúa el primer criterio pendiente sin rehacer pruebas ya acreditadas que no se invalidaron. Mantén commits pequeños, no PR/merge/deploy, no borrar volúmenes. Reporta resultados reales.

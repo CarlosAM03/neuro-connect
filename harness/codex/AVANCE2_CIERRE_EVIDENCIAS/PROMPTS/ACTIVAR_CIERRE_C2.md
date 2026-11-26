@@ -1,0 +1,11 @@
+# ACTIVACIÓN ÚNICA — CIERRE C2 / AVANCE 2
+
+Trabaja en el repositorio `CarlosAM03/neuro-connect` en la rama local del sprint `sprint/pre-ia-beta`; no partir de main por defecto. Verifica HEAD, dirty state, upstream y preserve todo trabajo existente.
+
+Lee **íntegramente**, en este orden: (a) `harness/HARNESS.md`, (b) anteproyecto y ADR-001..ADR-008 aplicables, (c) baseline del Avance 1, (d) `harness/codex/AVANCE2_CIERRE_EVIDENCIAS/00_LEEME.md`, (e) `SPEC/SPEC_CIERRE_EVIDENCIAS_C2.md`, (f) `OPERACION/DOCKER_LIMPIEZA_CONTROLADA.md`, (g) reporte PDF actualizado adjunto en `REFERENCIAS/`, y (h) `REFERENCIAS/CONSTANCIA_SMOKE_MANUAL_2026-11-26.md`.
+
+Ten presente que el responsable YA ejecutó el smoke exploratorio manual local y revisó las pestañas con resultado satisfactorio; no asignarle de nuevo esa comprobación. Tu función es obtener evidencia reproducible, no suplantar su testimonio. Ejecuta como un único bloque acotado: reproducir prototipo con Compose y 2 cuentas sintéticas; generar capturas auténticas y legibles; documentar BD/ERD fiel al Prisma actual; volver a ejecutar pruebas reportando valores observados; agregar evidencia versionada a `docs/evidence/avance2/`; hacer limpieza Docker segura de contenedores sobrantes detenidos, imágenes no requeridas y caché, sin borrar volúmenes ni interrumpir contenedores ajenos activos; confirmar funcionamiento posterior. Crear commits pequeños por grupos coherentes.
+
+Permiso especial de este bloque: tras comprobar `git diff`, escaneo de secretos y pruebas, puedes **publicar solo la rama `sprint/pre-ia-beta`** para dejar evidencia accesible por GitHub. No crear PR, no mergear, no tocar main, no publicar frontend/backend, no configurar IA real. Si GitHub no permite push, documentar y entregar las rutas locales; no afirmar publicación.
+
+Al terminar, deja un único `docs/evidence/avance2/HANDOFF_C2.md`, `MANIFIESTO_EVIDENCIAS.md`, reporte de limpieza Docker antes/después, conteo real de pruebas y URLs exactas de evidencias. Señala como pendientes los bloqueos reales y la aceptación FORMAL de la rama/release, especialmente DEC-001. La revisión manual exploratoria está confirmada, no pendiente. No inventes resultados ni declares 100% del proyecto.
