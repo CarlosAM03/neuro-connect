@@ -18,3 +18,8 @@ Los PDF de referencia quedan locales, intactos, excluidos del commit del paquete
 las evidencias publicadas y la constancia enlazada bastan para la actualización del autor.
 Los resultados observados se consolidan al cerrar en `HANDOFF_C2.md` y
 `MANIFIESTO_EVIDENCIAS.md`; un archivo no existente no se considera evidencia.
+
+Cierre: [handoff único](HANDOFF_C2.md), [manifiesto](MANIFIESTO_EVIDENCIAS.md),
+[pruebas actuales](pruebas/resumen.md), [limpieza antes/después](docker/RESUMEN_LIMPIEZA.md).
+73 unitarias,78 E2E PostgreSQL y33 Flutter PASS; nueve capturas JPEG nativas sin
+retoques. C2 prepara evidencia para revisión formal; no declara aceptación/release.

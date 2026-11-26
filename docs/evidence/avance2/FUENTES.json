@@ -1,0 +1,60 @@
+{
+  "date": "2026-11-26T18:32:00.536Z",
+  "applicationBase": "4f2ced9fdacfaaa7e071bf91cdffd5b3412da2ae",
+  "inputs": [
+    {
+      "path": "harness/HARNESS.md",
+      "sha256": "7e17fc3af8588d07f7bde33b445acb71e7655ea8cf3f152aca681dcf81cfcca9"
+    },
+    {
+      "path": "backend/prisma/schema.prisma",
+      "sha256": "77503c71f37003ea110fd8b7bfdd7872c911197d8063bd3340c659c9e9dad3a1"
+    },
+    {
+      "path": "docs/ADRS/ADR-001 — Esquema relacional y modelo de datos de NeuroConnect.md",
+      "sha256": "1cbdbad5d399eb58ed046f986253ee97cab1a899754351668899cd856a968007"
+    },
+    {
+      "path": "docs/ADRS/ADR-002-DOMINIO-Y-DISENO-V1.md",
+      "sha256": "63594120709580206fa539b0934e01cc13e8c17376f02975cdfadb6e0f52e085"
+    },
+    {
+      "path": "docs/ADRS/ADR-003-BACKEND-V1.md",
+      "sha256": "cac9fa06a98e0c7bbe4fe1fc2a9f7f8bd0e41585bb89bb766018c58d078eab5d"
+    },
+    {
+      "path": "docs/ADRS/ADR-004-FRONTEND-V1.md",
+      "sha256": "c6fd6dae858464c85ae7ed18fc7fca6f945ad8ef373dfde753ec3dcb48455d2c"
+    },
+    {
+      "path": "docs/ADRS/ADR-005-INTEGRACION-IA-V1.md",
+      "sha256": "248d69aa4f422d41488b625bac0b6c91b9f77fa30408083cc1d465a53b71b872"
+    },
+    {
+      "path": "docs/ADRS/ADR-006-ARQUITECTURA-SISTEMA-V1.md",
+      "sha256": "a27999e530549d23f4596ac05e78379ce4bd6e9a876eea0fc43749b23e677431"
+    },
+    {
+      "path": "docs/ADRS/ADR-007-DEVOPS-INFRAESTRUCTURA-V1.md",
+      "sha256": "9fb66ffb6d524dd0bc098228845d48c100c781620d646017126c00e99e727bb6"
+    },
+    {
+      "path": "docs/ADRS/ADR-008-Auditoría, persistencia histórica y red de apoyo de NeuroConnect v1.0.0.md",
+      "sha256": "d145b718d3ef5badb930669ddfd33df0f4d77a726a6ed77591fae7a3f8b58f78"
+    },
+    {
+      "path": "docs/ADRS/Anteproyecto_NeuroConnect_IA_G_Carlos_Armenta.pdf",
+      "sha256": "1cf747e78fddb0088fa80e113e7dd00e6ffcaaa3ef2c7efb1da7ee4680a2009f"
+    },
+    {
+      "path": "docs/Planeacion/AVANCE1_BASELINE_FREEZE.md",
+      "sha256": "a6f0e88ae5e3a052f793756411ed478afb282470ddafbdd58a766dabf9bead75"
+    },
+    {
+      "path": "harness/codex/AVANCE2_CIERRE_EVIDENCIAS/REFERENCIAS/NeuroConnect_Avance_2_Actualizado_Smoke_Manual_2026-11-26.pdf",
+      "sha256": "01d0cb51369d0ca1eb051251c4523235845eef356d8c88efec3b6907b9f94b80"
+    }
+  ],
+  "referencePdf": "local input only, not modified or republished",
+  "manualSmoke": "confirmed by owner 2026-11-26; exact execution time not provided"
+}

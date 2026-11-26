@@ -12,5 +12,5 @@ for(const f of files){
  if(/-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/.test(s)||/eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/.test(s))findings.push({file:f,reason:'private key or JWT'});
 }
 const report={date:new Date().toISOString(),textFilesScanned:textFiles,findings,scope:'branch diff from main + untracked evidence, excludes ignored local inputs; JPEG manually reviewed'};
-fs.writeFileSync('docs/evidence/avance2/pruebas/escaneo_secretos.json',JSON.stringify(report,null,2)+'\n');
+if(!process.argv.includes('--check-only'))fs.writeFileSync('docs/evidence/avance2/pruebas/escaneo_secretos.json',JSON.stringify(report,null,2)+'\n');
 console.log(findings.length?'FAIL: inspect findings by path only':`PASS: ${textFiles} text files scanned; no known local secrets, JWT or private keys. JPEG captures reviewed visually.`);if(findings.length)process.exitCode=1;
