@@ -1,0 +1,14 @@
+{
+  "capturedAt": "2026-11-26T18:22:58.405Z",
+  "sourceSha": "4f2ced9fdacfaaa7e071bf91cdffd5b3412da2ae",
+  "viewport": {
+    "dpr": 1.5,
+    "height": 720,
+    "width": 1280
+  },
+  "browser": "ChatGPT IAB",
+  "format": "native JPEG; no crop or content editing",
+  "accounts": "A owner and B supporter: synthetic C2 data; no credentials exported",
+  "fixtureDates": "CheckIn timestamps assigned at now-6d, now-3d, now for synthetic temporal graph",
+  "observed": "B authorized read, owner UI revoke, B refresh denied; summary unavailable"
+}
