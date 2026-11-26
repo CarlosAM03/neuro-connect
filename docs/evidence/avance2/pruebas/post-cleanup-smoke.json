@@ -1,0 +1,9 @@
+{
+  "label": "post-cleanup-smoke",
+  "command": "docker compose exec -T backend node scripts/smoke.cjs",
+  "directory": ".",
+  "sha": "5fed3aa0d306a1a1566c11f22a421aaabef8779c",
+  "started": "2026-11-26T18:27:25.910Z",
+  "ended": "2026-11-26T18:27:28.787Z",
+  "exitCode": 0
+}

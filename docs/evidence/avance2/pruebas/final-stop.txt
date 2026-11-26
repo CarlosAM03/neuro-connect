@@ -1,0 +1,17 @@
+{
+  "label": "final-stop",
+  "command": "docker compose stop",
+  "directory": ".",
+  "sha": "36825d87d64eedafa02e101a01440262e1ab9255",
+  "started": "2026-11-26T18:30:06.849Z",
+  "ended": "2026-11-26T18:30:07.187Z",
+  "exitCode": 0
+}
+
+
+ Container neuroconnect-frontend-1 Stopping 
+ Container neuroconnect-frontend-1 Stopped 
+ Container neuroconnect-backend-1 Stopping 
+ Container neuroconnect-backend-1 Stopped 
+ Container neuroconnect-postgres-1 Stopping 
+ Container neuroconnect-postgres-1 Stopped 

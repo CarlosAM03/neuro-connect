@@ -1,0 +1,9 @@
+{
+  "label": "final-container-state",
+  "command": "docker compose ps -a",
+  "directory": ".",
+  "sha": "36825d87d64eedafa02e101a01440262e1ab9255",
+  "started": "2026-11-26T18:30:07.288Z",
+  "ended": "2026-11-26T18:30:07.645Z",
+  "exitCode": 0
+}

@@ -27,8 +27,8 @@ Cada `.txt` conserva stdout/stderr sanitizados. Hora local = UTC−08:00 (Tijuan
 | Eliminación exacta de fixtures C2 | PASS: dos cuentas sintéticas propias; estado temporal eliminado | [fixtures-cleanup.txt](fixtures-cleanup.txt) |
 | Post limpieza: startup/smoke/persistencia | PASS, exit 0 en los tres | logs `post-cleanup-*` con exit observado |
 
-Entorno: Windows; Node 22.16.0; npm host 11.7.0 (runner usa npm CLI instalado junto
-a Node, identificado por su comando); Flutter 3.47.5 / Dart 3.13.4; Docker29.9.2;
+Entorno: Windows; Node 22.16.0; npm host 11.7.0 y **npm runner 10.9.2** (CLI instalado
+junto a Node, comprobado con su ejecutable); Flutter 3.47.5 / Dart 3.13.4; Docker29.9.2;
 PostgreSQL16.15 según consulta en DB de prueba. No se midió porcentaje de cobertura.
 
 ## Fallos y diferencias conservados

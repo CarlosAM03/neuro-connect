@@ -1,0 +1,12 @@
+{
+  "label": "post-cleanup-persistence",
+  "command": "node infra/persistence-smoke.cjs",
+  "directory": ".",
+  "sha": "5fed3aa0d306a1a1566c11f22a421aaabef8779c",
+  "started": "2026-11-26T18:27:28.934Z",
+  "ended": "2026-11-26T18:27:41.676Z",
+  "exitCode": 0
+}
+
+PASS: Goal, effective CheckIn, session and append-only audit preserved across three-service restart; no volume deleted.
+

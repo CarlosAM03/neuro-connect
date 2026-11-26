@@ -1,0 +1,9 @@
+{
+  "label": "post-cleanup-start",
+  "command": "docker compose up -d --wait",
+  "directory": ".",
+  "sha": "5fed3aa0d306a1a1566c11f22a421aaabef8779c",
+  "started": "2026-11-26T18:27:23.625Z",
+  "ended": "2026-11-26T18:27:25.783Z",
+  "exitCode": 0
+}

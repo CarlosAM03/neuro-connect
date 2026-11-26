@@ -1,0 +1,24 @@
+{
+  "label": "post-cleanup-start",
+  "command": "docker compose up -d --wait",
+  "directory": ".",
+  "sha": "5fed3aa0d306a1a1566c11f22a421aaabef8779c",
+  "started": "2026-11-26T18:27:23.625Z",
+  "ended": "2026-11-26T18:27:25.783Z",
+  "exitCode": 0
+}
+
+
+ Container neuroconnect-postgres-1 Running 
+ Container neuroconnect-backend-1 Running 
+ Container neuroconnect-frontend-1 Running 
+ Container neuroconnect-postgres-1 Waiting 
+ Container neuroconnect-postgres-1 Healthy 
+ Container neuroconnect-backend-1 Waiting 
+ Container neuroconnect-backend-1 Healthy 
+ Container neuroconnect-postgres-1 Waiting 
+ Container neuroconnect-backend-1 Waiting 
+ Container neuroconnect-frontend-1 Waiting 
+ Container neuroconnect-backend-1 Healthy 
+ Container neuroconnect-postgres-1 Healthy 
+ Container neuroconnect-frontend-1 Healthy 
