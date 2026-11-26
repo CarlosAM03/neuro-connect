@@ -1,0 +1,73 @@
+%% Source: backend/prisma/schema.prisma @4f2ced9fdacfaaa7e071bf91cdffd5b3412da2ae
+%% No schema changes in C2. AuditEvent.entityId is NOT a universal FK.
+erDiagram
+  User ||--o{ Goal : "ownerId"
+  Goal ||--o{ CheckIn : "goalId"
+  User ||--o{ AISummary : "userId"
+  User ||--o{ SupportRelationship : "ownerId (SupportOwner)"
+  User ||--o{ SupportRelationship : "supporterId (Supporter)"
+  User ||--o{ AuditEvent : "ownerId (AuditOwner)"
+  User ||--o{ AuditEvent : "actorId (AuditActor)"
+  User {
+    uuid id PK
+    string email UK
+    string passwordHash
+    string displayName
+    timestamptz createdAt
+    timestamptz updatedAt
+  }
+  Goal {
+    uuid id PK
+    uuid ownerId FK
+    string title
+    string description "nullable"
+    string category "nullable"
+    GoalStatus status "ACTIVE PAUSED COMPLETED CANCELLED"
+    int progress "0..100 snapshot"
+    timestamptz targetDate "nullable"
+    timestamptz createdAt
+    timestamptz updatedAt
+  }
+  CheckIn {
+    uuid id PK
+    uuid goalId FK
+    int progress
+    int difficulty
+    CheckInCompletion completion
+    string notes "nullable; owner-only"
+    timestamptz voidedAt "nullable; no deletion"
+    timestamptz createdAt
+  }
+  SupportRelationship {
+    uuid id PK
+    uuid ownerId FK
+    uuid supporterId FK
+    boolean canViewGoals
+    boolean canViewProgress
+    boolean canViewSummaries
+    timestamptz authorizedAt
+    timestamptz expiresAt "nullable"
+    timestamptz revokedAt "nullable"
+  }
+  AuditEvent {
+    uuid id PK
+    uuid ownerId FK
+    uuid actorId FK
+    AuditAction action
+    AuditEntityType entityType
+    uuid entityId "business reference; NOT FK"
+    jsonb payload "minimized"
+    timestamptz occurredAt
+  }
+  AISummary {
+    uuid id PK
+    uuid userId FK
+    timestamptz periodStart
+    timestamptz periodEnd
+    jsonb inputSnapshot "internal; not shared"
+    string content "nullable"
+    string provider "nullable"
+    string model "nullable"
+    AISummaryStatus status "PENDING COMPLETED FAILED"
+    timestamptz createdAt
+  }

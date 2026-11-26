@@ -1,0 +1,9 @@
+{
+  "label": "backend-e2e",
+  "command": "npm run test:e2e",
+  "directory": "backend",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:18:05.379Z",
+  "ended": "2026-11-26T18:19:33.971Z",
+  "exitCode": 0
+}

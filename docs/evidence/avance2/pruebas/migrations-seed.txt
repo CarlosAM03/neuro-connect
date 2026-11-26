@@ -1,0 +1,45 @@
+{
+  "label": "migrations-seed",
+  "command": "npm run smoke:migrations",
+  "directory": "backend",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:20:02.683Z",
+  "ended": "2026-11-26T18:20:26.913Z",
+  "exitCode": 0
+}
+
+
+> neuroconnect-backend@0.1.0 smoke:migrations
+> node test/migration-smoke.cjs
+
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "neuroconnect_migration_1795717204496_test", schema "public" at "localhost:5434"
+
+4 migrations found in prisma/migrations
+
+Applying migration `20261014000100_mvp0_core`
+Applying migration `20261014000200_ai_summary_scaffold`
+Applying migration `20261015000100_support_audit_history`
+Applying migration `20261015000200_audit_append_only`
+
+The following migration(s) have been applied:
+
+migrations/
+  └─ 20261014000100_mvp0_core/
+    └─ migration.sql
+  └─ 20261014000200_ai_summary_scaffold/
+    └─ migration.sql
+  └─ 20261015000100_support_audit_history/
+    └─ migration.sql
+  └─ 20261015000200_audit_append_only/
+    └─ migration.sql
+      
+All migrations have been successfully applied.
+Seed complete: owner + two supporters, five goals, differentiated permissions, atomic audit. Existing history preserved on re-run.
+Seed complete: owner + two supporters, five goals, differentiated permissions, atomic audit. Existing history preserved on re-run.
+PASS: 4 migrations on empty PostgreSQL, seed twice (3 users/5 goals/25 CheckIns/2 relationships/37 stable audit events); additive baseline upgrade verified separately.
+
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env

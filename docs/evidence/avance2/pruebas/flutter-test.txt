@@ -1,0 +1,46 @@
+{
+  "label": "flutter-test",
+  "command": "C:/src/flutter/bin/cache/dart-sdk/bin/dart.exe C:/src/flutter/bin/cache/flutter_tools.snapshot test --no-pub --reporter expanded",
+  "directory": "app",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:16:44.872Z",
+  "ended": "2026-11-26T18:17:20.728Z",
+  "exitCode": 0
+}
+
+00:00 +0: loading <repo>/app/test/accessibility_test.dart
+00:00 +0: <repo>/app/test/accessibility_test.dart: goals and summaries fit width 320.0 at 200% text
+00:02 +1: <repo>/app/test/accessibility_test.dart: goals and summaries fit width 320.0 at 200% text
+00:10 +2: <repo>/app/test/accessibility_test.dart: goals and summaries fit width 320.0 at 200% text
+00:11 +3: <repo>/app/test/accessibility_test.dart: goals and summaries fit width 320.0 at 200% text
+00:11 +4: <repo>/app/test/goals_filter_test.dart: filters preserve cancelled goals and combine with title search
+00:12 +5: <repo>/app/test/goals_filter_test.dart: filters preserve cancelled goals and combine with title search
+00:12 +6: <repo>/app/test/goals_filter_test.dart: filters preserve cancelled goals and combine with title search
+00:13 +7: <repo>/app/test/widget_test.dart: paused goal retains history and rejects CheckIn in the UI
+00:13 +8: <repo>/app/test/widget_test.dart: paused goal retains history and rejects CheckIn in the UI
+00:13 +9: <repo>/app/test/widget_test.dart: paused goal retains history and rejects CheckIn in the UI
+00:14 +10: <repo>/app/test/widget_test.dart: paused goal retains history and rejects CheckIn in the UI
+00:14 +11: <repo>/app/test/support_test.dart: void confirmation explains retained history and uses canonical action
+00:14 +12: <repo>/app/test/support_test.dart: void confirmation explains retained history and uses canonical action
+00:14 +13: <repo>/app/test/accessibility_test.dart: authentication supports keyboard focus, labels, contrast and touch targets
+00:14 +14: <repo>/app/test/widget_test.dart: active goal opens a bounded CheckIn form
+00:14 +15: <repo>/app/test/widget_test.dart: active goal opens a bounded CheckIn form
+00:15 +16: <repo>/app/test/widget_test.dart: active goal opens a bounded CheckIn form
+00:15 +17: <repo>/app/test/support_test.dart: owner adds exact email with explicit permissions and no role switch
+00:15 +18: <repo>/app/test/support_test.dart: owner adds exact email with explicit permissions and no role switch
+00:15 +19: <repo>/app/test/support_test.dart: owner adds exact email with explicit permissions and no role switch
+00:15 +20: <repo>/app/test/support_test.dart: owner adds exact email with explicit permissions and no role switch
+00:15 +21: <repo>/app/test/support_test.dart: owner adds exact email with explicit permissions and no role switch
+00:15 +22: <repo>/app/test/widget_test.dart: transient server failure keeps token and exposes retryable session error
+00:15 +23: <repo>/app/test/support_test.dart: owner changes progress permission and confirms persistent revoke
+00:16 +24: <repo>/app/test/support_test.dart: owner changes progress permission and confirms persistent revoke
+00:16 +25: <repo>/app/test/support_test.dart: owner changes progress permission and confirms persistent revoke
+00:16 +26: <repo>/app/test/widget_test.dart: goal editor exposes metadata while progress requires a CheckIn
+00:17 +27: <repo>/app/test/widget_test.dart: goal editor exposes metadata while progress requires a CheckIn
+00:17 +28: <repo>/app/test/support_test.dart: delegated refresh removes cached goals when access is revoked
+00:17 +29: <repo>/app/test/support_test.dart: permitted delegated progress shows effective timeline without editing
+00:18 +30: <repo>/app/test/support_test.dart: owner activity renders Spanish descriptions instead of raw payload
+00:18 +31: <repo>/app/test/support_test.dart: support network error can be retried
+00:20 +32: <repo>/app/test/support_test.dart: activity messages cover all permission and historical changes
+00:20 +33: All tests passed!
+

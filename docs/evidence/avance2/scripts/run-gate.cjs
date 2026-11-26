@@ -32,6 +32,10 @@ const result=spawnSync(binary,commandArgs,{cwd:path.resolve(directory),env:{...p
 const ended=new Date().toISOString(), code=result.status??1;
 const output=redact((result.stdout||'')+'\n'+(result.stderr||'')+(result.error?'\n'+result.error.name:''));
 const entry={label,command:[program,...args].join(' '),directory,sha,started,ended,exitCode:code};
+if(fs.existsSync(path.join(out,label+'.txt'))){
+  let attempt=1;while(fs.existsSync(path.join(out,`${label}-attempt-${attempt}.txt`)))attempt++;
+  for(const ext of ['txt','json'])fs.copyFileSync(path.join(out,label+'.'+ext),path.join(out,`${label}-attempt-${attempt}.${ext}`));
+}
 fs.writeFileSync(path.join(out,label+'.txt'),JSON.stringify(entry,null,2)+'\n\n'+output);
 fs.writeFileSync(path.join(out,label+'.json'),JSON.stringify(entry,null,2)+'\n');
 console.log(label,'exit='+code,output.split(/\r?\n/).slice(-12).join('\n'));

@@ -1,0 +1,13 @@
+{
+  "label": "smoke-http",
+  "command": "docker compose exec -T backend node scripts/smoke.cjs",
+  "directory": ".",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:23:43.526Z",
+  "ended": "2026-11-26T18:23:45.173Z",
+  "exitCode": 0
+}
+
+PASS: CHECKIN_VOIDED 70 / resultingGoalProgress 40; eligible average 73.33 in Analytics and AI Preview; no notes/provider/summary persistence.
+PASS: live HTTP Auth/profile → Goals/lifecycle/CANCELLED → CheckIns/void/snapshot/history → Analytics → AI Preview → Owner/Supporter permissions/no notes/read-only/expiry/revoke/reactivate → private audit → controlled synthetic cleanup.
+

@@ -1,0 +1,9 @@
+{
+  "label": "migrations-seed",
+  "command": "npm run smoke:migrations",
+  "directory": "backend",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:20:02.683Z",
+  "ended": "2026-11-26T18:20:26.913Z",
+  "exitCode": 0
+}

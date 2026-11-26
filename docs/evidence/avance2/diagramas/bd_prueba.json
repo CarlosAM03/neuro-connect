@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-26T18:19:36.724Z",
+  "source": "backend/prisma/schema.prisma",
+  "schemaSha256": "77503c71f37003ea110fd8b7bfdd7872c911197d8063bd3340c659c9e9dad3a1",
+  "version": "PostgreSQL 16.15 (Debian 16.15-1.pgdg12+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 12.2.0-14+deb12u1) 12.2.0, 64-bit",
+  "tables": [
+    {
+      "tablename": "AISummary"
+    },
+    {
+      "tablename": "AuditEvent"
+    },
+    {
+      "tablename": "CheckIn"
+    },
+    {
+      "tablename": "Goal"
+    },
+    {
+      "tablename": "SupportRelationship"
+    },
+    {
+      "tablename": "User"
+    },
+    {
+      "tablename": "_prisma_migrations"
+    }
+  ],
+  "foreignKeys": [
+    {
+      "table_name": "AISummary",
+      "column_name": "userId",
+      "referenced_table": "User",
+      "referenced_column": "id"
+    },
+    {
+      "table_name": "AuditEvent",
+      "column_name": "actorId",
+      "referenced_table": "User",
+      "referenced_column": "id"
+    },
+    {
+      "table_name": "AuditEvent",
+      "column_name": "ownerId",
+      "referenced_table": "User",
+      "referenced_column": "id"
+    },
+    {
+      "table_name": "CheckIn",
+      "column_name": "goalId",
+      "referenced_table": "Goal",
+      "referenced_column": "id"
+    },
+    {
+      "table_name": "Goal",
+      "column_name": "ownerId",
+      "referenced_table": "User",
+      "referenced_column": "id"
+    },
+    {
+      "table_name": "SupportRelationship",
+      "column_name": "ownerId",
+      "referenced_table": "User",
+      "referenced_column": "id"
+    },
+    {
+      "table_name": "SupportRelationship",
+      "column_name": "supporterId",
+      "referenced_table": "User",
+      "referenced_column": "id"
+    }
+  ],
+  "migrations": [
+    {
+      "migration_name": "20261014000100_mvp0_core",
+      "checksum": "8c069381441b267260b3f9f69a12d5d7cb3d2c48e09ee6b5181f7fff24ae45f3",
+      "finished_at": "2026-10-14T10:20:01.172Z"
+    },
+    {
+      "migration_name": "20261014000200_ai_summary_scaffold",
+      "checksum": "e0bca5bd7ec3df5ab2ea5bd0db28abe46e210186676087f6d83b13d880e83479",
+      "finished_at": "2026-10-15T02:22:40.921Z"
+    },
+    {
+      "migration_name": "20261015000100_support_audit_history",
+      "checksum": "0ea71a029b0fd4072002dcbd2e318abb7b5e0b7abc9905f6850cf8bdf314205a",
+      "finished_at": "2026-10-15T03:18:38.687Z"
+    },
+    {
+      "migration_name": "20261015000200_audit_append_only",
+      "checksum": "50f873765715cd178ba7ad4b333fe605e018d2d1cbb984ce56acb36a02b73758",
+      "finished_at": "2026-10-15T03:26:07.136Z"
+    }
+  ]
+}

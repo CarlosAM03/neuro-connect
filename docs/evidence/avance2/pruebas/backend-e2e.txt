@@ -1,0 +1,65 @@
+{
+  "label": "backend-e2e",
+  "command": "npm run test:e2e",
+  "directory": "backend",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:18:05.379Z",
+  "ended": "2026-11-26T18:19:33.971Z",
+  "exitCode": 0
+}
+
+
+> neuroconnect-backend@0.1.0 test:e2e
+> node test/run-e2e.cjs
+
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "neuroconnect_test", schema "public" at "localhost:5434"
+
+4 migrations found in prisma/migrations
+
+
+No pending migrations to apply.
+
+warn The configuration property `package.json#prisma` is deprecated and will be removed in Prisma 7. Please migrate to a Prisma config file (e.g., `prisma.config.ts`).
+For more information, see: https://pris.ly/prisma-config
+
+Environment variables loaded from .env
+[Nest] 41508  - 26/11/2026, 10:18:57 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [5d4bc36c-7fec-4392-8acc-30c18bd6a16b]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:57 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [ec2c84c8-76fb-4812-b084-fa0c6e1ae3ef]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:57 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [57ffd55c-eddb-4359-bf0d-17e72632c7d4]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:57 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [18b37362-4bdc-44d7-a260-504a89c02acf]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:57 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [cce1c929-58cd-4782-9e59-c71740d5a34a]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:57 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [aa2bc63c-c9fa-416b-b9f7-5abf8a5cb97b]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:57 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [ed7924b9-af29-49be-bf37-a82697023463]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:57 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [149501a3-385a-4797-a574-1ecb710bd152]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:58 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [9de31bd1-b942-415f-a167-3f7a5146cd19]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:58 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [e4e4e853-e09d-4adf-9879-1c19164be7ee]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:58 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [012192e4-9253-40e3-9dd4-e8150ffb8be2]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:58 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [d91accc4-b856-43c0-b344-757763197ecf]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:58 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [791c4066-698a-421f-9957-0b9215a8fbaa]
+PrismaClientUnknownRequestError
+[Nest] 41508  - 26/11/2026, 10:18:58 a.m.   ERROR [HttpExceptionFilter] Unexpected request failure [89819c69-969f-45d5-bdf0-96498e030967]
+PrismaClientUnknownRequestError
+PASS test/e2e/support-audit.e2e-spec.ts (36.786 s)
+PASS test/e2e/summary-reads.e2e-spec.ts (7.511 s)
+PASS test/e2e/core.e2e-spec.ts (12.974 s)
+PASS test/e2e/analytics.e2e-spec.ts (6.996 s)
+PASS test/e2e/ai.e2e-spec.ts (7.631 s)
+
+Test Suites: 5 passed, 5 total
+Tests:       78 passed, 78 total
+Snapshots:   0 total
+Time:        72.977 s, estimated 81 s
+Ran all test suites.

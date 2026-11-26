@@ -1,0 +1,9 @@
+{
+  "label": "audit-runtime",
+  "command": "npm audit --omit=dev --json",
+  "directory": "backend",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:18:20.296Z",
+  "ended": "2026-11-26T18:18:40.046Z",
+  "exitCode": 1
+}

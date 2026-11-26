@@ -1,0 +1,13 @@
+{
+  "label": "flutter-analyze",
+  "command": "C:/src/flutter/bin/cache/dart-sdk/bin/dart.exe C:/src/flutter/bin/cache/flutter_tools.snapshot analyze --no-pub",
+  "directory": "app",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:14:39.753Z",
+  "ended": "2026-11-26T18:16:44.680Z",
+  "exitCode": 0
+}
+
+Analyzing app...                                                
+No issues found! (ran in 120.3s)
+

@@ -1,0 +1,16 @@
+{
+  "label": "audit-policy",
+  "command": "npm run audit:gate",
+  "directory": "backend",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:18:40.243Z",
+  "ended": "2026-11-26T18:18:49.088Z",
+  "exitCode": 0
+}
+
+
+> neuroconnect-backend@0.1.0 audit:gate
+> node test/audit-gate.cjs
+
+Policy gate: 3 affected tooling packages; only documented GHSA-ggr8-5vv4-36mx allowed. Not audit=0; human review required before public deployment.
+

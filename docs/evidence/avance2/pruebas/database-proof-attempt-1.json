@@ -1,0 +1,9 @@
+{
+  "label": "database-proof",
+  "command": "node docs/evidence/avance2/scripts/database-proof.cjs",
+  "directory": ".",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:17:30.689Z",
+  "ended": "2026-11-26T18:17:35.263Z",
+  "exitCode": 1
+}

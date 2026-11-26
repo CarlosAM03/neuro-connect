@@ -1,0 +1,9 @@
+{
+  "label": "capture-fixtures",
+  "command": "node docs/evidence/avance2/scripts/fixtures.cjs create",
+  "directory": ".",
+  "sha": "c86b3eece5943581a507c639fe1cca9b829c055c",
+  "started": "2026-11-26T18:20:27.395Z",
+  "ended": "2026-11-26T18:20:31.573Z",
+  "exitCode": 0
+}
