@@ -121,8 +121,11 @@ Rama autorizada exclusivamente:
 
 La publicación se confirma únicamente al obtener push exitoso y equivalencia
 `git rev-parse HEAD` / `git ls-remote origin refs/heads/sprint/pre-ia-beta`.
-El cierre remoto exacto queda comunicado en la respuesta final. Si esa operación
-falla, estos archivos locales siguen siendo la entrega y no se afirma publicación.
+**Publicación de evidencias comprobada:** push exit0 y ambos comandos devolvieron
+`5bbe97cdf59545c2c446a8d78561279c9f0feb08`. Ese snapshot incluye capturas, logs,
+ERD, inventarios y manifiesto completos. [Snapshot inmutable publicado](https://github.com/CarlosAM03/neuro-connect/tree/5bbe97cdf59545c2c446a8d78561279c9f0feb08/docs/evidence/avance2).
+Este ajuste posterior solo registra la comprobación; su SHA final en la misma
+rama se informa en la respuesta de cierre y se verifica con ls-remote.
 Sin force push,PR,merge,tag,despliegue ni integración IA. Los PDF recibidos se
 mantienen locales e intactos; no se genera nueva versión académica.
 
